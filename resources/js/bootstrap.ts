@@ -6,7 +6,6 @@
 import axios from 'axios'
 import type { AxiosStatic } from 'axios'
 import JQuery from 'jquery'
-import type { JQueryStatic } from 'jquery'
 import { client } from 'laravel-precognition-vue'
 import _ from 'lodash'
 import type { LoDashStatic } from 'lodash'

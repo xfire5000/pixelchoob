@@ -35,8 +35,8 @@ createServer((page) =>
           ...page.props.ziggy,
           location: new URL(page.props.ziggy['location']),
         })
-        .component('o-link', Link)
-        .component('o-head', Head)
+        .component('p-link', Link)
+        .component('p-head', Head)
         .use(i18n)
         .use(vuetify)
     },

@@ -10,7 +10,7 @@
 </script>
 
 <template lang="pug">
-o-head
+p-head
   meta(name="darkreader-lock")
   meta(content="#01DC84", name="theme-color")
   link(:href="$page.props.ziggy['url']", rel="canonical")
