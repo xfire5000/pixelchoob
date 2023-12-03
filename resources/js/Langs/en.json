@@ -1,0 +1,32 @@
+{
+  "exceptions": {
+    "Forbidden": "Forbidden",
+    "Forbidden-Hint": "Sorry, you are forbidden from accessing this page.",
+    "Page-Not-Found": "Page Not Found",
+    "Page-Not-Found-Hint": "Sorry, the page you are looking for could not be found.",
+    "Server-Error": "Server Error",
+    "Server-Error-Hint": "Whoops, something went wrong on our servers.",
+    "Service-Unavailable": "Service Unavailable",
+    "Service-Unavailable-Hint": "Sorry, we are doing some maintenance. Please check back soon."
+  },
+  "timeAgo": {
+    "just-now": "just now",
+    "ago": "{0} ago",
+    "in": "in {0}",
+    "last-month": "last month",
+    "next-month": "next month",
+    "month": "month | months",
+    "last-year": "last year",
+    "next-year": "next year",
+    "year": "year | years",
+    "yesterday": "yesterday",
+    "tomorrow": "tomorrow",
+    "day": "day | days",
+    "last-week": "last week",
+    "next-week": "next week",
+    "week": "week | weeks",
+    "hour": "hour | hours",
+    "minute": "minute | minutes",
+    "second": "second | seconds"
+  }
+}

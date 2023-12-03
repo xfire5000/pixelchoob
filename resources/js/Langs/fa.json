@@ -1,0 +1,40 @@
+{
+  "dayEvents": {
+    "good-morning": "صبح بخیر",
+    "good-time": "وقت بخیر",
+    "good-lunch": "ظهر بخیر",
+    "good-evening": "بعد از ظهر بخیر",
+    "good-night": "شب بخیر"
+  },
+  "exceptions": {
+    "Forbidden": "ممنوع",
+    "Forbidden-Hint": "با عرض پوزش ، شما از دسترسی به این صفحه ممنوع است.",
+    "Page-Not-Found": "صفحه یافت نشد",
+    "Page-Not-Found-Hint": "با عرض پوزش ، صفحه ای که به دنبال آن هستید یافت نشد.",
+    "Server-Error": "خطای سرور",
+    "Server-Error-Hint": "چیزی روی سرورهای ما رخ داد",
+    "Service-Unavailable": "خدمات در دسترس نیست",
+    "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
+  },
+  "timeAgo": {
+    "just-now": "همین الان",
+    "ago": "{0} پیش",
+    "in": "که در {0}",
+    "last-month": "ماه گذشته",
+    "next-month": "ماه بعد",
+    "month": "ماه | ماه ها",
+    "last-year": "سال گذشته",
+    "next-year": "سال آینده",
+    "year": "سال | سال ها",
+    "yesterday": "دیروز",
+    "tomorrow": "فردا",
+    "day": "روز | روزها",
+    "last-week": "هفته گذشته",
+    "next-week": "هفته بعد",
+    "week": "هفته | هفته",
+    "hour": "ساعت |ساعت ها",
+    "minute": "دقیقه | دقیقه",
+    "second": "ثانیه | ثانیه",
+    "after-tomorrow": "پس فردا"
+  }
+}
