@@ -3,11 +3,52 @@
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
+import axios from 'axios'
+import type { AxiosStatic } from 'axios'
+import JQuery from 'jquery'
+import type { JQueryStatic } from 'jquery'
+import { client } from 'laravel-precognition-vue'
+import _ from 'lodash'
+import type { LoDashStatic } from 'lodash'
 
-import axios from 'axios';
-window.axios = axios;
+declare global {
+  interface Window {
+    axios: AxiosStatic
+  }
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+  interface Window {
+    _: LoDashStatic
+  }
+
+  interface Window {
+    JQuery: JQueryStatic
+  }
+
+  interface Element {
+    content: string
+  }
+}
+
+declare var window: Window
+
+window.axios = axios
+window.JQuery = JQuery
+window._ = _
+
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+window.axios.defaults.withCredentials = true
+
+const token: Element | null = document.head.querySelector(
+  'meta[name="csrf-token"]',
+)
+
+if (token) {
+  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
+} else {
+  console.error('CSRF token not found')
+}
+
+client.use(window.axios)
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
