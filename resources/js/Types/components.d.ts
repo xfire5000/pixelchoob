@@ -27,12 +27,14 @@ declare module 'vue' {
     InputLabel: typeof import('./../Components/InputLabel.vue')['default']
     Modal: typeof import('./../Components/Modal.vue')['default']
     NavLink: typeof import('./../Components/NavLink.vue')['default']
+    PanelLayout: typeof import('./../Layouts/PanelLayout.vue')['default']
     PrimaryButton: typeof import('./../Components/PrimaryButton.vue')['default']
     ResponsiveNavLink: typeof import('./../Components/ResponsiveNavLink.vue')['default']
     SecondaryButton: typeof import('./../Components/SecondaryButton.vue')['default']
     SectionBorder: typeof import('./../Components/SectionBorder.vue')['default']
     SectionTitle: typeof import('./../Components/SectionTitle.vue')['default']
     TextInput: typeof import('./../Components/TextInput.vue')['default']
+    ThemeProvide: typeof import('./../Components/ThemeProvide.vue')['default']
     Welcome: typeof import('./../Components/Welcome.vue')['default']
   }
 }

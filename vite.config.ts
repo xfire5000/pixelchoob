@@ -4,10 +4,7 @@ import { transformShortVmodel } from '@vue-macros/short-vmodel'
 import type { Options } from '@vuetify/loader-shared/dist'
 import laravel from 'laravel-vite-plugin'
 import AutoImport from 'unplugin-auto-import/vite'
-import {
-  Vuetify3Resolver,
-  VueUseComponentsResolver,
-} from 'unplugin-vue-components/resolvers'
+import { Vuetify3Resolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import DefineOptions from 'unplugin-vue-define-options/vite'
 import vueMacros from 'unplugin-vue-macros/vite'
@@ -68,7 +65,7 @@ export default ({ mode }) => {
           /\.vue\?vue/, // .vue
           /\.md$/, // .md
         ],
-        resolvers: [Vuetify3Resolver(), VueUseComponentsResolver()],
+        resolvers: [Vuetify3Resolver()],
       }),
       AutoImport({
         include: [

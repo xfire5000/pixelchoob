@@ -54,6 +54,5 @@ export const useGlobalState = createGlobalState(() => {
     drawerOpener,
     homeBreadCrumb,
     readProgress,
-    clearNavItems,
   }
 })

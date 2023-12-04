@@ -1,4 +1,9 @@
 {
+  "auth": {
+    "login-register": "ورود / عضویت",
+    "login": "ورود",
+    "register": "ثبت نام"
+  },
   "dayEvents": {
     "good-morning": "صبح بخیر",
     "good-time": "وقت بخیر",
@@ -16,6 +21,7 @@
     "Service-Unavailable": "خدمات در دسترس نیست",
     "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
   },
+  "home-page": "صفحه اصلی",
   "timeAgo": {
     "just-now": "همین الان",
     "ago": "{0} پیش",

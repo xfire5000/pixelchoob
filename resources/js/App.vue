@@ -17,12 +17,3 @@ p-head
 transition-fade
   slot
 </template>
-
-<style>
-  .app {
-    @apply text-center dark:bg-dark-100;
-  }
-  .panel {
-    @apply ltr:text-left rtl:text-right dark:bg-dark-300;
-  }
-</style>

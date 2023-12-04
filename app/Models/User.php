@@ -3,18 +3,27 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Interfaces\User as InterfacesUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements InterfacesUser
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles,Searchable,SoftDeletes;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -58,4 +67,36 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function contacts(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'user_manager');
+    }
+
+    public function addressInfos(): HasMany
+    {
+        return $this->hasMany(UserAddressInfo::class, 'user_id', 'id');
+    }
+
+    public function getPermissionArray(): mixed
+    {
+        return $this->getAllPermissions()->mapWithKeys(fn ($pr) => [$pr['name'] => true]
+        );
+    }
+
+    public function getRole(): Collection
+    {
+        return $this->getRoleNames();
+    }
+
+    public static function findOrCreate(string $email, array $array): InterfacesUser
+    {
+        $user = static::where('email', 'like', "%$email%")->first();
+
+        if (! $user) {
+            return static::query()->create($array);
+        }
+
+        return $user;
+    }
 }
