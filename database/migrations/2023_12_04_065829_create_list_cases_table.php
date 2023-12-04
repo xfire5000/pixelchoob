@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('list_cases', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('color');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

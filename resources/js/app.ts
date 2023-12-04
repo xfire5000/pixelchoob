@@ -15,7 +15,7 @@ import 'instant.page'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { createApp, h } from 'vue'
 import type { DefineComponent } from 'vue'
-import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker'
+import Particles from 'vue3-particles'
 import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
@@ -59,6 +59,7 @@ createInertiaApp({
       .use(vuetify)
       .use(i18n)
       .use(VueTransitions)
+      .use(Particles)
       .use(Vue3Toastify, {
         position: 'bottom-left',
         rtl: true,
@@ -71,16 +72,10 @@ createInertiaApp({
           autoHideBadge: true,
         },
       })
-      .use(Vue3PersianDatetimePicker, {
-        name: 'p-date-picker',
-        format: 'YYYY-MM-DD HH:mm:ss',
-        inputClass: 'date-picker-orise',
-        color: '#01DC84',
-      })
       .component('p-editor', QuillEditor)
     return app.mount(el)
   },
   progress: {
-    color: '#01DC84',
+    color: '#30DAD0',
   },
 })

@@ -39,9 +39,9 @@ export default {
       primary: '#01DC84',
       secondary: '#30DAD0',
       dark: {
-        100: '#333',
-        200: '#105a56',
-        300: '#0A302E',
+        100: '#1c1b22',
+        200: '#111c44',
+        300: '#141727',
       },
       slate: {
         DEFAULT: colors.slate,

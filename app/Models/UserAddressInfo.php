@@ -14,8 +14,8 @@ class UserAddressInfo extends Model
 
     protected $fillable = ['user_id', 'type', 'description', 'isShow'];
 
-    public static array $TYPES = ['address' => ['title' => __('validation.attributes.address'), 'value' => 'address'],
-        'phone' => ['title' => __('validation.attributes.phone'), 'value' => 'phone'], 'mobile' => ['title' => __('validation.attributes.mobile'), 'value' => 'mobile']];
+    public static array $TYPES = ['address' => ['title' => 'نشانی', 'value' => 'address'],
+        'phone' => ['title' => 'شماره تلفن ثابت', 'value' => 'phone'], 'mobile' => ['title' => 'شماره همراه', 'value' => 'mobile']];
 
     public function scopeOfType(Builder $query, string|array $type): void
     {

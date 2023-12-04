@@ -12,7 +12,7 @@ class ListCaseController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('ListCase');
     }
 
     /**

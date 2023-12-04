@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template lang="pug">
-p-head(:title="$t('home-page')")
+p-head(:title="$t('pixel-choob') + '&nbsp;' + $t('home-page')")
 AppLayout
   .container-fluid.-mt-8
     .cols-12.grid.grid.gap-4

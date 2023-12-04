@@ -124,11 +124,16 @@ export const Header = defineComponent({
             </div>
 
             <div class="flex justify-center sm:mt-6 lg:flex z-40 lg:mt-0 lg:ml-4 absolute left-0">
-              <button class="border hover:shadow-lg dark:bg-opacity-50 hover:dark:bg-opacity-100 transition duration-250 shadow-cyan-500 my-auto px-2 ml-3 h-9 dark:text-white border-gray-600 flex flex-row items-center justify-center dark:border-gray-200 rounded-full bg-white bg-opacity-20 dark:bg-gray-850 hover:bg-opacity-100">
+              <p-link
+                href={route('login')}
+                as="button"
+                type="button"
+                class="border hover:shadow-lg dark:bg-opacity-50 hover:dark:bg-opacity-100 transition duration-250 shadow-cyan-500 my-auto px-2 ml-3 h-9 dark:text-white border-gray-600 flex flex-row items-center justify-center dark:border-gray-200 rounded-full bg-white bg-opacity-20 dark:bg-gray-850 hover:bg-opacity-100"
+              >
                 <VIcon class="ml-2 text-sky-600">{mdiAccountOutline}</VIcon>
                 <VDivider vertical class="ml-2 my-auto" length="24px" />
                 <span>{t('auth.login-register')}</span>
-              </button>
+              </p-link>
               <ThemeProvideVue />
             </div>
           </div>

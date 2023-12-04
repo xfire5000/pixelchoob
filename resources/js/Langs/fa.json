@@ -1,9 +1,22 @@
 {
+  "add": "افزودن {name}",
+  "archived": "بایگانی",
   "auth": {
     "login-register": "ورود / عضویت",
     "login": "ورود",
-    "register": "ثبت نام"
+    "register": "ثبت نام",
+    "welcome-login": "خوش آمدید، اطلاعات احراز خود را وارد کنید",
+    "login-hint": "با ورود به حساب خود از طریق داشبورد، کسب و کار خود را توسعه بدهید",
+    "no-account-go-register": "حسابی ندارم، شروع ثبت نام",
+    "forgot-password": "گذرواژه خود را فراموش کرده ام",
+    "password": "گذرواژه",
+    "remember-me": "مرا به خاطر بسپار",
+    "email": "ایمیل"
   },
+  "back": "بازگشت",
+  "close": "بستن",
+  "creator": "ایجاد کننده",
+  "dashboard": "داشبورد",
   "dayEvents": {
     "good-morning": "صبح بخیر",
     "good-time": "وقت بخیر",
@@ -11,6 +24,9 @@
     "good-evening": "بعد از ظهر بخیر",
     "good-night": "شب بخیر"
   },
+  "delete": "حذف {name}",
+  "description": "توضیحات",
+  "edit": "ویرایش {name}",
   "exceptions": {
     "Forbidden": "ممنوع",
     "Forbidden-Hint": "با عرض پوزش ، شما از دسترسی به این صفحه ممنوع است.",
@@ -22,6 +38,18 @@
     "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
   },
   "home-page": "صفحه اصلی",
+  "inbox-lists": "لیست های دریافتی",
+  "list": "لیست",
+  "menuDrawerItems": {
+    "my-lists": "لیست های من",
+    "my-invoices": "فاکتور های من"
+  },
+  "pixel-choob": "پیکسل چوب",
+  "pvc-infos": "مشخصات pvc",
+  "search-placeholder": "جستجو ...",
+  "stock-infos": "مشخصات ورق",
+  "submit-edit": "ثبت و ویرایش",
+  "submit-store": "ثبت و ذخیره",
   "timeAgo": {
     "just-now": "همین الان",
     "ago": "{0} پیش",
@@ -42,5 +70,11 @@
     "minute": "دقیقه | دقیقه",
     "second": "ثانیه | ثانیه",
     "after-tomorrow": "پس فردا"
+  },
+  "title": "عنوان",
+  "updated_at": "تغییر",
+  "validation-rules": {
+    "required": "الزامی",
+    "email-invalid": "ایمیل نا معتبر است"
   }
 }

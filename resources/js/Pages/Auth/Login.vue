@@ -1,90 +1,140 @@
-<script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+<script setup lang="ts">
+  import { useForm, usePage } from '@inertiajs/vue3'
+  import {
+    mdiArrowRight,
+    mdiAt,
+    mdiCheck,
+    mdiEyeOffOutline,
+    mdiEyeOutline,
+    mdiInformationVariantCircleOutline,
+    mdiLockOutline,
+    mdiLockReset,
+  } from '@mdi/js'
+  import { TransitionSlide } from '@morev/vue-transitions'
+  import { useReCaptcha } from 'vue-recaptcha-v3'
+  import route from 'ziggy-js'
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
+  defineProps<{
+    canResetPassword: boolean
+    status: string
+  }>()
 
-const form = useForm({
+  const form = useForm({
     email: '',
     password: '',
     remember: false,
-});
+    captcha_token: null,
+  })
 
-const submit = () => {
-    form.transform(data => ({
+  const { t } = useI18n()
+
+  const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+
+  const recaptcha = async () => {
+    if (
+      import.meta.env.VITE_GOOGLE_RECAPTCHA_SITE_KEY !== '' &&
+      import.meta.env.VITE_RECAPTCHA_ENABLE
+    ) {
+      await recaptchaLoaded()
+      form.captcha_token = await executeRecaptcha('login')
+    }
+    form
+      .transform((data) => ({
         ...data,
         remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
+      }))
+      .post(route('login'), {
         onFinish: () => form.reset('password'),
-    });
-};
+        onError() {
+          if (usePage().props.errors['email']) step.value -= 1
+        },
+      })
+  }
+
+  const submit = () => {
+    if (2 > step.value) step.value++
+    else recaptcha()
+  }
+
+  const step = ref<number>(1)
+  const isPassword = ref<boolean>(true)
+
+  const rules = {
+    email: (value) => {
+      const pattern =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return pattern.test(value) || t('validation-rule.email-invalid')
+    },
+    required: (value) => !!value || t('validation-rule.required'),
+  }
 </script>
 
-<template>
-    <Head title="Log in" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+<template lang="pug">
+p-head(:title="$t('auth.login')")
+AuthLayout
+  small(class="dark:text-white").mr-6 {{ $t('auth.welcome-login') }}
+  p(class="Dark:text-gray-200").mx-6.my-4.text-right.text-xs.text-gray-600
+    v-icon(size="small").ml-2 {{ mdiInformationVariantCircleOutline }}
+    | {{ $t('auth.login-hint') }}
+  TransitionSlide
+    div(v-if="step === 1").flex.flex-col
+      v-text-field(
+        ::="form.email",
+        :focused="step === 1",
+        :label="$t('auth.email')",
+        :prepend-inner-icon="mdiAt",
+        :rules="[rules.email, rules.required]",
+        @keypress.enter="recaptcha",
+        color="secondary",
+        type="email",
+        variant="solo"
+      ).mx-10.mt-4.text-right
+      v-switch(
+        ::="form.remember",
+        :label="$t('auth.remember-me')",
+        color="secondary",
+        hide-details="auto",
+        inset
+      ).mx-10.mb-2
+    v-text-field(
+      ::="form.password",
+      :append-inner-icon="isPassword ? mdiEyeOffOutline : mdiEyeOutline",
+      :focused="step === 2",
+      :label="$t('auth.password')",
+      :prepend-inner-icon="mdiLockOutline",
+      :rules="[rules.required]",
+      :type="isPassword ? 'password' : 'text'",
+      @click:append-inner="isPassword = !isPassword",
+      @keypress.enter="submit",
+      color="secondary",
+      v-else,
+      variant="solo"
+    ).mx-10.mt-4.text-right
+    p-link(
+      :href="route('password.request')",
+      class="hover:underline",
+      v-if="canResetPassword && step === 2"
+    ).mx-10.mb-4.text-right.text-sm.text-secondary
+      v-icon(size="small").ml-2 {{ mdiLockReset }}
+      | {{ $t('auth.forgot-password') }}
+  v-divider.mx-10
+  p-link(
+    :href="route('register')",
+    as="button",
+    type="button"
+  ).mx-12.mb-10.mt-3.text-right.text-xs.text-sky-600 {{ $t('auth.no-account-go-register') }}
+  v-btn(
+    :icon="2 > step ? mdiArrowRight : mdiCheck",
+    :loading="form.processing",
+    @click="submit",
+    color="secondary"
+  ).absolute.bottom-6.right-6
+  v-btn(
+    ,
+    :icon="mdiArrowRight",
+    @click="step--",
+    size="small",
+    v-if="step > 1",
+    variant="text"
+  ).absolute.left-4.top-4.rotate-180
 </template>

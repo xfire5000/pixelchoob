@@ -43,21 +43,22 @@ export default createVuetify({
     VTextField: {
       density: 'compact',
       variant: 'outlined',
+      class: 'dark:text-white',
     },
     VTextArea: {
       density: 'compact',
-      class: '',
+      class: 'dark:text-white',
       variant: 'outlined',
     },
     VSelect: {
       density: 'compact',
-      class: '',
+      class: 'dark:text-white',
     },
     VAutocomplete: {
       density: 'compact',
-      class: '',
+      class: 'dark:text-white',
     },
-    VAlert: { density: 'compact' },
+    VAlert: { density: 'compact', variant: 'tonal' },
     VList: {
       density: 'compact',
       class: 'dark:bg-dark-200 dark:text-gray-100',
