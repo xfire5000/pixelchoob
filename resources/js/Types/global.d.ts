@@ -12,10 +12,11 @@ declare global {
     user_id?: number
     author_id?: number
     title: string
-    slug?: string
     description?: string
-    pvc: string
-    stock: string
+    pvc: any | string
+    stock: any | string
     archived: 1 | 0
+    created_at?: Date
+    updated_at?: Date
   }
 }

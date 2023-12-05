@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('list_cases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('author_id')->nullable()->constrained('users')->onUpdate('cascade')->nullOnDelete();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('title');
-            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('pvc');
             $table->string('stock');
             $table->boolean('archived');
+            $table->integer('viewed');
             $table->softDeletes();
             $table->timestamps();
         });

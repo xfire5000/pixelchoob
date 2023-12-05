@@ -92,3 +92,13 @@ h6 {
   @apply dark:[&_.vpd-addon-list]:bg-dark-200 dark:[&_.vpd-body]:bg-dark-200 dark:[&_.vpd-body]:text-white dark:[&_.vpd-column-header]:text-white [&_.vpd-input-group]:hidden;
   @apply dark:[&_.vpd-content]:bg-dark-200;
 }
+
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+.no-spin {
+  -moz-appearance: textfield !important;
+}

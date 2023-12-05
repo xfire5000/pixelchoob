@@ -30,12 +30,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
+        $auth = [];
+        if (auth()->check()) {
+            $auth = [
+                'auth.can' => $request->user()->getPermissionArray(),
+                'auth.role' => $request->user()->getRole()[0],
+                'auth.token' => $request->user()
+                  ? 'Bearer '.
+                  $request->user()->createToken('auth_token')->plainTextToken
+                  : null,
+            ];
+        }
+
+        return array_merge([
             ...parent::share($request),
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-        ];
+        ], $auth);
     }
 }

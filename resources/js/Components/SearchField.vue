@@ -1,9 +1,13 @@
 <script setup lang="ts">
   import { mdiArrowLeft, mdiMagnify } from '@mdi/js'
 
-  const props = withDefaults(defineProps<{ modelValue: string }>(), {
-    modelValue: () => '',
-  })
+  const props = withDefaults(
+    defineProps<{ modelValue: string; disabled?: boolean }>(),
+    {
+      modelValue: () => '',
+      disabled: false,
+    },
+  )
 
   const emit = defineEmits(['update:modelValue', 'doSearch'])
 
@@ -14,6 +18,7 @@
 v-text-field(
   ::="value",
   :append-inner-icon="mdiArrowLeft",
+  :disabled,
   :placeholder="$t('search-placeholder')",
   :prepend-inner-icon="mdiMagnify",
   @click:append-inner="emit('doSearch')",

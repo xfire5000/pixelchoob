@@ -13,6 +13,6 @@ class MyItems implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('user_id', auth()->id());
+        $builder->where('author_id', auth()->id());
     }
 }

@@ -29,6 +29,7 @@ declare module 'vue' {
     ListCaseDialog: typeof import('./../Components/Dialogs/ListCaseDialog.vue')['default']
     Modal: typeof import('./../Components/Modal.vue')['default']
     NavLink: typeof import('./../Components/NavLink.vue')['default']
+    Paginator: typeof import('./../Components/Paginator.vue')['default']
     PanelLayout: typeof import('./../Layouts/PanelLayout.vue')['default']
     PrimaryButton: typeof import('./../Components/PrimaryButton.vue')['default']
     ResponsiveNavLink: typeof import('./../Components/ResponsiveNavLink.vue')['default']
@@ -38,6 +39,7 @@ declare module 'vue' {
     SectionTitle: typeof import('./../Components/SectionTitle.vue')['default']
     TextInput: typeof import('./../Components/TextInput.vue')['default']
     ThemeProvide: typeof import('./../Components/ThemeProvide.vue')['default']
+    VCheck: typeof import('vuetify/components')['VCheck']
     Welcome: typeof import('./../Components/Welcome.vue')['default']
   }
 }

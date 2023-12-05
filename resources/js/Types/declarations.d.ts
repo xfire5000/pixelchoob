@@ -8,7 +8,7 @@ declare global {
 
   declare type TPageProps = {
     current_page: number
-    data: any | any[]
+    data: { [P in keyof T]: T[P] }[]
     first_page_url: string
     from: any
     last_page: number

@@ -13,7 +13,11 @@ Route::middleware([
     HandlePrecognitiveRequests::class,
 ])->group(function () {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
-    Route::resource('list-cases', ListCaseController::class);
+    Route::resource('list-cases', ListCaseController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::controller(ListCaseController::class)->prefix('list-cases')->group(function () {
+        Route::get('api/{type}', 'apiIndex')->name('list-cases.index.api');
+        Route::get('duplicate/{id}', 'duplicate')->name('list-cases.duplicate');
+    });
     Route::resource('list-items', ListItemController::class);
     Route::resource('invoices', InvoiceController::class);
 });

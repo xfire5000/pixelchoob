@@ -10,14 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Pishran\LaravelPersianSlug\HasPersianSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class ListCase extends Model
 {
-    use HasFactory,HasPersianSlug,Searchable,SoftDeletes;
+    use HasFactory,Searchable,SoftDeletes;
 
-    protected $fillable = ['author_id', 'user_id', 'title', 'slug', 'description', 'pvc', 'stock', 'archived',
+    protected $fillable = ['author_id', 'user_id', 'title', 'description', 'pvc', 'stock', 'archived',
         'viewed'];
 
     protected static function booted()
@@ -32,18 +30,6 @@ class ListCase extends Model
             'title' => $this->title,
             'description' => $this->description,
         ];
-    }
-
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
     }
 
     public function listItems(): HasMany

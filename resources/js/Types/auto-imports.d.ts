@@ -169,6 +169,7 @@ declare global {
   const useDocumentVisibility: typeof import('@vueuse/core')['useDocumentVisibility']
   const useDraggable: typeof import('@vueuse/core')['useDraggable']
   const useDropZone: typeof import('@vueuse/core')['useDropZone']
+  const useDuplicate: typeof import('../Composables/CommonRoutes')['useDuplicate']
   const useElementBounding: typeof import('@vueuse/core')['useElementBounding']
   const useElementByPoint: typeof import('@vueuse/core')['useElementByPoint']
   const useElementHover: typeof import('@vueuse/core')['useElementHover']
@@ -447,7 +448,6 @@ declare module 'vue' {
     readonly useBroadcastChannel: UnwrapRef<typeof import('@vueuse/core')['useBroadcastChannel']>
     readonly useBrowserLocation: UnwrapRef<typeof import('@vueuse/core')['useBrowserLocation']>
     readonly useCached: UnwrapRef<typeof import('@vueuse/core')['useCached']>
-    readonly useChangeTaskStatus: UnwrapRef<typeof import('../Composables/CommonRoutes')['useChangeTaskStatus']>
     readonly useClipboard: UnwrapRef<typeof import('@vueuse/core')['useClipboard']>
     readonly useClipboardItems: UnwrapRef<typeof import('@vueuse/core')['useClipboardItems']>
     readonly useCloned: UnwrapRef<typeof import('@vueuse/core')['useCloned']>
@@ -476,6 +476,7 @@ declare module 'vue' {
     readonly useDocumentVisibility: UnwrapRef<typeof import('@vueuse/core')['useDocumentVisibility']>
     readonly useDraggable: UnwrapRef<typeof import('@vueuse/core')['useDraggable']>
     readonly useDropZone: UnwrapRef<typeof import('@vueuse/core')['useDropZone']>
+    readonly useDuplicate: UnwrapRef<typeof import('../Composables/CommonRoutes')['useDuplicate']>
     readonly useElementBounding: UnwrapRef<typeof import('@vueuse/core')['useElementBounding']>
     readonly useElementByPoint: UnwrapRef<typeof import('@vueuse/core')['useElementByPoint']>
     readonly useElementHover: UnwrapRef<typeof import('@vueuse/core')['useElementHover']>
@@ -747,7 +748,6 @@ declare module '@vue/runtime-core' {
     readonly useBroadcastChannel: UnwrapRef<typeof import('@vueuse/core')['useBroadcastChannel']>
     readonly useBrowserLocation: UnwrapRef<typeof import('@vueuse/core')['useBrowserLocation']>
     readonly useCached: UnwrapRef<typeof import('@vueuse/core')['useCached']>
-    readonly useChangeTaskStatus: UnwrapRef<typeof import('../Composables/CommonRoutes')['useChangeTaskStatus']>
     readonly useClipboard: UnwrapRef<typeof import('@vueuse/core')['useClipboard']>
     readonly useClipboardItems: UnwrapRef<typeof import('@vueuse/core')['useClipboardItems']>
     readonly useCloned: UnwrapRef<typeof import('@vueuse/core')['useCloned']>
@@ -776,6 +776,7 @@ declare module '@vue/runtime-core' {
     readonly useDocumentVisibility: UnwrapRef<typeof import('@vueuse/core')['useDocumentVisibility']>
     readonly useDraggable: UnwrapRef<typeof import('@vueuse/core')['useDraggable']>
     readonly useDropZone: UnwrapRef<typeof import('@vueuse/core')['useDropZone']>
+    readonly useDuplicate: UnwrapRef<typeof import('../Composables/CommonRoutes')['useDuplicate']>
     readonly useElementBounding: UnwrapRef<typeof import('@vueuse/core')['useElementBounding']>
     readonly useElementByPoint: UnwrapRef<typeof import('@vueuse/core')['useElementByPoint']>
     readonly useElementHover: UnwrapRef<typeof import('@vueuse/core')['useElementHover']>

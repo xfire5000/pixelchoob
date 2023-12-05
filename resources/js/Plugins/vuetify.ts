@@ -80,6 +80,7 @@ export default createVuetify({
       class: 'dark:text-gray-200',
     },
     VCheckBoxBtn: { density: 'compact', color: 'info' },
+    VCheckBox: { density: 'compact', class: 'dark:text-white' },
     VCardTitle: { class: 'dark:text-gray-300' },
     VTabs: { class: 'dark:text-gray-200 rounded-md' },
     VDivider: { class: 'my-0 dark:text-white' },

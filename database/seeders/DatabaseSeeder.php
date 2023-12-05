@@ -12,14 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         $this->call([
             RoleSeeder::class,
         ]);
+        if (\App\Models\User::count() < 10) {
+            \App\Models\User::factory(10)->create();
+        }
+        if (\App\Models\ListCase::count() < 10) {
+            \App\Models\ListCase::factory(10)->create();
+        }
     }
 }

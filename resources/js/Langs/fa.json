@@ -1,4 +1,5 @@
 {
+  "actions": "عملیات",
   "add": "افزودن {name}",
   "archived": "بایگانی",
   "auth": {
@@ -15,6 +16,8 @@
   },
   "back": "بازگشت",
   "close": "بستن",
+  "color": "رنگ",
+  "color-code": "کد رنگ",
   "creator": "ایجاد کننده",
   "dashboard": "داشبورد",
   "dayEvents": {
@@ -25,6 +28,8 @@
     "good-night": "شب بخیر"
   },
   "delete": "حذف {name}",
+  "delete-confirmation": "آیا مایل به حذف {name} هستید؟",
+  "deleted": "حذف شده ها",
   "description": "توضیحات",
   "edit": "ویرایش {name}",
   "exceptions": {
@@ -37,17 +42,33 @@
     "Service-Unavailable": "خدمات در دسترس نیست",
     "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
   },
+  "having": { "have-it": "دارد", "not-have-it": "ندارد" },
   "home-page": "صفحه اصلی",
   "inbox-lists": "لیست های دریافتی",
   "list": "لیست",
+  "material": "جنس",
   "menuDrawerItems": {
     "my-lists": "لیست های من",
     "my-invoices": "فاکتور های من"
   },
   "pixel-choob": "پیکسل چوب",
   "pvc-infos": "مشخصات pvc",
+  "pvc-settings": "مشخصات pvc",
+  "pvc-size": {
+    "1mm": "1 میلی متر",
+    "2mm": "2 میلی متر"
+  },
+  "qty": "تعداد",
+  "reduce_thickness": "ضخامت pvc کم شود",
   "search-placeholder": "جستجو ...",
+  "sizes": {
+    "width": "عرض",
+    "height": "ارتفاع",
+    "stroke": "ضخامت"
+  },
   "stock-infos": "مشخصات ورق",
+  "stock-pattern": "ورق راه",
+  "stock-settings": "مشخصات ورق",
   "submit-edit": "ثبت و ویرایش",
   "submit-store": "ثبت و ذخیره",
   "timeAgo": {
@@ -72,6 +93,10 @@
     "after-tomorrow": "پس فردا"
   },
   "title": "عنوان",
+  "units": {
+    "cm": "سانتی متر",
+    "count": "عدد"
+  },
   "updated_at": "تغییر",
   "validation-rules": {
     "required": "الزامی",

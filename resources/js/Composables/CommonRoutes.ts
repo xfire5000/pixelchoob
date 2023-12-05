@@ -28,7 +28,10 @@ export const useShow = (routeName: string, param: RouteParams<RouteName>) =>
     }),
   )
 
-export const useChangeTaskStatus = (status: boolean = true) =>
-  useTaskApi.changeTaskStatus(status).then(({ data }) => {
-    toast(data.value['msg'], { type: 'info' })
-  })
+export const useDuplicate = (routeName: string, id: number) =>
+  new Promise((resolve, reject) =>
+    useFetchClient.get(route(routeName, id)).then(({ data, error }) => {
+      if (data.value) resolve(data.value)
+      else reject(error.value)
+    }),
+  )
