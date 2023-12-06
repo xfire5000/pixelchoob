@@ -19,9 +19,6 @@ const networkFetchClient = createFetch({
       }
     },
     afterFetch(ctx) {
-      if (ctx.data) {
-        return ctx.data
-      }
       return ctx
     },
   },
@@ -39,7 +36,7 @@ class FetchClient {
 
   get<T>(url: string) {
     return this.networkClient(url, {
-      afterFetch: (ctx) => ctx.data,
+      afterFetch: (ctx) => ctx,
     })
       .get()
       .json<T>()
@@ -47,7 +44,7 @@ class FetchClient {
 
   delete<T>(url: string) {
     return this.networkClient(url, {
-      afterFetch: (ctx) => ctx.data,
+      afterFetch: (ctx) => ctx,
     })
       .delete()
       .json<T>()
@@ -55,7 +52,7 @@ class FetchClient {
 
   post<T>(url: string, body: unknown) {
     return this.networkClient(url, {
-      afterFetch: (ctx) => ctx.data,
+      afterFetch: (ctx) => ctx,
     })
       .post(body)
       .json<T>()
@@ -63,7 +60,7 @@ class FetchClient {
 
   patch<T>(url: string, body: unknown) {
     return this.networkClient(url, {
-      afterFetch: (ctx) => ctx.data,
+      afterFetch: (ctx) => ctx,
     })
       .patch(body)
       .json<T>()

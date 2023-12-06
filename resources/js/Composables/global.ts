@@ -65,7 +65,7 @@ export function useLocaleTimeAgo(date: Date) {
 
 export const useCsrf = document.head.querySelector(
   'meta[name="csrf-token"]',
-).textContent
+).content
 
 export const useDate = (
   date: Date = new Date(),

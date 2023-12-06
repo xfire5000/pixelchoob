@@ -5,25 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ListCaseRequest;
 use App\Models\ListCase;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ListCaseController extends Controller
 {
-    public function apiIndex(string $type)
-    {
-        $lists = [];
-        if (! isset($_GET['s'])) {
-            $lists['my_lists'] = ListCase::latest()->paginate(20);
-        } else {
-            $lists['my_lists'] = ListCase::search($_GET['s'])->query(fn ($query) => $query->latest())->paginate(20);
-        }
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return inertia('ListCase');
+        if (! isset($_GET['type'])) {
+            return abort(Response::HTTP_BAD_REQUEST);
+        }
+        $type = $_GET['type'];
+
+        return response(! isset($_GET['s']) ? match ($type) {
+            'my-lists' => ListCase::withCount('listItems')->latest()->archived(false)->paginate(20),
+            'inbox' => ListCase::withCount('listItems')->inbox()->latest()->paginate(20),
+            'archived' => ListCase::withCount('listItems')->archived()->latest()->paginate(20),
+            'deleted' => ListCase::withCount('listItems')->onlyTrashed()->latest()->paginate(20),
+        } : ListCase::search($_GET['s'])->query(fn ($query) => $query->latest())->paginate(20));
     }
 
     /**
@@ -90,6 +91,20 @@ class ListCaseController extends Controller
         $newList->listItems()->createMany($getListItems);
 
         return response(['msg' => __('panel_messages.list', ['status' => __('panel_messages.attributes.duplicated')]), 'item' => $newList]);
+    }
+
+    public function restore(int $id)
+    {
+        ListCase::withTrashed()->find($id)->restore();
+
+        return response()->noContent();
+    }
+
+    public function send(Request $request, int $id)
+    {
+        ListCase::find($id)->update(['user_id' => $request->input('user_id')]);
+
+        return response(['msg' => __('panel_messages.list', ['status' => __('panel_messages.attributes.sent')])]);
     }
 
     private function initForm(Request $request): array

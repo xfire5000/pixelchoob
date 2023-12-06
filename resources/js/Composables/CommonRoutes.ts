@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/vue3'
+import { StatusCodes } from 'http-status-codes'
 import { toast } from 'vue3-toastify'
 import route from 'ziggy-js'
 import type { RouteName, RouteParams } from 'ziggy-js'
@@ -10,14 +11,14 @@ export const useSearch = (routeName: string, text: string, query?: any) =>
 
 export const useDelete = (routeName: string, id: any) =>
   new Promise((resolve, reject) =>
-    useFetchClient.delete(route(routeName, id)).then(({ data, error }) => {
-      console.log(data.value)
-
-      if (data.value) {
-        toast(data.value['msg'], { type: 'success' })
-        resolve(data.value)
-      } else reject(error.value)
-    }),
+    useFetchClient
+      .delete(route(routeName, id))
+      .then(({ data, error, statusCode }) => {
+        if (statusCode.value === StatusCodes.OK) {
+          toast(data.value['msg'], { type: 'success' })
+          resolve(data.value)
+        } else reject(error.value)
+      }),
   )
 
 export const useShow = (routeName: string, param: RouteParams<RouteName>) =>
@@ -28,10 +29,5 @@ export const useShow = (routeName: string, param: RouteParams<RouteName>) =>
     }),
   )
 
-export const useDuplicate = (routeName: string, id: number) =>
-  new Promise((resolve, reject) =>
-    useFetchClient.get(route(routeName, id)).then(({ data, error }) => {
-      if (data.value) resolve(data.value)
-      else reject(error.value)
-    }),
-  )
+export const useChangeRoute = (routeName: string, id: number) =>
+  useFetchClient.get(route(routeName, id))

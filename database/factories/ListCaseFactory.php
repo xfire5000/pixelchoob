@@ -20,8 +20,8 @@ class ListCaseFactory extends Factory
     public function definition(): array
     {
         return [
-            'author_id' => $this->faker->boolean(1) ? $this->faker->numberBetween(1, 5) : null,
-            'user_id' => $this->faker->numberBetween(1, 5),
+            'author_id' => $this->faker->numberBetween(1, 5),
+            'user_id' => $this->faker->boolean(1) ? $this->faker->numberBetween(1, 5) : null,
             'title' => $this->faker->jobTitle,
             'description' => $this->faker->text,
             'pvc' => json_encode([

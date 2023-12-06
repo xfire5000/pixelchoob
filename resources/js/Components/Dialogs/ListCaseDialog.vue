@@ -41,16 +41,20 @@
     () => props.initialForm,
     (newVal: IListCaseItem) => {
       if (props.show && props.initialForm.id)
-        form = useForm('patch', route('tasks.update', props.initialForm.id), {
-          id: newVal.id,
-          archived: newVal.archived,
-          title: newVal.title,
-          pvc: JSON.parse(newVal.pvc as string),
-          stock: JSON.parse(newVal.stock as string),
-          description: newVal.description,
-          author_id: newVal.author_id,
-          user_id: newVal.user_id,
-        })
+        form = useForm(
+          'patch',
+          route('list-cases.update', props.initialForm.id),
+          {
+            id: newVal.id,
+            archived: newVal.archived,
+            title: newVal.title,
+            pvc: JSON.parse(newVal.pvc as string),
+            stock: JSON.parse(newVal.stock as string),
+            description: newVal.description,
+            author_id: newVal.author_id,
+            user_id: newVal.user_id,
+          },
+        )
     },
   )
 
@@ -111,7 +115,7 @@ DialogModal(:closeable="false", :show, @close="emit('close')")
               v-icon {{ mdiArrowLeftRight }}
               input(
                 ::="form.stock.sizes.w",
-                :placeholder="$t('width')",
+                :placeholder="$t('sizes.width')",
                 class="w-1/3 focus:outline-none",
                 step="1",
                 type="number"
@@ -122,7 +126,7 @@ DialogModal(:closeable="false", :show, @close="emit('close')")
               v-icon.rotate-90 {{ mdiArrowLeftRight }}
               input(
                 ::="form.stock.sizes.h",
-                :placeholder="$t('height')",
+                :placeholder="$t('sizes.height')",
                 class="w-1/3 focus:outline-none",
                 step="1",
                 type="number"

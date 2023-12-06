@@ -15,7 +15,6 @@ use Illuminate\Support\Collection;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Scout\Searchable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements InterfacesUser
@@ -23,7 +22,7 @@ class User extends Authenticatable implements InterfacesUser
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
-    use HasRoles,Searchable,SoftDeletes;
+    use HasRoles,SoftDeletes;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -70,7 +69,7 @@ class User extends Authenticatable implements InterfacesUser
 
     public function contacts(): MorphToMany
     {
-        return $this->morphToMany(User::class, 'user_manager');
+        return $this->morphToMany(User::class, 'user_manager')->with(['addressInfos']);
     }
 
     public function addressInfos(): HasMany

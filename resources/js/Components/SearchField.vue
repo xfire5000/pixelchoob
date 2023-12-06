@@ -23,6 +23,7 @@ v-text-field(
   :prepend-inner-icon="mdiMagnify",
   @click:append-inner="emit('doSearch')",
   @keypress.enter="emit('doSearch')",
+  class="dark:bg-dark-200",
   hide-details="auto",
   variant="outlined"
 )

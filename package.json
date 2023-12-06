@@ -37,6 +37,7 @@
     "eslint-plugin-jquery": "^1.5.1",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.19.2",
+    "http-status-codes": "^2.3.0",
     "instant.page": "^5.2.0",
     "jquery": "^3.7.1",
     "laravel-precognition-vue": "^0.5.2",

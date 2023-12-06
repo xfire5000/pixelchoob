@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
         if (\App\Models\ListCase::count() < 10) {
             \App\Models\ListCase::factory(10)->create();
         }
+        if (\App\Models\ListItem::count() < 60) {
+            \App\Models\ListItem::factory(60)->create();
+        }
     }
 }

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_manager', function (Blueprint $table) {
+        Schema::create('user_managers', function (Blueprint $table) {
             // $table->id();
             // $table->timestamps();
-            $table->string('user_managers_type')->index();
-            $table->integer('user_managers_id');
+            $table->string('user_manager_type')->index();
+            $table->integer('user_manager_id');
             $table->bigInteger('user_id');
         });
     }

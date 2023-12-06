@@ -5,6 +5,9 @@ return [
         'update' => 'ویرایش گردید',
         'deleted' => 'حذف شد',
         'duplicated' => 'کپی شد',
-        'created' => 'ایجاد شد', ],
+        'created' => 'ایجاد شد',
+        'sent' => 'ارسال شد',
+    ],
     'list' => 'لیست :status',
+    'contact' => 'مخاطب :status',
 ];

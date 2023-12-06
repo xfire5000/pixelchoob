@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ActionMessage: typeof import('./../Components/ActionMessage.vue')['default']
     ActionSection: typeof import('./../Components/ActionSection.vue')['default']
+    AddContactDialog: typeof import('./../Components/Dialogs/Partials/AddContactDialog.vue')['default']
     AppLayout: typeof import('./../Layouts/AppLayout.vue')['default']
     ApplicationLogo: typeof import('./../Components/ApplicationLogo.vue')['default']
     ApplicationMark: typeof import('./../Components/ApplicationMark.vue')['default']
@@ -28,6 +29,7 @@ declare module 'vue' {
     InputLabel: typeof import('./../Components/InputLabel.vue')['default']
     ListCaseDialog: typeof import('./../Components/Dialogs/ListCaseDialog.vue')['default']
     Modal: typeof import('./../Components/Modal.vue')['default']
+    MyContactsDialog: typeof import('./../Components/Dialogs/MyContactsDialog.vue')['default']
     NavLink: typeof import('./../Components/NavLink.vue')['default']
     Paginator: typeof import('./../Components/Paginator.vue')['default']
     PanelLayout: typeof import('./../Layouts/PanelLayout.vue')['default']

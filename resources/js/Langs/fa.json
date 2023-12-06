@@ -18,6 +18,9 @@
   "close": "بستن",
   "color": "رنگ",
   "color-code": "کد رنگ",
+  "confirm": "تأیید",
+  "contact": "مخاطب",
+  "contacts": "مخاطبین",
   "creator": "ایجاد کننده",
   "dashboard": "داشبورد",
   "dayEvents": {
@@ -31,6 +34,7 @@
   "delete-confirmation": "آیا مایل به حذف {name} هستید؟",
   "deleted": "حذف شده ها",
   "description": "توضیحات",
+  "duplicate": "کپی کردن",
   "edit": "ویرایش {name}",
   "exceptions": {
     "Forbidden": "ممنوع",
@@ -51,6 +55,10 @@
     "my-lists": "لیست های من",
     "my-invoices": "فاکتور های من"
   },
+  "my-contacts": "مخاطبین من",
+  "no": "خیر",
+  "no-data": "داده ای موجود نیست",
+  "parts": "قطعه ها",
   "pixel-choob": "پیکسل چوب",
   "pvc-infos": "مشخصات pvc",
   "pvc-settings": "مشخصات pvc",
@@ -60,7 +68,14 @@
   },
   "qty": "تعداد",
   "reduce_thickness": "ضخامت pvc کم شود",
+  "restore": "بازگردانی",
+  "search-and-add-contacts": "جستجو و افزودن مخاطبین",
+  "search-contacts-hint": "نام ، شماره همراه ، شماره آدرس و آدرس",
   "search-placeholder": "جستجو ...",
+  "select": "{prefix} انتخاب {suffix}",
+  "select-contacts-hint": "نام، آدرس و یا تلفن همراه یا ثابت مخاطب مورد نظر خود را وارد کنید و سپس بعد از انتخاب گزینهبا گزینه تأیید مخاطب مورد نظر خود را به لیست مخاطبین خود اضافه کنید",
+  "select-to-send": "شما با انتخاب مخاطب خود اقدام به ارسال لیست جهت صدور فاکتور میکنید. نکته: پس از ارسال، لیست قابل تغییر نمی باشد",
+  "send": "ارسال",
   "sizes": {
     "width": "عرض",
     "height": "ارتفاع",
@@ -101,5 +116,6 @@
   "validation-rules": {
     "required": "الزامی",
     "email-invalid": "ایمیل نا معتبر است"
-  }
+  },
+  "yes": "بله"
 }

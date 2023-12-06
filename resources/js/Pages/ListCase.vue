@@ -1,20 +1,26 @@
 <script setup lang="ts">
-  import { useDuplicate } from '@/Composables/CommonRoutes'
   import {
+    mdiArchive,
     mdiArrowRight,
     mdiContentCopy,
     mdiDotsHorizontal,
+    mdiFormatListText,
+    mdiInboxArrowDownOutline,
     mdiPencil,
     mdiPlusCircleOutline,
+    mdiRestore,
     mdiSend,
     mdiTrashCanOutline,
   } from '@mdi/js'
+  import { StatusCodes } from 'http-status-codes'
+  import { toast } from 'vue3-toastify'
   import route from 'ziggy-js'
 
   const { t } = useI18n()
 
   const headers = [
     { key: 'user_id', title: t('creator') },
+    { key: 'list_items_count', title: t('parts') },
     { key: 'title', title: t('title') },
     { key: 'description', title: t('description') },
     { key: 'pvc', title: t('pvc-infos') },
@@ -27,31 +33,41 @@
 
   const tab = ref<number>(0)
   const tabs = ref<
-    { title: string; items: TPageProps | any; headers: any[]; key: string }[]
+    {
+      title: string
+      items: TPageProps | any
+      headers: any[]
+      key: string
+      icon: string
+    }[]
   >([
     {
       title: t('menuDrawerItems.my-lists'),
       items: { data: [] },
       headers: headers.slice(1),
       key: 'my-lists',
+      icon: mdiFormatListText,
     },
     {
       title: t('inbox-lists'),
       items: { data: [] },
       headers: headers,
       key: 'inbox',
+      icon: mdiInboxArrowDownOutline,
     },
     {
       title: t('archived'),
       items: { data: [] },
       headers: headers.slice(1),
       key: 'archived',
+      icon: mdiArchive,
     },
     {
       title: t('deleted'),
       items: { data: [] },
       headers: headers.slice(1),
       key: 'deleted',
+      icon: mdiTrashCanOutline,
     },
   ])
 
@@ -64,7 +80,7 @@
   const case_dialog = ref<boolean>(false)
   const case_item = ref<IListCaseItem>(undefined)
 
-  const listCaseDialogActivator = (item: IListCaseItem = undefined) => {
+  const listCaseDialogActivator = (item = undefined) => {
     case_item.value = item
     case_dialog.value = true
   }
@@ -121,9 +137,12 @@
   }
 
   const duplicate = (id: number) =>
-    useDuplicate('list-cases.duplicate', id)
-      .then((res: any) => tabs.value[tab.value].items.data.unshift(res))
-      .catch((err: string) => console.error(err))
+    useChangeRoute('list-cases.duplicate', id).then(
+      ({ data, statusCode, error }) =>
+        StatusCodes.OK === statusCode.value
+          ? tabs.value[tab.value].items.data.unshift(data)
+          : console.error(error),
+    )
 
   const fetchLists = async (
     activatedTab: number = tab.value,
@@ -131,21 +150,59 @@
   ) =>
     await useFetchClient
       .get<TPageProps>(
-        route('list-cases.index.api', {
-          type: tabs.value[activatedTab].key,
-          _query: { page: page },
+        route('list-cases.index', {
+          _query: _.merge(
+            { type: tabs.value[activatedTab].key, page: page },
+            search.value.length ? { s: search.value } : null,
+          ),
         }),
       )
-      .then(({ data }) => {
-        tabs.value[activatedTab].items = data.value
-      })
+      .then(({ data }) => (tabs.value[activatedTab].items = data.value))
 
   function onTabChanged(args: number) {
     selectedItems.value = []
-    if (!tabs.value[args].items.data.length) fetchLists(args)
+    if (!tabs.value[args].items.links) fetchLists(args)
   }
 
   onMounted(() => fetchLists())
+
+  const onPageChanged = (args: number) => fetchLists(undefined, args)
+
+  const restoreList = (id: number) =>
+    useChangeRoute('list-cases.restore', id).then(({ statusCode }) => {
+      if (statusCode.value === StatusCodes.NO_CONTENT) {
+        let item: IListCaseItem = tabs.value[tab.value].items.data.find(
+          (d: IListCaseItem) => d.id === id,
+        )
+        item.deleted_at = null
+        tabs.value[0].items.data.push(item)
+        _.remove(
+          tabs.value[tabs.value.length - 1].items.data,
+          (d: IListCaseItem) => d.id === id,
+        )
+      }
+    })
+
+  const contactsDialog = ref<boolean>(false)
+
+  function initOrDestroyToSend(id: number = 0) {
+    contactsDialog.value = id !== 0
+    listId.value = id
+  }
+
+  async function onSelectedUser(id: number) {
+    await useFetchClient
+      .post<{ msg: string }>(route('list-cases.send'), { user_id: id })
+      .then(({ data }) => {
+        contactsDialog.value = false
+        toast(data.value.msg, { type: 'success' })
+        let index = tabs.value[tab.value].items.data.findIndex(
+          (item) => item.id === listId.value,
+        )
+        tabs.value[tab.value].items.data[index].user_id = id
+        listId.value = 0
+      })
+  }
 </script>
 
 <template lang="pug">
@@ -173,8 +230,8 @@ PanelLayout
           :prepend-icon="mdiTrashCanOutline",
           color="red",
           rounded="lg",
+          v-show="tab !== 1",
           variant="tonal"
-          v-show="tab !== 1"
         ).my-auto.ml-3 {{ $t('delete') }}
         v-btn(
           :prepend-icon="mdiPlusCircleOutline",
@@ -184,14 +241,17 @@ PanelLayout
           v-show="tab === 0"
         ).my-auto {{ $t('add', { name: $t('list') }) }}
       v-col(cols="12").flex.flex-col.gap-y-2
-        v-tabs(::="tab", @update:model-value="onTabChanged", color="secondary")
-          v-tab(v-for="item in tabs") {{ item.title }}
+        v-tabs(::="tab", @update:model-value="onTabChanged", color="sky-600")
+          v-tab(v-for="item in tabs")
+            v-icon.ml-2 {{ item.icon }}
+            | {{ item.title }}
         v-window(::="tab")
           v-window-item(:value="index", v-for="(item, index) in tabs")
             v-data-table(
               ::="selectedItems",
               :headers="item.headers",
               :items="item.items.data",
+              :items-per-page="item.items.per_page",
               :show-select="tab === 0 || tab === 2",
               item-value="id"
             )
@@ -200,42 +260,100 @@ PanelLayout
                   :current-page="item.items.current_page",
                   :links="item.items.links",
                   :total="item.items.last_page",
-                  @page:click="(args:number)=>fetchLists(undefined,args)",
+                  @page:click="onPageChanged",
                   type="api"
-                )
-              template(#item.actions="item")
+                ).w-full.p-4
+              template(#item.list_items_count="{ value }")
+                v-chip(
+                  v-text="value"
+                ).bg-sky-600.bg-opacity-30.text-sky-600.backdrop-blur-sm
+              template(#item.stock="{ value }")
+                .flex.flex-col.text-xs
+                  .flex.flex-row.gap-x-2
+                    span {{ $t('sizes.width') }}: {{ JSON.parse(value).sizes.w }}
+                    small {{ $t('units.cm') }}
+                    v-divider(vertical).mx-1
+                    span {{ $t('sizes.height') }}: {{ JSON.parse(value).sizes.h }}
+                    small {{ $t('units.cm') }}
+                  v-divider.my-1
+                  .flex.flex-row.gap-x-2
+                    span {{ $t('qty') }}: {{ JSON.parse(value).qty }}
+                    v-divider(vertical).mx-1
+                    span {{ $t('stock-pattern') }}: {{ JSON.parse(value).pattern ? $t('having.have-it') : $t('having.not-have-it') }}
+                    v-divider(vertical).mx-1
+                    span {{ $t('material') }}: {{ JSON.parse(value).material }}
+                  v-divider.my-1
+                  span {{ $t('color') }}: {{ JSON.parse(value).color }}
+              template(#item.pvc="{ value }")
+                .flex.flex-col.text-xs
+                  .flex.flex-row.gap-x-1
+                    input(
+                      :value="JSON.parse(value).reduce_thickness",
+                      disabled,
+                      type="checkbox"
+                    )
+                    label {{ $t('reduce_thickness') }}
+                  v-divider.my-1
+                  .flex.flex-row.items-center
+                    span {{ $t('sizes.stroke') }}:
+                    strong {{ JSON.parse(value).size === '1' ? $t('pvc-size.1mm') : $t('pvc-size.2mm') }}
+                  v-divider.my-1
+                  strong {{ $t('color-code') }}: {{ JSON.parse(value).color_code }}
+              template(#item.description="{ value }")
+                p.max-w-40.truncate {{ value }}
+              template(#item.actions="{ item }")
                 v-menu(location="bottom")
                   template(#activator="{ props }")
                     v-btn(
                       :icon="mdiDotsHorizontal",
                       size="small",
-                      v-bind="props"
+                      v-bind="props",
+                      variant="text"
                     )
                   v-list
-                    v-list-item(:prepend-icon="mdiSend")
+                    v-list-item(
+                      :disabled="item['list_items_count'] === 0",
+                      :prepend-icon="mdiSend",
+                      @click="initOrDestroyToSend(item['id'])",
+                      v-if="item['user_id'] === null",
+                      v-show="tab === 0"
+                    ) {{ $t('send') }}
+                    v-list-item(
+                      :prepend-icon="mdiRestore",
+                      @click="restoreList(item['id'])",
+                      v-show="tab === tabs.length - 1"
+                    ) {{ $t('restore') }}
                     v-divider.mx-2
                     v-list-item(
                       :prepend-icon="mdiPencil",
-                      @click="listCaseDialogActivator(item.value)"
-                    )
+                      @click="listCaseDialogActivator(item)",
+                      v-if="item['user_id'] === null"
+                    ) {{ $t('edit') }}
                     v-list-item(
                       :prepend-icon="mdiContentCopy",
-                      @click="duplicate(item.value.id)"
-                    )
+                      @click="duplicate(item['id'])",
+                      v-show="tab !== tabs.length - 1"
+                    ) {{ $t('duplicate') }}
                     v-list-item(
                       :prepend-icon="mdiTrashCanOutline",
-                      @click="deleteList(item.value.id)"
-                    )
+                      @click="deleteList(item['id'])",
+                      v-if="item['user_id'] === null",
+                      v-show="tab !== 1"
+                    ) {{ $t('delete') }}
               template(#item.updated_at="{ value }")
-                | {{ useLocaleTimeAgo(value) }}
-              template(#item.title="item")
+                .flex.flex-col.items-center.gap-y-2
+                  small.text-xs {{ useLocaleTimeAgo(value) }}
+                  small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}
+              template(#item.title="{ item, value }")
                 p-link(
-                  :href="route('list-items.index', { _query: { list_case_id: item.value.id } })",
+                  :href="route('list-items.index', { _query: { list_case_id: item['id'] } })",
+                  as="button",
                   class="hover:underline",
-                  v-text="item.value.title"
+                  type="button",
+                  v-text="value"
                 ).text-sky-500
-              template(#item.user_id="item")
-                | {{ item.value.author.name }}
+              template(#item.user_id="{ item }")
+                | {{ item['author'].name }}
 ListCaseDialog(
   :initial-form="case_item",
   :show="case_dialog",
@@ -251,4 +369,9 @@ ConfirmationModal(
     | {{ $t('delete', { name: $t('list') }) }}
   template(#content)
     | {{ $t('delete-confirmation', { name: $t('list') }) }}
+MyContactsDialog(
+  :show="contactsDialog",
+  @close="initOrDestroyToSend()",
+  @selected-user="onSelectedUser"
+)
 </template>

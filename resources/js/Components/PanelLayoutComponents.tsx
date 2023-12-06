@@ -22,7 +22,7 @@ export const NavDrawer = defineComponent({
       },
       {
         title: t('menuDrawerItems.my-lists'),
-        link: route('list-cases.index'),
+        link: route('list-case.index'),
         icon: mdiFolderOutline,
         isActive: route().current('list-cases.index'),
       },

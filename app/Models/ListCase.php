@@ -47,13 +47,18 @@ class ListCase extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function scopeArchived(Builder $query, bool $archived): void
+    public function scopeArchived(Builder $query, bool $archived = true): void
     {
         $query->where('archived', $archived);
     }
 
-    public function scopeViewed(Builder $query, bool $viewed): void
+    public function scopeViewed(Builder $query, bool $viewed = true): void
     {
         $query->where('viewed', $viewed);
+    }
+
+    public function scopeInbox(Builder $query): void
+    {
+        $query->withoutGlobalScopes()->whereHas('user', fn ($user) => $user->where('id', auth()->id()));
     }
 }
