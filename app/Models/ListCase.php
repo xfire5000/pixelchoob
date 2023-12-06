@@ -39,7 +39,7 @@ class ListCase extends Model
 
     public function author(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'author_id');
+        return $this->hasOne(User::class, 'id', 'author_id')->with('addressInfos');
     }
 
     public function user(): HasOne

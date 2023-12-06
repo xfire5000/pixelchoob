@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListCase;
 use App\Models\ListItem;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,17 @@ class ListItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $id)
     {
-        //
+        $list_case = ListCase::withoutTrashed()->with('author')->findOrFail($id);
+        $items = ListItem::where('list_case_id', $id)->orderBy('sortable')->get();
+        $viewed = session()->get('viewed_post', []);
+        if (! in_array($id, $viewed) and $list_case->author_id !== auth()->id()) {
+            $list_case->update(['viewed' => true]);
+            session()->push('viewed_post', $id);
+        }
+
+        return inertia('ListCaseItems', compact(['items', 'list_case']));
     }
 
     /**

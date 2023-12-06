@@ -15,6 +15,7 @@
     "email": "ایمیل"
   },
   "back": "بازگشت",
+  "chamfer": "فارسی",
   "close": "بستن",
   "color": "رنگ",
   "color-code": "کد رنگ",
@@ -22,7 +23,9 @@
   "contact": "مخاطب",
   "contacts": "مخاطبین",
   "creator": "ایجاد کننده",
+  "customer-name": "نام مشتری",
   "dashboard": "داشبورد",
+  "date": "تاریخ",
   "dayEvents": {
     "good-morning": "صبح بخیر",
     "good-time": "وقت بخیر",
@@ -46,10 +49,12 @@
     "Service-Unavailable": "خدمات در دسترس نیست",
     "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
   },
+  "gazor_hinge": "لولا گازور",
+  "groove": "شیار",
   "having": { "have-it": "دارد", "not-have-it": "ندارد" },
   "home-page": "صفحه اصلی",
   "inbox-lists": "لیست های دریافتی",
-  "list": "لیست",
+  "list": "لیست {name}",
   "material": "جنس",
   "menuDrawerItems": {
     "my-lists": "لیست های من",
@@ -59,6 +64,7 @@
   "no": "خیر",
   "no-data": "داده ای موجود نیست",
   "parts": "قطعه ها",
+  "phone-number": "شماره تماس",
   "pixel-choob": "پیکسل چوب",
   "pvc-infos": "مشخصات pvc",
   "pvc-settings": "مشخصات pvc",

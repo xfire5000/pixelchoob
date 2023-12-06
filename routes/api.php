@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ListCaseController;
+use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\Panel\FileManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // contacts
     Route::resource('contacts', ContactsController::class)->only(['index', 'store', 'destroy']);
     Route::get('users', [ContactsController::class, 'usersIndex'])->name('search.contacts.index');
+    // list-items
+    Route::resource('list-items', ListItemController::class)->only(['store', 'destroy']);
+    // invoices
+    Route::resource('invoices', InvoiceController::class);
 });

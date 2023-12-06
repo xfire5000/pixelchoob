@@ -203,6 +203,9 @@
         listId.value = 0
       })
   }
+
+  const jsonParser = (data: string | any): any =>
+    !_.isObject(data) ? JSON.parse(data) : data
 </script>
 
 <template lang="pug">
@@ -270,25 +273,25 @@ PanelLayout
               template(#item.stock="{ value }")
                 .flex.flex-col.text-xs
                   .flex.flex-row.gap-x-2
-                    span {{ $t('sizes.width') }}: {{ JSON.parse(value).sizes.w }}
+                    span {{ $t('sizes.width') }}: {{ jsonParser(value).sizes.w }}
                     small {{ $t('units.cm') }}
                     v-divider(vertical).mx-1
-                    span {{ $t('sizes.height') }}: {{ JSON.parse(value).sizes.h }}
+                    span {{ $t('sizes.height') }}: {{ jsonParser(value).sizes.h }}
                     small {{ $t('units.cm') }}
                   v-divider.my-1
                   .flex.flex-row.gap-x-2
-                    span {{ $t('qty') }}: {{ JSON.parse(value).qty }}
+                    span {{ $t('qty') }}: {{ jsonParser(value).qty }}
                     v-divider(vertical).mx-1
-                    span {{ $t('stock-pattern') }}: {{ JSON.parse(value).pattern ? $t('having.have-it') : $t('having.not-have-it') }}
+                    span {{ $t('stock-pattern') }}: {{ jsonParser(value).pattern ? $t('having.have-it') : $t('having.not-have-it') }}
                     v-divider(vertical).mx-1
-                    span {{ $t('material') }}: {{ JSON.parse(value).material }}
+                    span {{ $t('material') }}: {{ jsonParser(value).material }}
                   v-divider.my-1
-                  span {{ $t('color') }}: {{ JSON.parse(value).color }}
+                  span {{ $t('color') }}: {{ jsonParser(value).color }}
               template(#item.pvc="{ value }")
                 .flex.flex-col.text-xs
                   .flex.flex-row.gap-x-1
                     input(
-                      :value="JSON.parse(value).reduce_thickness",
+                      :value="jsonParser(value).reduce_thickness",
                       disabled,
                       type="checkbox"
                     )
@@ -296,9 +299,9 @@ PanelLayout
                   v-divider.my-1
                   .flex.flex-row.items-center
                     span {{ $t('sizes.stroke') }}:
-                    strong {{ JSON.parse(value).size === '1' ? $t('pvc-size.1mm') : $t('pvc-size.2mm') }}
+                    strong {{ jsonParser(value).size === '1' ? $t('pvc-size.1mm') : $t('pvc-size.2mm') }}
                   v-divider.my-1
-                  strong {{ $t('color-code') }}: {{ JSON.parse(value).color_code }}
+                  strong {{ $t('color-code') }}: {{ jsonParser(value).color_code }}
               template(#item.description="{ value }")
                 p.max-w-40.truncate {{ value }}
               template(#item.actions="{ item }")
@@ -346,7 +349,7 @@ PanelLayout
                   small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}
               template(#item.title="{ item, value }")
                 p-link(
-                  :href="route('list-items.index', { _query: { list_case_id: item['id'] } })",
+                  :href="route('list-items.index', item['id'])",
                   as="button",
                   class="hover:underline",
                   type="button",

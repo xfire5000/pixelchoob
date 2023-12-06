@@ -35,7 +35,7 @@
 
   let form = useForm('post', route('list-cases.store'), {
     ...props.initialForm,
-  })
+  } as IListCaseItem)
 
   watch(
     () => props.initialForm,
@@ -53,7 +53,7 @@
             description: newVal.description,
             author_id: newVal.author_id,
             user_id: newVal.user_id,
-          },
+          } as IListCaseItem,
         )
     },
   )
@@ -76,7 +76,7 @@
           material: '',
         },
         archived: 0,
-      })
+      } as IListCaseItem)
   })
 
   const submit = () =>
