@@ -1,22 +1,17 @@
 import { type } from './auto-imports.d'
 
-interface fourSection {
-  l1: boolean
-  l2: boolean
-  w1: boolean
-  w2: boolean
-}
-
-interface twoSection {
-  l: boolean
-  w: boolean
-}
-
 declare global {
   declare type IBreadCrumbItem = {
     title: string
     link?: string
     icon?: string
+  }
+
+  declare type IMenuItem = {
+    title: string
+    link?: string
+    icon?: string
+    isActive: boolean
   }
 
   declare type IListCaseItem = {
@@ -61,14 +56,26 @@ declare global {
     addressInfos?: IAddressInfo[]
   }
 
+  declare type IFourSections = {
+    l1: boolean
+    l2: boolean
+    w1: boolean
+    w2: boolean
+  }
+
+  declare type ITwoSections = {
+    l: boolean
+    w: boolean
+  }
+
   declare type IListItem = {
     id?: number
     list_case_id?: number
     description?: string
-    chamfer: skyfourQuarter
-    gazor_hinge: skytwoQuarter
-    groove: skytwoQuarter
-    pvc: skyfourQuarter
+    chamfer: IFourSections
+    gazor_hinge: ITwoSections
+    groove: ITwoSections
+    pvc: IFourSections
     qty: number
     dimensions: { w: number; h: number }
     sortable?: number

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ListItemRequest;
 use App\Models\ListCase;
 use App\Models\ListItem;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class ListItemController extends Controller
             session()->push('viewed_post', $id);
         }
 
-        return inertia('ListCaseItems', compact(['items', 'list_case']));
+        return inertia('ListCaseItems/index', compact(['items', 'list_case']));
     }
 
     /**
@@ -35,9 +36,11 @@ class ListItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ListItemRequest $request)
     {
-        //
+        $item = ListItem::create($this->initFormData($request));
+
+        return response(['msg' => __('panel_messages.list-item', ['status' => __('panel_messages.attributes.created')]), 'item' => $item]);
     }
 
     /**
@@ -59,9 +62,11 @@ class ListItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ListItem $listItem)
+    public function update(ListItemRequest $request, int $id)
     {
-        //
+        ListItem::find($id)->update($this->initFormData($request));
+
+        return response(['msg' => __('panel_messages.list-item', ['status' => __('panel_messages.attributes.update')]), 'item' => ListItem::find($id)]);
     }
 
     /**
@@ -69,6 +74,20 @@ class ListItemController extends Controller
      */
     public function destroy(ListItem $listItem)
     {
-        //
+        $listItem->delete();
+
+        return response(['msg' => __('panel_messages.list-item', ['status' => __('panel_messages.attributes.deleted')])]);
+    }
+
+    public function initFormData(Request $request): array
+    {
+        $data = $request->all();
+        $data['chamfer'] = json_encode($request->input('chamfer'));
+        $data['pvc'] = json_encode($request->input('pvc'));
+        $data['groove'] = json_encode($request->input('groove'));
+        $data['gazor_hinge'] = json_encode($request->input('gazor_hinge'));
+        $data['dimensions'] = json_encode($request->input('dimensions'));
+
+        return $data;
     }
 }

@@ -1,10 +1,74 @@
 import { usePage } from '@inertiajs/vue3'
-import { mdiFolderOutline, mdiHomeOutline, mdiPageNextOutline } from '@mdi/js'
-import { VIcon } from 'vuetify/lib/components/index.mjs'
+import {
+  mdiArrowLeft,
+  mdiChevronLeft,
+  mdiFolderOutline,
+  mdiHomeOutline,
+  mdiMenu,
+  mdiPageNextOutline,
+} from '@mdi/js'
+import { VBtn, VIcon } from 'vuetify/lib/components/index.mjs'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 import route from 'ziggy-js'
 
 export const Header = defineComponent({
   setup() {},
+})
+
+export const BreadCrumb = defineComponent({
+  setup() {
+    const { breadCrumb, homeBreadCrumb, drawerOpener } = useGlobalState()
+
+    return () => (
+      <div class="flex items-center overflow-x-auto whitespace-nowrap py-4 child:text-xs">
+        <div onClick={() => (drawerOpener.value = !drawerOpener.value)}>
+          {!drawerOpener.value ? (
+            <VBtn icon={mdiMenu} variant="text"></VBtn>
+          ) : null}
+        </div>
+        <p-link
+          href={homeBreadCrumb.value}
+          class="hover:text-primary dark:text-gray-200 text-gray-600"
+        >
+          <VIcon>{mdiHomeOutline}</VIcon>
+        </p-link>
+        {breadCrumb.value.length ? (
+          <span class="ltr:-scale-x-100 dark:text-gray-300 mx-2 text-gray-500">
+            <VIcon class="h-5 w-5">{mdiChevronLeft}</VIcon>
+          </span>
+        ) : null}
+        {breadCrumb.value.map((item, index) => (
+          <>
+            {breadCrumb.value.length - 1 > index &&
+            breadCrumb.value.length !== 1 &&
+            item.link ? (
+              <p-link
+                class="hover:underline dark:text-gray-200 -px-2 flex items-center text-gray-600"
+                href={item.link}
+              >
+                <VIcon size={15} class="rtl:ml-2">
+                  {item.icon}
+                </VIcon>
+                {item.title}
+              </p-link>
+            ) : (
+              <div class="-px-2 flex items-center text-gray-600 dark:text-gray-200">
+                <span>{item.title}</span>
+              </div>
+            )}
+            <span
+              class={[
+                'mx-2 text-gray-500 dark:text-gray-300 ltr:-scale-x-100',
+                { hidden: index > breadCrumb.value.length - 2 },
+              ]}
+            >
+              <VIcon class="h-5 w-5">{mdiChevronLeft}</VIcon>
+            </span>
+          </>
+        ))}
+      </div>
+    )
+  },
 })
 
 export const NavDrawer = defineComponent({
@@ -12,6 +76,10 @@ export const NavDrawer = defineComponent({
     const page = usePage()
 
     const { t } = useI18n()
+
+    const { mobile } = useDisplay()
+
+    const { selectDrawerItem, drawerOpener } = useGlobalState()
 
     const menuItems = [
       {
@@ -34,8 +102,32 @@ export const NavDrawer = defineComponent({
       },
     ]
 
+    onMounted(() => {
+      let itemFinder = menuItems.find(
+        (item) => item.link === page.props.ziggy['url'] + page.url,
+      )
+      if (itemFinder) selectDrawerItem(itemFinder)
+      else if (page.url.includes('list-items')) selectDrawerItem(menuItems[1])
+      setTimeout(() => (drawerOpener.value = !mobile.value), 500)
+    })
+
     return () => (
-      <aside class="sticky right-0 top-0 z-20 flex flex-col w-64 h-screen px-5 py-6 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+      <aside
+        class={[
+          'sticky transition duration-300 right-0 top-0 z-20 flex flex-col h-screen py-6 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700',
+          !drawerOpener.value ? 'w-0' : 'w-64 px-5',
+        ]}
+      >
+        <div
+          class="absolute top-2 left-2 block lg:hidden"
+          onClick={() => (drawerOpener.value = !drawerOpener.value)}
+        >
+          <VBtn
+            icon={mdiArrowLeft}
+            variant="text"
+            class="dark:text-white"
+          ></VBtn>
+        </div>
         <p-link href={route('dashboard')} class="mx-auto">
           <img
             class="w-auto h-7 dark:brightness-200"

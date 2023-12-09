@@ -27,6 +27,7 @@ export const fourSections = defineComponent({
             <label for={ids[0]}>L1</label>
             <input
               value={l1.value}
+              checked={l1.value}
               onChange={() => (l1.value = !l1.value)}
               type="checkbox"
               disabled={props.disabler.l1}
@@ -36,6 +37,7 @@ export const fourSections = defineComponent({
             <label for={ids[1]}>L2</label>
             <input
               value={l2.value}
+              checked={l2.value}
               onChange={() => (l2.value = !l2.value)}
               type="checkbox"
               disabled={props.disabler.l2}
@@ -45,15 +47,17 @@ export const fourSections = defineComponent({
             <label for={ids[2]}>W1</label>
             <input
               value={w1.value}
+              checked={w1.value}
               onChange={() => (w1.value = !w1.value)}
               type="checkbox"
-              disabled={props.disabler.w2}
+              disabled={props.disabler.w1}
             />
           </div>
           <div class="flex w-5 flex-col items-center gap-y-1">
             <label for={ids[3]}>W2</label>
             <input
               value={w2.value}
+              checked={w2.value}
               onChange={() => (w2.value = !w2.value)}
               type="checkbox"
               disabled={props.disabler.w2}

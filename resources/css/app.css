@@ -93,12 +93,12 @@ h6 {
   @apply dark:[&_.vpd-content]:bg-dark-200;
 }
 
-.no-spin::-webkit-inner-spin-button,
-.no-spin::-webkit-outer-spin-button {
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
   -webkit-appearance: none !important;
   margin: 0 !important;
 }
 
-.no-spin {
+input {
   -moz-appearance: textfield !important;
 }

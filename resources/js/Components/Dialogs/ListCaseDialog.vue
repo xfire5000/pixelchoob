@@ -33,54 +33,26 @@
 
   const emit = defineEmits(['close', 'submitted'])
 
-  let form = useForm('post', route('list-cases.store'), {
+  const form = useForm('post', route('list-cases.store'), {
     ...props.initialForm,
   } as IListCaseItem)
 
   watch(
     () => props.initialForm,
     (newVal: IListCaseItem) => {
-      if (props.show && props.initialForm.id)
-        form = useForm(
-          'patch',
-          route('list-cases.update', props.initialForm.id),
-          {
-            id: newVal.id,
-            archived: newVal.archived,
-            title: newVal.title,
-            pvc: JSON.parse(newVal.pvc as string),
-            stock: JSON.parse(newVal.stock as string),
-            description: newVal.description,
-            author_id: newVal.author_id,
-            user_id: newVal.user_id,
-          } as IListCaseItem,
-        )
+      if (props.show && props.initialForm.id) {
+        form.pvc = JSON.parse(newVal.pvc as string)
+        form.stock = JSON.parse(newVal.stock as string)
+      }
     },
   )
 
-  onUpdated(() => {
-    if (!props.show)
-      form = useForm('post', route('list-cases.store'), {
-        title: '',
-        description: '<p class="ql-align-right"></p>',
-        pvc: {
-          reduce_thickness: false,
-          size: '1',
-          color_code: '',
-        },
-        stock: {
-          sizes: { w: 183, h: 366 },
-          qty: 1,
-          color: '',
-          pattern: false,
-          material: '',
-        },
-        archived: 0,
-      } as IListCaseItem)
-  })
-
   const submit = () =>
     form.submit({
+      method: props.initialForm.id ? 'patch' : 'post',
+      url: props.initialForm.id
+        ? route('list-cases.update', props.initialForm.id)
+        : route('list-cases.store'),
       onSuccess(res: any) {
         emit('submitted', res.data.item)
         toast(res.data.msg, { type: 'success' })
@@ -143,7 +115,7 @@ DialogModal(:closeable="false", :show, @close="emit('close')")
                 class="w-1/3 focus:outline-none",
                 step="1",
                 type="number"
-              ).no-spin.appearance-none
+              ).appearance-none
               span.opacity-70 {{ $t('units.count') }}
           .flex.grow.flex-row.items-center
             strong {{ $t('stock-pattern') }}:

@@ -10,4 +10,5 @@ return [
     ],
     'list' => 'لیست :status',
     'contact' => 'مخاطب :status',
+    'list-item' => 'قطعه :status',
 ];

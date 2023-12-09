@@ -108,3 +108,6 @@ export const eventDay = computed(() => {
       return t('dayEvents.good-night')
   }
 })
+
+export const useJsonParser = (data: string | any): any =>
+  !_.isObject(data) ? JSON.parse(data) : data

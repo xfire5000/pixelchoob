@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('contacts', ContactsController::class)->only(['index', 'store', 'destroy']);
     Route::get('users', [ContactsController::class, 'usersIndex'])->name('search.contacts.index');
     // list-items
-    Route::resource('list-items', ListItemController::class)->only(['store', 'destroy']);
+    Route::resource('list-items', ListItemController::class)->only(['store', 'destroy', 'update']);
     // invoices
     Route::resource('invoices', InvoiceController::class);
 });
