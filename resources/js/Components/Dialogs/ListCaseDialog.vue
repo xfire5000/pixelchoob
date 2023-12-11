@@ -39,10 +39,11 @@
 
   watch(
     () => props.initialForm,
-    (newVal: IListCaseItem) => {
+    (newVal: any) => {
       if (props.show && props.initialForm.id) {
-        form.pvc = JSON.parse(newVal.pvc as string)
-        form.stock = JSON.parse(newVal.stock as string)
+        let dataItem = useInitListCase(newVal)
+        form.pvc = dataItem.pvc
+        form.stock = dataItem.stock
       }
     },
   )

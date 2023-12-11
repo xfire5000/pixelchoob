@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ListItemController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,5 +13,12 @@ Route::middleware([
     // list-cases
     Route::inertia('list-case', 'ListCase')->name('list-case.index');
     // list-items
-    Route::get('list-items/{id}', [ListItemController::class, 'index'])->name('list-items.index');
+    Route::controller(ListItemController::class)->prefix('list-items')->group(function () {
+        Route::get('{id}', 'index')->name('list-items.index');
+        Route::get('export', 'export')->name('list-items.export');
+    });
+    // invoices
+    Route::resource('invoices', InvoiceController::class)->only(['index']);
+    // settings
+    Route::inertia('settings', 'Settings/index')->name('settings.index');
 });

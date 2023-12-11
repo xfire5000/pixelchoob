@@ -1,6 +1,15 @@
 <script setup lang="ts">
   import ListItemFragment from './Partials/ListItemFragment.vue'
+  import { usePage } from '@inertiajs/vue3'
+  import {
+    mdiDotsHorizontal,
+    mdiMicrosoftExcel,
+    mdiReceiptTextCheck,
+    mdiReceiptTextEdit,
+    mdiSend,
+  } from '@mdi/js'
   import { useForm } from 'laravel-precognition-vue'
+  import { mergeProps } from 'vue'
   import { toast } from 'vue3-toastify'
   import route from 'ziggy-js'
 
@@ -34,8 +43,12 @@
         : route('list-items.store'),
       onSuccess(response) {
         toast(response.data.msg, { type: 'success' })
-        Items.value.unshift(response.data.item)
-        form.reset()
+        if (!form.id) Items.value.unshift(response.data.item)
+        else {
+          let index = Items.value.findIndex((item) => item.id === form.id)
+          Items.value[index] = response.data.item
+        }
+        reset()
       },
     })
 
@@ -45,15 +58,7 @@
 
   const { arrivedState } = useScroll(window)
 
-  function initToUpdateItem(item: any) {
-    let dataItem = { ...item }
-    dataItem.chamfer = useJsonParser(item.chamfer)
-    dataItem.gazor_hinge = useJsonParser(item.gazor_hinge)
-    dataItem.pvc = useJsonParser(item.pvc)
-    dataItem.groove = useJsonParser(item.groove)
-    dataItem.dimensions = useJsonParser(item.dimensions)
-    form.setData(dataItem as IListItem)
-  }
+  const initToUpdateItem = (item: any) => form.setData(useInitListItem(item))
 
   const reset = () => {
     form.reset()
@@ -69,9 +74,25 @@
   }
 
   const doDelete = () =>
-    useDelete('list-items.destroy', itemId.value).then(() =>
-      initOrDestroyDeleteItem(),
-    )
+    useDelete('list-items.destroy', itemId.value).then(() => {
+      _.remove(Items.value, (item) => item.id === itemId.value)
+      initOrDestroyDeleteItem()
+    })
+
+  const contactsDialog = ref<boolean>(false)
+
+  const onSelectedUser = (id: number) =>
+    useFetchClient
+      .post<{ msg: string }>(route('list-cases.send'), {
+        user_id: id,
+      })
+      .then(({ data }) => {
+        contactsDialog.value = false
+        toast(data.value.msg, { type: 'success' })
+        usePage().props.list_case['user_id'] = id
+      })
+
+  const invoiceDialog = ref<boolean>(false)
 </script>
 
 <template lang="pug">
@@ -86,15 +107,15 @@ PanelLayout
         | {{ $t('phone-number') }}:&nbsp;
         v-chip(
           :key="item.id",
-          v-for="item in list_case.author.addressInfos.filter((f) => ['phone', 'mobile'].includes(f.type))",
+          v-for="item in list_case.author.address_infos.filter((f) => ['phone', 'mobile'].includes(f.type))",
           v-text="item.description"
         )
       strong(class="lg:col-span-1").col-span-full {{ $t('date') }}: {{ $d(list_case.created_at, 'long') }}
     .flex.w-full.flex-col.items-center.gap-y-2
       #list-item-provider(
-        :class="[arrivedState.top ? 'lg:top-16' : 'lg:top-6']",
+        :class="[arrivedState.top ? 'lg:top-16' : 'lg:top-6', 'lg:max-h-44']",
         v-if="list_case.author_id === $page.props.auth['user'].id && !list_case.user_id"
-      ).items-top.max-h-44
+      ).items-top
         ListItemFragment(
           ::chamfer="form.chamfer",
           ::description="form.description",
@@ -110,32 +131,68 @@ PanelLayout
           btn-color="primary",
           clearable
         )
-      div(
-        :class="['dark:bg-slate-800 lg:w-[98%]', Object.entries(form.errors).length ? 'mt-40' : 'mt-34']"
-      ).w-full.rounded-lg.bg-gray-300.px-2.py-6.shadow-md
-        .flex.flex-col.gap-y-2
-          div(
-            :key="item.id",
-            class="hover:bg-gray-400 dark:hover:bg-white dark:hover:bg-opacity-20",
-            v-for="item in Items"
-          ).items-top.flex.w-full.flex-row.gap-x-2.rounded-lg.p-2
-            ListItemFragment(
-              :btn-disabled="form.id && form.id === item.id ? true : false",
-              :btn-text="$t('edit')",
-              :chamfer="item.chamfer",
-              :clearable-text="$t('delete', { name: $t('part') })",
-              :description="item.description",
-              :dimensions="item.dimensions",
-              :gazor_hinge="item.gazor_hinge",
-              :groove="item.groove",
-              :pvc="item.pvc",
-              :qty="item.qty",
-              @btn:click="initToUpdateItem(item)",
-              @clear:click="initOrDestroyDeleteItem(item.id)",
-              btn-color="secondary",
-              clearable,
-              readonly
-            )
+      #list-items-provider(
+        :class="[Object.entries(form.errors).length ? 'lg:mt-40' : 'lg:mt-34']"
+      )
+        div(:key="item.id", v-for="(item, index) in Items").items-top
+          ListItemFragment(
+            :btn-disabled="(form.id && form.id === item.id) || list_case.user_id ? true : false",
+            :btn-text="$t('edit', { name: $t('part') })",
+            :chamfer="item.chamfer",
+            :clearable="!list_case.user_id",
+            :clearable-text="$t('delete', { name: $t('part') })",
+            :description="item.description",
+            :dimensions="item.dimensions",
+            :gazor_hinge="item.gazor_hinge",
+            :groove="item.groove",
+            :pvc="item.pvc",
+            :qty="item.qty",
+            @btn:click="initToUpdateItem(item)",
+            @clear:click="initOrDestroyDeleteItem(item.id)",
+            btn-color="secondary",
+            readonly
+          )
+          v-divider(
+            :class="['lg:hidden', { hidden: index > Items.length - 2 }]"
+          ).mt-2.block
+    v-menu(location="top")
+      template(#activator="{ props: menu }")
+        v-tooltip(location="right")
+          template(#activator="{ props: tooltip }")
+            v-btn(
+              :icon="mdiDotsHorizontal",
+              color="primary",
+              v-bind="mergeProps(menu, tooltip)"
+            ).fixed.bottom-5.left-5
+          span {{ $t('actions') }}
+      v-list
+        template(
+          v-if="list_case.author_id === $page.props.auth['user'].id && !list_case.user_id && !list_case.deleted_at"
+        )
+          v-list-item(:prepend-icon="mdiSend", @click="contactsDialog = true") {{ $t('send') }}
+          v-divider.mx-2
+        v-list-item(
+          :href="route('list-items.export')",
+          :prepend-icon="mdiMicrosoftExcel",
+          target="_blank"
+        ) {{ $t('export-excel') }}
+        //- p-link(
+        //-   :href="route('invoices.create', { _query: { list_case_id: list_case.id } })",
+        //-   as="button",
+        //-   type="button",
+        //-   v-if="!list_case.invoice && list_case.author_id !== $page.props.auth['user'].id"
+        //- )
+        v-list-item(
+          :prepend-icon="mdiReceiptTextEdit",
+          @click="invoiceDialog = true"
+        ) {{ $t('invoicing') }}
+        //- p-link(
+        //-   :href="route('invoices.show', list_case.invoice.id)",
+        //-   as="button",
+        //-   type="button",
+        //-   v-else
+        //- )
+        v-list-item(:prepend-icon="mdiReceiptTextCheck") {{ $t('show', { name: $t('invoice') }) }}
 ConfirmationModal(
   :show="deleteDialog",
   @close="initOrDestroyDeleteItem()",
@@ -143,11 +200,27 @@ ConfirmationModal(
 )
   template(#title) {{ $t('delete', { name: $t('part') }) }}
   template(#content) {{ $t('delete-confirmation', { name: $t('part') }) }}
+MyContactsDialog(
+  :show="contactsDialog",
+  @close="contactsDialog = false",
+  @selected-user="onSelectedUser"
+)
+ListInvoiceDialog(
+  :list-case="list_case",
+  :list-items="Items",
+  :show="invoiceDialog",
+  @close="invoiceDialog = false"
+)
 </template>
 
 <style scoped>
   #list-item-provider {
     @apply dark:bg-dark-200 dark:shadow-gray-800 lg:fixed lg:w-[78%] lg:flex-row [&_input]:text-xs;
-    @apply z-40 flex flex-col gap-x-2 gap-y-2 rounded-lg bg-sky-300 p-6 shadow-md transition duration-300 lg:flex-row;
+    @apply z-40 flex flex-col gap-x-2 gap-y-2 rounded-lg bg-sky-300 p-6 transition duration-300 lg:flex-row lg:shadow-md;
+  }
+  #list-items-provider {
+    @apply flex w-full flex-col gap-y-2 rounded-lg bg-gray-300 px-2 py-4 shadow-md dark:bg-slate-800 lg:w-[98%] lg:py-6;
+    @apply child-hover:bg-gray-400 child-hover:dark:bg-white child-hover:dark:bg-opacity-20 child:lg:gap-x-2;
+    @apply child:flex child:w-full child:flex-col child:gap-y-2 child:rounded-lg child:p-2 child:lg:flex-row;
   }
 </style>

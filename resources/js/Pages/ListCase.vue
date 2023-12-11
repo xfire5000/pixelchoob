@@ -6,6 +6,7 @@
     mdiDotsHorizontal,
     mdiFormatListText,
     mdiInboxArrowDownOutline,
+    mdiMagnify,
     mdiPencil,
     mdiPlusCircleOutline,
     mdiRestore,
@@ -69,11 +70,16 @@
       key: 'deleted',
       icon: mdiTrashCanOutline,
     },
+    {
+      title: t('searched'),
+      items: { data: [] },
+      headers: headers,
+      key: 'searched',
+      icon: mdiMagnify,
+    },
   ])
 
   const search = ref<string>(searched ? (searched as string) : '')
-
-  const doSearch = () => useSearch('list-cases.index', search.value as string)
 
   const selectedItems = ref<number[]>([])
 
@@ -215,16 +221,16 @@ PanelLayout
         SearchField(
           ::="search",
           :disabled="tab !== 0",
-          @do-search="doSearch",
+          @do-search="fetchLists(tabs.length - 1)",
           class="w-1/3"
         ).mt-4
       v-col(class="rtl:text-left", cols="12", md="4")
-        v-btn(
-          :prepend-icon="mdiArrowRight",
-          rounded="lg",
-          v-show="searched",
-          variant="outlined"
-        ).my-auto.ml-3 {{ $t('back') }}
+        p-link(:href="route('list-cases.index')", v-if="searched")
+          v-btn(
+            :prepend-icon="mdiArrowRight",
+            rounded="lg",
+            variant="outlined"
+          ).my-auto.ml-3 {{ $t('back') }}
         v-btn(
           :disabled="!selectedItems.length",
           :prepend-icon="mdiTrashCanOutline",
@@ -242,7 +248,9 @@ PanelLayout
         ).my-auto {{ $t('add', { name: $t('list') }) }}
       v-col(cols="12").flex.flex-col.gap-y-2
         v-tabs(::="tab", @update:model-value="onTabChanged", color="sky-600")
-          v-tab(v-for="item in tabs")
+          v-tab(
+            v-for="item in tabs.filter((f) => (search.length > 0 ? f.key === 'searched' : f.key !== 'searched'))"
+          )
             v-icon.ml-2 {{ item.icon }}
             | {{ item.title }}
         v-window(::="tab")
@@ -300,7 +308,7 @@ PanelLayout
                   v-divider.my-1
                   strong {{ $t('color-code') }}: {{ useJsonParser(value).color_code }}
               template(#item.description="{ value }")
-                p.max-w-40.truncate {{ value }}
+                p.line-clamp-3.max-w-40 {{ value }}
               template(#item.actions="{ item }")
                 v-menu(location="bottom")
                   template(#activator="{ props }")

@@ -28,6 +28,7 @@ declare module 'vue' {
     InputError: typeof import('./../Components/InputError.vue')['default']
     InputLabel: typeof import('./../Components/InputLabel.vue')['default']
     ListCaseDialog: typeof import('./../Components/Dialogs/ListCaseDialog.vue')['default']
+    ListInvoiceDialog: typeof import('./../Components/Dialogs/ListInvoiceDialog.vue')['default']
     Modal: typeof import('./../Components/Modal.vue')['default']
     MyContactsDialog: typeof import('./../Components/Dialogs/MyContactsDialog.vue')['default']
     NavLink: typeof import('./../Components/NavLink.vue')['default']

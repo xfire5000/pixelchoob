@@ -72,7 +72,7 @@ fourSections(
   :title="$t('pvc-settings')"
 )
 .flex.h-full.grow.flex-col.gap-y-2
-  .items-top.flex.h-auto.max-h-16.flex-row.gap-x-2
+  div(class="lg:max-h-16 lg:flex-row lg:gap-x-2").items-top.flex.h-auto.flex-col.gap-y-3
     v-text-field(
       ::="qty",
       :error-messages="errors?.qty",

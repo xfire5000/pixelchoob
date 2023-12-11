@@ -41,7 +41,7 @@ export default createI18n({
     fa: {
       currency: {
         style: 'currency',
-        currency: 'ريال',
+        currency: 'تومان',
         currencyDisplay: 'name',
       },
     },

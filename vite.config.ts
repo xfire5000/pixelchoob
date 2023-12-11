@@ -91,7 +91,7 @@ export default ({ mode }) => {
         outDir: 'public',
         srcDir: 'public',
         manifestFilename: '../manifest.webmanifest',
-        includeAssets: ['/assets/img/orise.png'],
+        includeAssets: ['/assets/img/logo.png'],
         injectRegister: 'inline',
         manifest: {
           start_url: './',

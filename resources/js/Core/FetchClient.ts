@@ -50,7 +50,7 @@ class FetchClient {
       .json<T>()
   }
 
-  post<T>(url: string, body: unknown) {
+  post<T>(url: string, body?: unknown) {
     return this.networkClient(url, {
       afterFetch: (ctx) => ctx,
     })
@@ -58,7 +58,7 @@ class FetchClient {
       .json<T>()
   }
 
-  patch<T>(url: string, body: unknown) {
+  patch<T>(url: string, body?: unknown) {
     return this.networkClient(url, {
       afterFetch: (ctx) => ctx,
     })

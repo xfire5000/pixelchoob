@@ -47,6 +47,11 @@ class ListCase extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(Invoice::class, 'list_case_id', 'id');
+    }
+
     public function scopeArchived(Builder $query, bool $archived = true): void
     {
         $query->where('archived', $archived);
@@ -60,5 +65,10 @@ class ListCase extends Model
     public function scopeInbox(Builder $query): void
     {
         $query->withoutGlobalScopes()->whereHas('user', fn ($user) => $user->where('id', auth()->id()));
+    }
+
+    public function scopeHasInvoice(Builder $query, bool $has = true): void
+    {
+        $has ? $query->whereHas('invoice') : $query->whereDoesntHave('invoice');
     }
 }

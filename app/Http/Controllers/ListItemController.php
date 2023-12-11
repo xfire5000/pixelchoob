@@ -2,25 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ListCaseItems;
 use App\Http\Requests\ListItemRequest;
 use App\Models\ListCase;
 use App\Models\ListItem;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ListItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(int $id)
+    public function index(int $id): \Inertia\Response
     {
-        $list_case = ListCase::withoutTrashed()->with('author')->findOrFail($id);
-        $items = ListItem::where('list_case_id', $id)->orderBy('sortable')->get();
+        $list_case = ListCase::withoutTrashed()->with(['author', 'invoice'])->archived(false)->findOrFail($id);
+        $items = $list_case->listItems()->orderBy('sortable')->get();
         $viewed = session()->get('viewed_post', []);
         if (! in_array($id, $viewed) and $list_case->author_id !== auth()->id()) {
             $list_case->update(['viewed' => true]);
             session()->push('viewed_post', $id);
         }
+        session()->put('list_case_id', $id);
 
         return inertia('ListCaseItems/index', compact(['items', 'list_case']));
     }
@@ -79,7 +82,16 @@ class ListItemController extends Controller
         return response(['msg' => __('panel_messages.list-item', ['status' => __('panel_messages.attributes.deleted')])]);
     }
 
-    public function initFormData(Request $request): array
+    public function export()
+    {
+        $id = session('list_case_id');
+        $listCase = ListCase::find($id);
+        $now = now()->format('Y-m-d_H-i-s');
+
+        return Excel::download(new ListCaseItems($id), "$listCase->title-$now.xlsx");
+    }
+
+    private function initFormData(Request $request): array
     {
         $data = $request->all();
         $data['chamfer'] = json_encode($request->input('chamfer'));
@@ -87,6 +99,9 @@ class ListItemController extends Controller
         $data['groove'] = json_encode($request->input('groove'));
         $data['gazor_hinge'] = json_encode($request->input('gazor_hinge'));
         $data['dimensions'] = json_encode($request->input('dimensions'));
+        if (! isset($data['list_case_id'])) {
+            $data['list_case_id'] = session('list_case_id');
+        }
 
         return $data;
     }

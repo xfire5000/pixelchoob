@@ -86,21 +86,20 @@ export const NavDrawer = defineComponent({
         title: t('dashboard'),
         link: route('dashboard'),
         icon: mdiHomeOutline,
-        isActive: route().current('dashboard'),
       },
       {
         title: t('menuDrawerItems.my-lists'),
         link: route('list-case.index'),
         icon: mdiFolderOutline,
-        isActive: route().current('list-cases.index'),
       },
       {
         title: t('menuDrawerItems.my-invoices'),
         link: route('invoices.index'),
         icon: mdiPageNextOutline,
-        isActive: route().current('invoices.index'),
       },
     ]
+
+    const search = ref<string>('')
 
     onMounted(() => {
       let itemFinder = menuItems.find(
@@ -156,30 +155,36 @@ export const NavDrawer = defineComponent({
               </span>
 
               <input
+                value={search.value}
+                onInput={(e) => (search.value = e.target['value'])}
                 type="text"
                 class="w-full py-1.5 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
                 placeholder={t('search-placeholder')}
               />
             </div>
 
-            {menuItems.map((item) => (
-              <p-link
-                as="button"
-                type="button"
-                class={[
-                  'flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700 w-full',
-                  {
-                    'dark:text-gray-200 text-gray-700 dark:bg-gray-800 bg-gray-100':
-                      item.isActive,
-                  },
-                ]}
-                href={item.link}
-              >
-                <VIcon size="20">{item.icon}</VIcon>
+            {menuItems
+              .filter((f) =>
+                search.value.length ? f.title.includes(search.value) : f,
+              )
+              .map((item) => (
+                <p-link
+                  as="button"
+                  type="button"
+                  class={[
+                    'flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700 w-full',
+                    {
+                      'dark:text-gray-200 text-gray-700 dark:bg-gray-800 bg-gray-100':
+                        item.link === page.props.ziggy['location'],
+                    },
+                  ]}
+                  href={item.link}
+                >
+                  <VIcon size="20">{item.icon}</VIcon>
 
-                <span class="mx-2 text-sm font-medium">{item.title}</span>
-              </p-link>
-            ))}
+                  <span class="mx-2 text-sm font-medium">{item.title}</span>
+                </p-link>
+              ))}
           </nav>
 
           <div class="mt-6">

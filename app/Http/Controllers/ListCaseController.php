@@ -19,12 +19,13 @@ class ListCaseController extends Controller
         }
         $type = $_GET['type'];
 
-        return response(! isset($_GET['s']) ? match ($type) {
-            'my-lists' => ListCase::withCount('listItems')->latest()->archived(false)->paginate(20),
-            'inbox' => ListCase::withCount('listItems')->inbox()->latest()->paginate(20),
-            'archived' => ListCase::withCount('listItems')->archived()->latest()->paginate(20),
-            'deleted' => ListCase::withCount('listItems')->onlyTrashed()->latest()->paginate(20),
-        } : ListCase::search($_GET['s'])->query(fn ($query) => $query->latest())->paginate(20));
+        return response(match ($type) {
+            'my-lists' => ListCase::withCount('listItems')->with('invoice')->latest()->archived(false)->paginate(20),
+            'inbox' => ListCase::withCount('listItems')->with('invoice')->inbox()->latest()->paginate(20),
+            'archived' => ListCase::withCount('listItems')->with('invoice')->archived()->latest()->paginate(20),
+            'deleted' => ListCase::withCount('listItems')->with('invoice')->onlyTrashed()->latest()->paginate(20),
+            'searched' => ListCase::search($_GET['s'])->query(fn ($query) => $query->withCount('listItems')->with('invoice')->latest())->paginate(20)
+        });
     }
 
     /**

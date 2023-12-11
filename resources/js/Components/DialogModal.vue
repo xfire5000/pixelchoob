@@ -1,20 +1,14 @@
-<script setup>
+<script setup lang="ts">
   const emit = defineEmits(['close'])
 
-  defineProps({
-    show: {
-      type: Boolean,
-      default: false,
+  withDefaults(
+    defineProps<{ show: boolean; maxWidth: string; closeable: boolean }>(),
+    {
+      show: false,
+      maxWidth: '2xl',
+      closeable: true,
     },
-    maxWidth: {
-      type: String,
-      default: '2xl',
-    },
-    closeable: {
-      type: Boolean,
-      default: true,
-    },
-  })
+  )
 
   const close = () => {
     emit('close')

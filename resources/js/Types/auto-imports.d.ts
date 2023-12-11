@@ -195,12 +195,15 @@ declare global {
   const useIdle: typeof import('@vueuse/core')['useIdle']
   const useImage: typeof import('@vueuse/core')['useImage']
   const useInfiniteScroll: typeof import('@vueuse/core')['useInfiniteScroll']
+  const useInitListCase: typeof import('../Composables/ListComposable')['useInitListCase']
+  const useInitListItem: typeof import('../Composables/ListComposable')['useInitListItem']
   const useIntersectionObserver: typeof import('@vueuse/core')['useIntersectionObserver']
   const useInterval: typeof import('@vueuse/core')['useInterval']
   const useIntervalFn: typeof import('@vueuse/core')['useIntervalFn']
   const useJsonParser: typeof import('../Composables/global')['useJsonParser']
   const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
+  const useListItem: typeof import('../Composables/ListComposable')['useListItem']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
   const useLocaleTimeAgo: typeof import('../Composables/global')['useLocaleTimeAgo']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
@@ -503,6 +506,8 @@ declare module 'vue' {
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>
     readonly useInfiniteScroll: UnwrapRef<typeof import('@vueuse/core')['useInfiniteScroll']>
+    readonly useInitListCase: UnwrapRef<typeof import('../Composables/ListComposable')['useInitListCase']>
+    readonly useInitListItem: UnwrapRef<typeof import('../Composables/ListComposable')['useInitListItem']>
     readonly useIntersectionObserver: UnwrapRef<typeof import('@vueuse/core')['useIntersectionObserver']>
     readonly useInterval: UnwrapRef<typeof import('@vueuse/core')['useInterval']>
     readonly useIntervalFn: UnwrapRef<typeof import('@vueuse/core')['useIntervalFn']>
@@ -804,6 +809,8 @@ declare module '@vue/runtime-core' {
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>
     readonly useInfiniteScroll: UnwrapRef<typeof import('@vueuse/core')['useInfiniteScroll']>
+    readonly useInitListCase: UnwrapRef<typeof import('../Composables/ListComposable')['useInitListCase']>
+    readonly useInitListItem: UnwrapRef<typeof import('../Composables/ListComposable')['useInitListItem']>
     readonly useIntersectionObserver: UnwrapRef<typeof import('@vueuse/core')['useIntersectionObserver']>
     readonly useInterval: UnwrapRef<typeof import('@vueuse/core')['useInterval']>
     readonly useIntervalFn: UnwrapRef<typeof import('@vueuse/core')['useIntervalFn']>

@@ -15,6 +15,7 @@
     "email": "ایمیل"
   },
   "back": "بازگشت",
+  "calculate": "محاسبه",
   "chamfer": "فارسی",
   "clear-form": "خالی کردن",
   "close": "بستن",
@@ -24,7 +25,9 @@
   "contact": "مخاطب",
   "contacts": "مخاطبین",
   "creator": "ایجاد کننده",
+  "currency": "تومان",
   "customer-name": "نام مشتری",
+  "cutting": "برش",
   "dashboard": "داشبورد",
   "date": "تاریخ",
   "dayEvents": {
@@ -38,6 +41,7 @@
   "delete-confirmation": "آیا مایل به حذف {name} هستید؟",
   "deleted": "حذف شده ها",
   "description": "توضیحات",
+  "document-no": "شماره سند",
   "duplicate": "کپی کردن",
   "edit": "ویرایش {name}",
   "exceptions": {
@@ -50,11 +54,15 @@
     "Service-Unavailable": "خدمات در دسترس نیست",
     "Service-Unavailable-Hint": "با عرض پوزش ، ما در حال تعمیر و نگهداری هستیم.لطفا به زودی دوباره بررسی کنید."
   },
+  "export-excel": "خروجی اکسل",
   "gazor_hinge": "لولا گازور",
   "groove": "شیار",
   "having": { "have-it": "دارد", "not-have-it": "ندارد" },
   "home-page": "صفحه اصلی",
   "inbox-lists": "لیست های دریافتی",
+  "inprogress": "در حال توسعه",
+  "invoice": "فاکتور",
+  "invoicing": "صدور فاکتور",
   "list": "لیست {name}",
   "material": "جنس",
   "menuDrawerItems": {
@@ -68,6 +76,10 @@
   "parts": "قطعه ها",
   "phone-number": "شماره تماس",
   "pixel-choob": "پیکسل چوب",
+  "price": "قیمت",
+  "price_total": "قیمت نهایی",
+  "profile": "پروفایل",
+  "pvc": "PVC",
   "pvc-infos": "مشخصات pvc",
   "pvc-settings": "مشخصات pvc",
   "pvc-size": {
@@ -84,6 +96,7 @@
   "select-contacts-hint": "نام، آدرس و یا تلفن همراه یا ثابت مخاطب مورد نظر خود را وارد کنید و سپس بعد از انتخاب گزینهبا گزینه تأیید مخاطب مورد نظر خود را به لیست مخاطبین خود اضافه کنید",
   "select-to-send": "شما با انتخاب مخاطب خود اقدام به ارسال لیست جهت صدور فاکتور میکنید. نکته: پس از ارسال، لیست قابل تغییر نمی باشد",
   "send": "ارسال",
+  "show": "نمایش {name}",
   "sizes": {
     "width": "عرض",
     "height": "ارتفاع",
@@ -116,6 +129,7 @@
     "after-tomorrow": "پس فردا"
   },
   "title": "عنوان",
+  "type-of": "نوع {name}",
   "units": {
     "cm": "سانتی متر",
     "count": "عدد"

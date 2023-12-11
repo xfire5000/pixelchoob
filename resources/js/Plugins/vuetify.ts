@@ -69,7 +69,7 @@ export default createVuetify({
     },
     VTable: {
       density: 'compact',
-      class: 'dark:bg-dark-300 dark:text-gray-300',
+      class: 'dark:bg-dark-300 dark:text-gray-300 dark:[&_th]:bg-dark-200',
     },
     VSwitch: { density: 'compact', class: 'dark:child:text-gray-200' },
     VChip: { size: 'small', class: 'mx-2' },

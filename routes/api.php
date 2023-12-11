@@ -39,5 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // list-items
     Route::resource('list-items', ListItemController::class)->only(['store', 'destroy', 'update']);
     // invoices
-    Route::resource('invoices', InvoiceController::class);
+    Route::resource('invoices', InvoiceController::class)->only(['store', 'destroy']);
+    Route::post('invoices/calc/{list_case_id}', 'InvoiceController@calculate')->name('invoices.calc');
 });

@@ -11,7 +11,6 @@ declare global {
     title: string
     link?: string
     icon?: string
-    isActive: boolean
   }
 
   declare type IListCaseItem = {
@@ -20,14 +19,22 @@ declare global {
     author_id?: number
     title: string
     description?: string
-    pvc: any | string
-    stock: any | string
+    pvc: { reduce_thickness: boolean; size: '1' | '2'; color_code: string }
+    stock: {
+      sizes: { w: number; h: number }
+      qty: number
+      color: string
+      pattern: boolean
+      material: string
+    }
     archived: 1 | 0
     viewed?: 1 | 0
     created_at?: Date
     updated_at?: Date
     deleted_at?: Date
     author?: IUserItem
+    list_items?: listItems[]
+    invoice?: any
   }
 
   declare type IRoleItem = {
@@ -53,7 +60,7 @@ declare global {
     roles?: IRoleItem[]
     profile_photo_url: string
     contacts?: IUserItem[]
-    addressInfos?: IAddressInfo[]
+    address_infos?: IAddressInfo[]
   }
 
   declare type IFourSections = {
@@ -79,5 +86,11 @@ declare global {
     qty: number
     dimensions: { w: number; h: number }
     sortable?: number
+  }
+
+  declare type ISettingItem = {
+    id?: number
+    value?: string
+    user_id?: number
   }
 }
