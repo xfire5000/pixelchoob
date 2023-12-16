@@ -9,5 +9,6 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['list_case_id'];
+    protected $fillable = ['list_case_id', 'description', 'sumPVC', 'sumCutting', 'countParts',
+        'sumGroove', 'sumChamfers', 'cutting', 'chamfer', 'groove', 'pvc'];
 }

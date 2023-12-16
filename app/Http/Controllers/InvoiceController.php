@@ -28,7 +28,11 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['pvc'] = json_encode($request->input('pvc'));
+        $item = Invoice::create($data);
+
+        return response(['msg' => __('panel_messages.invoice', ['status' => __('panel_messages.attributes.sent')]), 'item' => $item]);
     }
 
     /**

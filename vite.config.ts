@@ -164,7 +164,7 @@ export default ({ mode }) => {
       external: ['lodash'],
     },
     optimizeDeps: {
-      include: ['lodash.throttle'],
+      include: ['lodash.throttle', 'vue-countup-v3'],
     },
   })
 }

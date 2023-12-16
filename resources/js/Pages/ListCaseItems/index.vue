@@ -1,7 +1,9 @@
+<!-- eslint-disable vue/prop-name-casing -->
 <script setup lang="ts">
   import ListItemFragment from './Partials/ListItemFragment.vue'
   import { usePage } from '@inertiajs/vue3'
   import {
+    mdiCheckAll,
     mdiDotsHorizontal,
     mdiMicrosoftExcel,
     mdiReceiptTextCheck,
@@ -17,8 +19,8 @@
 
   interface IProps {
     items: any[]
-    // eslint-disable-next-line vue/prop-name-casing
     list_case: IListCaseItem
+    invoice_prices: string
   }
 
   const props = defineProps<IProps>()
@@ -93,6 +95,11 @@
       })
 
   const invoiceDialog = ref<boolean>(false)
+
+  function onSubmitted(item: IInvoiceItem) {
+    usePage().props.list_case['invoice'] = item
+    invoiceDialog.value = false
+  }
 </script>
 
 <template lang="pug">
@@ -111,9 +118,22 @@ PanelLayout
           v-text="item.description"
         )
       strong(class="lg:col-span-1").col-span-full {{ $t('date') }}: {{ $d(list_case.created_at, 'long') }}
+    div(v-else).my-4.grid.grid-cols-3.gap-2
+      div(class="lg:col-span-1").col-span-full
+        small {{ $t('status') }}:
+        v-chip(
+          :class="[list_case.user_id ? 'bg-primary text-primary' : 'bg-indigo-600 text-indigo-500']"
+        ).bg-opacity-20 {{ list_case.user_id ? $t('sent') : $t('no-sent') }}
+      div(
+        class="ltr:text-right rtl:text-left dark:text-blue-400 lg:col-span-2",
+        v-show="list_case.viewed === 1"
+      ).text-blue-600
+        small
+          v-icon(class="ltr:mr-2 rtl:ml-2") {{ mdiCheckAll }}
+          | {{ $t('viewed') }}
     .flex.w-full.flex-col.items-center.gap-y-2
       #list-item-provider(
-        :class="[arrivedState.top ? 'lg:top-16' : 'lg:top-6', 'lg:max-h-44']",
+        :class="[arrivedState.top ? 'lg:top-26' : 'lg:top-6', 'lg:max-h-44']",
         v-if="list_case.author_id === $page.props.auth['user'].id && !list_case.user_id"
       ).items-top
         ListItemFragment(
@@ -176,23 +196,16 @@ PanelLayout
           :prepend-icon="mdiMicrosoftExcel",
           target="_blank"
         ) {{ $t('export-excel') }}
-        //- p-link(
-        //-   :href="route('invoices.create', { _query: { list_case_id: list_case.id } })",
-        //-   as="button",
-        //-   type="button",
-        //-   v-if="!list_case.invoice && list_case.author_id !== $page.props.auth['user'].id"
-        //- )
         v-list-item(
           :prepend-icon="mdiReceiptTextEdit",
-          @click="invoiceDialog = true"
+          @click="invoiceDialog = true",
+          v-if="!list_case.invoice && list_case.author_id !== $page.props.auth['user'].id"
         ) {{ $t('invoicing') }}
-        //- p-link(
-        //-   :href="route('invoices.show', list_case.invoice.id)",
-        //-   as="button",
-        //-   type="button",
-        //-   v-else
-        //- )
-        v-list-item(:prepend-icon="mdiReceiptTextCheck") {{ $t('show', { name: $t('invoice') }) }}
+        v-list-item(
+          :prepend-icon="mdiReceiptTextCheck",
+          @click="invoiceDialog = true",
+          v-else
+        ) {{ $t('show', { name: $t('invoice') }) }}
 ConfirmationModal(
   :show="deleteDialog",
   @close="initOrDestroyDeleteItem()",
@@ -208,18 +221,20 @@ MyContactsDialog(
 ListInvoiceDialog(
   :list-case="list_case",
   :list-items="Items",
+  :settings="useJsonParser(invoice_prices)",
   :show="invoiceDialog",
-  @close="invoiceDialog = false"
+  @close="invoiceDialog = false",
+  @submitted="onSubmitted"
 )
 </template>
 
 <style scoped>
   #list-item-provider {
-    @apply dark:bg-dark-200 dark:shadow-gray-800 lg:fixed lg:w-[78%] lg:flex-row [&_input]:text-xs;
+    @apply text-gray-800 dark:bg-dark-200 dark:text-white dark:shadow-gray-800 lg:fixed lg:w-[78%] lg:flex-row [&_input]:text-xs;
     @apply z-40 flex flex-col gap-x-2 gap-y-2 rounded-lg bg-sky-300 p-6 transition duration-300 lg:flex-row lg:shadow-md;
   }
   #list-items-provider {
-    @apply flex w-full flex-col gap-y-2 rounded-lg bg-gray-300 px-2 py-4 shadow-md dark:bg-slate-800 lg:w-[98%] lg:py-6;
+    @apply flex w-full flex-col gap-y-2 rounded-lg bg-gray-200 px-2 py-4 text-gray-800 shadow-md dark:bg-slate-800 dark:text-white lg:w-[98%] lg:py-6;
     @apply child-hover:bg-gray-400 child-hover:dark:bg-white child-hover:dark:bg-opacity-20 child:lg:gap-x-2;
     @apply child:flex child:w-full child:flex-col child:gap-y-2 child:rounded-lg child:p-2 child:lg:flex-row;
   }

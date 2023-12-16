@@ -14,7 +14,19 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('list_case_id')->constrained('list_cases')->onDelete('cascade')->onUpdate('cascade');
-
+            $table->text('description')->nullable();
+            $table->integer('sumPVC');
+            $table->integer('sumCutting');
+            $table->integer('countParts');
+            $table->integer('sumChamfers');
+            $table->integer('sumGroove');
+            $table->string('pvc')->default(json_encode([
+                'size_1' => 0,
+                'size_2' => 0,
+            ]));
+            $table->integer('groove');
+            $table->integer('chamfer');
+            $table->integer('cutting');
             $table->timestamps();
         });
     }

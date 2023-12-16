@@ -26,7 +26,7 @@
     { key: 'description', title: t('description') },
     { key: 'pvc', title: t('pvc-infos') },
     { key: 'stock', title: t('stock-infos') },
-    { key: 'updated_at', title: t('updated_at') },
+    { key: 'created_at', title: t('created_at') },
     { key: 'actions', title: t('actions') },
   ]
 
@@ -170,7 +170,19 @@
     if (!tabs.value[args].items.links) fetchLists(args)
   }
 
-  onMounted(() => fetchLists())
+  onMounted(() => {
+    switch (useUrlSearchParams('history').type) {
+      default:
+        break
+      case 'inbox':
+        tab.value = 1
+        break
+      case 'my-lists':
+        tab.value = 0
+        break
+    }
+    fetchLists()
+  })
 
   const onPageChanged = (args: number) => fetchLists(undefined, args)
 
@@ -348,7 +360,7 @@ PanelLayout
                       v-if="item['user_id'] === null",
                       v-show="tab !== 1"
                     ) {{ $t('delete') }}
-              template(#item.updated_at="{ value }")
+              template(#item.created_at="{ value }")
                 .flex.flex-col.items-center.gap-y-2
                   small.text-xs.text-sky-600 {{ useLocaleTimeAgo(value) }}
                   small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}

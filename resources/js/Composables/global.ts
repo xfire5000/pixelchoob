@@ -91,21 +91,21 @@ export const useDate = (
 export const addDays = (date: Date = new Date(), days: number = 1) =>
   date.setDate(date.getDate() + days)
 
-export const eventDay = computed(() => {
+export const eventDay = computed<{ title: string; event: string }>(() => {
   let currentTime = useNow()
   let hrs: number = currentTime.value.getHours()
 
   switch (true) {
     default:
-      return t('dayEvents.good-morning')
+      return { title: t('dayEvents.good-morning'), event: 'morning' }
     case hrs >= 10 && hrs < 12:
-      return t('dayEvents.good-time')
+      return { title: t('dayEvents.good-time'), event: 'morning' }
     case hrs >= 12 && hrs < 15:
-      return t('dayEvents.good-lunch')
+      return { title: t('dayEvents.good-lunch'), event: 'afternoon' }
     case hrs >= 15 && hrs < 19:
-      return t('dayEvents.good-evening')
+      return { title: t('dayEvents.good-evening'), event: 'evening' }
     case hrs >= 19:
-      return t('dayEvents.good-night')
+      return { title: t('dayEvents.good-night'), event: 'night' }
   }
 })
 

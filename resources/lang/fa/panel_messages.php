@@ -13,4 +13,5 @@ return [
     'contact' => 'مخاطب :status',
     'list-item' => 'قطعه :status',
     'settings' => 'تنظیمات :status',
+    'invoice' => 'پیش فاکتور :status',
 ];

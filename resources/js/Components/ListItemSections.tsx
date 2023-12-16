@@ -30,7 +30,7 @@ export const fourSections = defineComponent({
     })
 
     return () => (
-      <div class="hover:border-opacity-100 dark:border-white dark:border-opacity-20 dark:hover:border-opacity-80 flex flex-col items-center rounded-md border border-gray-600 border-opacity-30 p-2">
+      <div class="dark:border-white dark:border-opacity-20 dark:hover:border-opacity-80 flex flex-col items-center rounded-md border border-slate-800 p-2">
         <div class="flex flex-row items-center gap-x-2">
           <input
             value={toggleAll.value}

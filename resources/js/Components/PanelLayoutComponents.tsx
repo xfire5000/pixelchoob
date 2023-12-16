@@ -1,3 +1,4 @@
+import ThemeProvideVue from './ThemeProvide.vue'
 import { usePage } from '@inertiajs/vue3'
 import {
   mdiArrowLeft,
@@ -93,11 +94,11 @@ export const NavDrawer = defineComponent({
         link: route('list-case.index'),
         icon: mdiFolderOutline,
       },
-      {
-        title: t('menuDrawerItems.my-invoices'),
-        link: route('invoices.index'),
-        icon: mdiPageNextOutline,
-      },
+      // {
+      //   title: t('menuDrawerItems.my-invoices'),
+      //   link: route('invoices.index'),
+      //   icon: mdiPageNextOutline,
+      // },
       {
         title: t('settings.index'),
         link: route('settings.index'),
@@ -119,7 +120,7 @@ export const NavDrawer = defineComponent({
     return () => (
       <aside
         class={[
-          'sticky transition duration-300 right-0 top-0 z-20 flex flex-col h-screen py-6 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700',
+          'sticky transition duration-300 right-0 top-0 z-20 flex flex-col h-screen py-6 overflow-y-auto bg-white border-t-0 border-b-0 rtl:border-r-0 ltr:border-l-0 border dark:bg-gray-900 dark:border-gray-700',
           !drawerOpener.value ? 'w-0' : 'w-64 px-5',
         ]}
       >
@@ -132,6 +133,9 @@ export const NavDrawer = defineComponent({
             variant="text"
             class="dark:text-white"
           ></VBtn>
+        </div>
+        <div class="absolute top-4 right-2">
+          <ThemeProvideVue />
         </div>
         <p-link href={route('dashboard')} class="mx-auto">
           <img

@@ -1,68 +1,124 @@
 <script setup lang="ts">
   import DialogModal from '../DialogModal.vue'
-  import { mdiReceiptText, mdiText } from '@mdi/js'
+  import { mdiAlertOutline, mdiCheck, mdiReceiptText, mdiText } from '@mdi/js'
   import { useForm } from 'laravel-precognition-vue'
+  import { toast } from 'vue3-toastify'
   import route from 'ziggy-js'
 
   interface IProps {
     show: boolean
     listItems: IListItem[]
     listCase: IListCaseItem
+    settings?: InvoicePriceSetting
   }
 
-  const props = withDefaults(defineProps<IProps>(), { show: false })
-
-  const emit = defineEmits(['close'])
-
-  const calcForm = reactive({
-    cutting: 0,
-    pvc: {
-      size_1: 0,
-      size_2: 0,
-    },
-    chamfer: 0,
-    groove: 0,
+  const props = withDefaults(defineProps<IProps>(), {
+    show: false,
+    settings: () => ({
+      cutting: 0,
+      pvc: {
+        size_1: 0,
+        size_2: 0,
+      },
+      chamfer: 0,
+      groove: 0,
+    }),
   })
+
+  const emit = defineEmits(['close', 'submitted'])
+
+  const form = useForm(
+    'post',
+    route('invoices.store'),
+    !props.listCase.invoice
+      ? {
+          list_case_id: props.listCase.id,
+          description: '',
+          ...props.settings,
+          sumPVC: 0,
+          sumCutting: 0,
+          countParts: 0,
+          sumGroove: 0,
+          sumChamfers: 0,
+        }
+      : { ...props.listCase.invoice },
+  )
+
+  onUpdated(() => {
+    if (props.listCase.invoice) form.pvc = useJsonParser(form.pvc)
+  })
+
+  const pvcSize = useJsonParser(props.listCase.pvc).size
 
   const calcItems = computed(() => {
-    let sumChamfers: number = 0,
-      countChamfers: number = 0,
-      sumGroove: number = 0,
-      countParts: number = 0,
-      sumCutting: number = 0
-    props.listItems.forEach((item) => {
-      let dataItem = useInitListItem(item)
-      countParts += dataItem.qty
-      // let newChamfer = 0
-      // chamfers
-      if (dataItem.chamfer.l1 && dataItem.chamfer.l2) {
-        // newChamfer += dataItem.dimensions.h * 2
-        countChamfers += 2
-      } else if (dataItem.chamfer.l1 || dataItem.chamfer.l2) {
-        // newChamfer += dataItem.dimensions.h
-        countChamfers += 1
+    if (!props.listCase.invoice) {
+      let sumChamfers: number = 0,
+        sumGroove: number = 0,
+        countParts: number = 0,
+        sumCutting: number = 0,
+        sumPVC: number = 0
+      props.listItems.forEach((item) => {
+        let dataItem = useInitListItem(item)
+        countParts += dataItem.qty
+        let newChamfer = 0,
+          newPVC = 0
+        // chamfers
+        if (dataItem.chamfer.l1 && dataItem.chamfer.l2) {
+          newChamfer += dataItem.dimensions.h * 2
+        } else if (dataItem.chamfer.l1 || dataItem.chamfer.l2) {
+          newChamfer += dataItem.dimensions.h
+        }
+        if (dataItem.chamfer.w1 && dataItem.chamfer.w2) {
+          newChamfer += dataItem.dimensions.w * 2
+        } else if (dataItem.chamfer.w1 || dataItem.chamfer.w2) {
+          newChamfer += dataItem.dimensions.w
+        }
+        sumChamfers += newChamfer * dataItem.qty
+        // groove
+        if (dataItem.groove.l) sumGroove += dataItem.dimensions.h
+        else if (dataItem.groove.w) sumGroove += dataItem.dimensions.w
+        // pvc
+        if (dataItem.chamfer.l1 && dataItem.chamfer.l2) {
+          newPVC += dataItem.dimensions.h * 2
+        } else if (dataItem.chamfer.l1 || dataItem.chamfer.l2) {
+          newPVC += dataItem.dimensions.h
+        }
+        if (dataItem.chamfer.w1 && dataItem.chamfer.w2) {
+          newPVC += dataItem.dimensions.w * 2
+        } else if (dataItem.chamfer.w1 || dataItem.chamfer.w2) {
+          newPVC += dataItem.dimensions.w
+        }
+        sumPVC += newPVC * dataItem.qty
+      })
+      sumChamfers *= form.chamfer
+      sumCutting = countParts * form.cutting
+      sumPVC *= pvcSize === '1' ? form.pvc.size_1 : form.pvc.size_2
+      sumGroove *= form.groove
+      return {
+        sumChamfers,
+        sumGroove,
+        countParts,
+        sumCutting,
+        sumPVC,
       }
-      if (dataItem.chamfer.w1 && dataItem.chamfer.w2) {
-        // newChamfer += dataItem.dimensions.w * 2
-        countChamfers += 2
-      } else if (dataItem.chamfer.w1 || dataItem.chamfer.w2) {
-        // newChamfer += dataItem.dimensions.w
-        countChamfers += 1
-      }
-      sumChamfers += /*newChamfer **/ dataItem.qty
-      // groove
-      if (dataItem.groove.l) sumGroove += dataItem.dimensions.h
-      else if (dataItem.groove.w) sumGroove += dataItem.dimensions.w
-      // pvc
-    })
-    sumChamfers = sumChamfers * calcForm.chamfer
-    sumCutting = countParts * calcForm.cutting
-    return { sumChamfers, countChamfers, sumGroove, countParts, sumCutting }
+    } else return props.listCase.invoice
   })
 
-  const form = useForm('post', route('invoices.store'), {
-    description: '',
-  })
+  const submit = () => {
+    form.setData({
+      sumChamfers: calcItems.value.sumChamfers,
+      sumGroove: calcItems.value.sumGroove,
+      countParts: calcItems.value.countParts,
+      sumCutting: calcItems.value.sumCutting,
+      sumPVC: calcItems.value.sumPVC,
+    })
+    form.submit({
+      onSuccess(res) {
+        toast(res.data.msg, { type: 'success' })
+        emit('submitted', res.data.item)
+      },
+    })
+  }
 </script>
 
 <template lang="pug">
@@ -72,86 +128,106 @@ DialogModal(:show, @close="emit('close')")
     | {{ $t('invoicing') }}
   template(#content)
     .container
+      v-alert(
+        :icon="mdiAlertOutline",
+        :text="$t('invoice-dialog-hint')",
+        closable,
+        color="warning",
+        v-if="!listCase.invoice",
+        variant="tonal"
+      )
       v-table(fixed-header, hover).max-h-64.overflow-y-scroll
         thead
           tr
             th {{ $t('title') }}
-            th {{ $t('qty') }}
             th {{ $t('price') }}
             th {{ $t('price_total') }}
         tbody(class="[&_input]:text-xs")
           tr
-            td {{ $t('cutting') }}
             td
+              | {{ $t('cutting') }}
               v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countParts }} {{ $t('part') }}
             td
               v-text-field(
-                ::="calcForm.cutting",
+                ::="form.cutting",
+                :readonly="!!listCase.invoice",
                 :suffix="$t('currency')",
                 hide-details="auto",
                 type="number"
               )
-            td(v-text="$n(calcItems.sumCutting)")
-          tr
+            td
+              | {{ $n(calcItems.sumCutting) }}
+              small.mr-1.opacity-75 {{ $t('currency') }}
+          tr(v-if="pvcSize === '1'")
             td {{ $t('pvc-size.1mm') }} {{ $t('pvc') }}
             td
-              v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countParts }}
-            td
               v-text-field(
-                ::="calcForm.pvc.size_1",
+                ::="form.pvc.size_1",
+                :readonly="!!listCase.invoice",
                 :suffix="$t('currency')",
                 hide-details="auto",
                 type="number"
               )
-          tr
+            td
+              | {{ $n(calcItems.sumPVC) }}
+              small.mr-1.opacity-75 {{ $t('currency') }}
+          tr(v-else)
             td {{ $t('pvc-size.2mm') }} {{ $t('pvc') }}
             td
-              v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countParts }}
-            td
               v-text-field(
-                ::="calcForm.pvc.size_2",
+                ::="form.pvc.size_2",
+                :readonly="!!listCase.invoice",
                 :suffix="$t('currency')",
                 hide-details="auto",
                 type="number"
               )
+            td
+              | {{ $n(calcItems.sumPVC) }}
+              small.mr-1.opacity-75 {{ $t('currency') }}
           tr
             td {{ $t('chamfer') }}
             td
-              .flex.flex-row.items-center.gap-x-2
-                v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countChamfers }} {{ $t('type-of', { name: $t('cutting') }) }}
-                span X
-                v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countParts }} {{ $t('part') }}
-            td
               v-text-field(
-                ::="calcForm.chamfer",
+                ::="form.chamfer",
+                :readonly="!!listCase.invoice",
                 :suffix="$t('currency')",
                 hide-details="auto",
                 type="number"
               )
-            td(v-text="$n(calcItems.sumChamfers)")
+            td
+              | {{ $n(calcItems.sumChamfers) }}
+              small.mr-1.opacity-75 {{ $t('currency') }}
           tr
             td {{ $t('groove') }}
             td
-              v-chip(size="x-small").bg-sky-600.bg-opacity-20.text-sky-600 {{ calcItems.countParts }}
-            td
               v-text-field(
-                ::="calcForm.groove",
+                ::="form.groove",
+                :readonly="!!listCase.invoice",
                 :suffix="$t('currency')",
                 hide-details="auto",
                 type="number"
               )
+            td
+              | {{ $n(calcItems.sumGroove) }}
+              small.mr-1.opacity-75 {{ $t('currency') }}
       v-divider.mx-2
       v-textarea(
         ::="form.description",
         :label="$t('description')",
         :prepend-inner-icon="mdiText",
+        :readonly="!!listCase.invoice",
         hide-details="auto",
         max-rows="2",
         rows="2",
         variant="outlined"
       ).mt-4
   template(#footer)
-    v-btn(color="primary", rounded="lg") {{ $t('submit-store') }}
+    v-btn(
+      :prepend-icon="mdiCheck",
+      @click="submit",
+      color="primary",
+      rounded="lg"
+    ) {{ $t('submit-store') }}
 </template>
 
 <style scoped>

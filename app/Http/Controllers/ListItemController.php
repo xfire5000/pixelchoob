@@ -6,6 +6,7 @@ use App\Exports\ListCaseItems;
 use App\Http\Requests\ListItemRequest;
 use App\Models\ListCase;
 use App\Models\ListItem;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -24,8 +25,9 @@ class ListItemController extends Controller
             session()->push('viewed_post', $id);
         }
         session()->put('list_case_id', $id);
+        $invoice_prices = Setting::ofKey('invoices_price')->firstOrFail()->value;
 
-        return inertia('ListCaseItems/index', compact(['items', 'list_case']));
+        return inertia('ListCaseItems/index', compact(['items', 'list_case', 'invoice_prices']));
     }
 
     /**

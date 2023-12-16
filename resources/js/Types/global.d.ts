@@ -34,7 +34,7 @@ declare global {
     deleted_at?: Date
     author?: IUserItem
     list_items?: listItems[]
-    invoice?: any
+    invoice?: IInvoiceItem
   }
 
   declare type IRoleItem = {
@@ -88,9 +88,37 @@ declare global {
     sortable?: number
   }
 
+  declare type IInvoiceItem = {
+    id?: number
+    list_case_id?: number
+    description?: string
+    sumPVC?: number
+    sumCutting?: number
+    countParts?: number
+    sumGroove?: number
+    sumChamfers?: number
+    cutting: number
+    pvc: {
+      size_1: number
+      size_2: number
+    }
+    chamfer: number
+    groove: number
+  }
+
   declare type ISettingItem = {
     id?: number
     value?: string
     user_id?: number
+  }
+
+  declare type InvoicePriceSetting = {
+    cutting: number
+    pvc: {
+      size_1: number
+      size_2: number
+    }
+    chamfer: number
+    groove: number
   }
 }

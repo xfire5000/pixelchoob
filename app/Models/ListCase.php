@@ -59,7 +59,7 @@ class ListCase extends Model
 
     public function scopeViewed(Builder $query, bool $viewed = true): void
     {
-        $query->where('viewed', $viewed);
+        $query->withoutGlobalScopes()->where('viewed', $viewed);
     }
 
     public function scopeInbox(Builder $query): void
