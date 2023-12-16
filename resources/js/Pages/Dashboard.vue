@@ -114,7 +114,7 @@ PanelLayout
                   small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}
               template(#item.title="{ item, value }")
                 p-link(
-                  :href="route('list-items.index', item['id'])",
+                  :href="route('list-items.index', item['slug'])",
                   as="button",
                   class="hover:underline",
                   type="button",
@@ -144,7 +144,7 @@ PanelLayout
                   small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}
               template(#item.title="{ item, value }")
                 p-link(
-                  :href="route('list-items.index', item['id'])",
+                  :href="route('list-items.index', item['slug'])",
                   as="button",
                   class="hover:underline",
                   type="button",

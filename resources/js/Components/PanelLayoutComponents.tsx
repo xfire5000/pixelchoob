@@ -94,11 +94,11 @@ export const NavDrawer = defineComponent({
         link: route('list-case.index'),
         icon: mdiFolderOutline,
       },
-      // {
-      //   title: t('menuDrawerItems.my-invoices'),
-      //   link: route('invoices.index'),
-      //   icon: mdiPageNextOutline,
-      // },
+      {
+        title: t('menuDrawerItems.my-invoices'),
+        link: route('invoices.index'),
+        icon: mdiPageNextOutline,
+      },
       {
         title: t('settings.index'),
         link: route('settings.index'),

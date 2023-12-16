@@ -2,8 +2,8 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Setting;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -33,8 +33,17 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
         $user->assignRole('user');
-        // TODO make settings for user registered
-        DB::table('settings')->insert([]);
+        Setting::create([
+            'title' => 'invoices_price', 'value' => json_encode([
+                'cutting' => 1,
+                'pvc' => [
+                    'size_1' => 1,
+                    'size_2' => 1,
+                ],
+                'chamfer' => 1,
+                'groove' => 1,
+            ]), 'author_id' => $user->id,
+        ]);
 
         return $user;
     }

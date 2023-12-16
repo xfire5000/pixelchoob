@@ -13,7 +13,7 @@ Route::middleware([
     Route::inertia('list-case', 'ListCase')->name('list-case.index');
     // list-items
     Route::controller(ListItemController::class)->prefix('list-items')->group(function () {
-        Route::get('{id}', 'index')->name('list-items.index');
+        Route::get('{slug}', 'index')->name('list-items.index');
         Route::get('export', 'export')->name('list-items.export');
     });
     // invoices

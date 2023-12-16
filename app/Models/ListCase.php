@@ -10,18 +10,32 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
+use Pishran\LaravelPersianSlug\HasPersianSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class ListCase extends Model
 {
-    use HasFactory,Searchable,SoftDeletes;
+    use HasFactory,HasPersianSlug,Searchable,SoftDeletes;
 
     protected $fillable = ['author_id', 'user_id', 'title', 'description', 'pvc', 'stock', 'archived',
-        'viewed'];
+        'viewed', 'slug'];
 
     protected static function booted()
     {
         parent::booted();
         static::addGlobalScope(new MyItems);
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['user_id', 'title'])
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 
     public function toSearchableArray(): array

@@ -15,16 +15,16 @@ class ListItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(int $id): \Inertia\Response
+    public function index(string $slug): \Inertia\Response
     {
-        $list_case = ListCase::withoutTrashed()->with(['author', 'invoice'])->archived(false)->findOrFail($id);
+        $list_case = ListCase::withoutTrashed()->with(['author', 'invoice'])->archived(false)->where('slug', $slug)->firstOrFail();
         $items = $list_case->listItems()->orderBy('sortable')->get();
         $viewed = session()->get('viewed_post', []);
-        if (! in_array($id, $viewed) and $list_case->author_id !== auth()->id()) {
+        if (! in_array($list_case->id, $viewed) and $list_case->author_id !== auth()->id()) {
             $list_case->update(['viewed' => true]);
-            session()->push('viewed_post', $id);
+            session()->push('viewed_post', $list_case->id);
         }
-        session()->put('list_case_id', $id);
+        session()->put('list_case_id', $list_case->id);
         $invoice_prices = Setting::ofKey('invoices_price')->firstOrFail()->value;
 
         return inertia('ListCaseItems/index', compact(['items', 'list_case', 'invoice_prices']));

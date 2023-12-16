@@ -30,8 +30,6 @@ export const useGlobalState = createGlobalState(() => {
 
   const homeBreadCrumb = ref<string>(route('dashboard'))
 
-  const readProgress = ref<boolean>(false)
-
   return {
     breadCrumb,
     selectDrawerItem,
@@ -39,6 +37,5 @@ export const useGlobalState = createGlobalState(() => {
     direction,
     drawerOpener,
     homeBreadCrumb,
-    readProgress,
   }
 })
