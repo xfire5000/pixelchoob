@@ -44,31 +44,31 @@ v-textarea(
   variant="outlined"
 )
 fourSections(
-  ::l1="useJsonParser(chamfer).l1",
-  ::l2="useJsonParser(chamfer).l2",
-  ::w1="useJsonParser(chamfer).w1",
-  ::w2="useJsonParser(chamfer).w2",
-  :disabler="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: pvc.l1 || groove.l || gazor_hinge.l, l2: pvc.l2 || groove.l || gazor_hinge.l, w1: pvc.w1 || groove.l || gazor_hinge.l, w2: pvc.w2 || groove.l || gazor_hinge.l }",
+  ::l1="chamfer.l1",
+  ::l2="chamfer.l2",
+  ::w1="chamfer.w1",
+  ::w2="chamfer.w2",
+  :disable="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: pvc.l1 || ((groove.l || gazor_hinge.l) && (chamfer.l2 || pvc.l2)), l2: pvc.l2 || ((groove.l || gazor_hinge.l) && (chamfer.l1 || pvc.l1)), w1: pvc.w1 || ((groove.l || gazor_hinge.l) && (chamfer.w2 || pvc.w2)), w2: pvc.w2 || ((groove.l || gazor_hinge.l) && (chamfer.w1 || pvc.w1)) }",
   :title="$t('chamfer')"
 )
 twoSections(
-  ::l1="useJsonParser(gazor_hinge).l",
-  ::l2="useJsonParser(gazor_hinge).w",
-  :disabler="readonly ? { l: true, w: true } : { l: groove.l || chamfer.l1 || chamfer.l2 || pvc.l1 || pvc.l2, w: groove.w || chamfer.w1 || chamfer.w2 || pvc.w1 || pvc.w2 }",
+  ::l="gazor_hinge.l",
+  ::w="gazor_hinge.w",
+  :disable="readonly ? { l: true, w: true } : { l: groove.l || (chamfer.l1 && chamfer.l2), w: groove.w || (chamfer.w1 && chamfer.w2) }",
   :title="$t('gazor_hinge')"
 )
 twoSections(
-  ::l1="useJsonParser(groove).l",
-  ::l2="useJsonParser(groove).w",
-  :disabler="readonly ? { l: true, w: true } : { l: gazor_hinge.l || chamfer.l1 || chamfer.l2 || pvc.l1 || pvc.l2, w: gazor_hinge.w || chamfer.w1 || chamfer.w2 || pvc.w1 || pvc.w2 }",
+  ::l="groove.l",
+  ::w="groove.w",
+  :disable="readonly ? { l: true, w: true } : { l: gazor_hinge.l || (chamfer.l1 && chamfer.l2) || (pvc.l1 && pvc.l2), w: gazor_hinge.w || (chamfer.w1 && chamfer.w2) || (pvc.w1 && pvc.w2) }",
   :title="$t('groove')"
 )
 fourSections(
-  ::l1="useJsonParser(pvc).l1",
-  ::l2="useJsonParser(pvc).l2",
-  ::w1="useJsonParser(pvc).w1",
-  ::w2="useJsonParser(pvc).w2",
-  :disabler="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: chamfer.l1 || groove.l || gazor_hinge.l, l2: chamfer.l2 || groove.l || gazor_hinge.l, w1: chamfer.w1 || groove.l || gazor_hinge.l, w2: chamfer.w2 || groove.l || gazor_hinge.l }",
+  ::l1="pvc.l1",
+  ::l2="pvc.l2",
+  ::w1="pvc.w1",
+  ::w2="pvc.w2",
+  :disable="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: chamfer.l1 || (groove.l && (pvc.l2 || chamfer.l2)), l2: chamfer.l2 || (groove.l && (pvc.l1 || chamfer.l1)), w1: chamfer.w1 || (groove.l && (pvc.w2 || chamfer.w2)), w2: chamfer.w2 || (groove.l && (pvc.w1 || chamfer.w1)) }",
   :title="$t('pvc-settings')"
 )
 .flex.h-full.grow.flex-col.gap-y-2
@@ -82,7 +82,7 @@ fourSections(
       type="number"
     )
     v-text-field(
-      ::="useJsonParser(dimensions).w",
+      ::="dimensions.w",
       :error-messages="errors?.['dimensions.w']",
       :label="$t('sizes.width')",
       :prepend-inner-icon="mdiArrowLeftRight",
@@ -91,7 +91,7 @@ fourSections(
       type="number"
     )
     v-text-field(
-      ::="useJsonParser(dimensions).h",
+      ::="dimensions.h",
       :error-messages="errors?.['dimensions.h']",
       :label="$t('sizes.height')",
       :prepend-inner-icon="mdiArrowLeftRight",

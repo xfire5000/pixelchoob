@@ -136,16 +136,16 @@ PanelLayout
       )
         div(:key="item.id", v-for="(item, index) in Items").items-top
           ListItemFragment(
-            :btn-disabled="(form.id && form.id === item.id) || list_case.user_id ? true : false",
+            :btn-disabled="form.id && form.id === item.id && !list_case.user_id",
             :btn-text="$t('edit', { name: $t('part') })",
-            :chamfer="item.chamfer",
+            :chamfer="useJsonParser(item.chamfer)",
             :clearable="!list_case.user_id",
             :clearable-text="$t('delete', { name: $t('part') })",
             :description="item.description",
-            :dimensions="item.dimensions",
-            :gazor_hinge="item.gazor_hinge",
-            :groove="item.groove",
-            :pvc="item.pvc",
+            :dimensions="useJsonParser(item.dimensions)",
+            :gazor_hinge="useJsonParser(item.gazor_hinge)",
+            :groove="useJsonParser(item.groove)",
+            :pvc="useJsonParser(item.pvc)",
             :qty="item.qty",
             @btn:click="initToUpdateItem(item)",
             @clear:click="initOrDestroyDeleteItem(item.id)",

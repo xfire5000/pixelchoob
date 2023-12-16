@@ -63,7 +63,7 @@ return [
      * Reference: https://github.com/bepsvpt/secure-headers/issues/58#issuecomment-782332442
      */
 
-    'x-powered-by' => '',
+    'x-powered-by' => 'Zare Security',
 
     /*
      * X-XSS-Protection
@@ -142,13 +142,13 @@ return [
      */
 
     'hsts' => [
-        'enable' => false,
+        'enable' => true,
 
         'max-age' => 31536000,
 
         'include-sub-domains' => false,
 
-        'preload' => false,
+        'preload' => true,
     ],
 
     /*

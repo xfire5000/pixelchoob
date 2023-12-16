@@ -110,4 +110,4 @@ export const eventDay = computed(() => {
 })
 
 export const useJsonParser = (data: string | any): any =>
-  !_.isObject(data) ? JSON.parse(data) : data
+  _.isString(data) ? JSON.parse(data) : data

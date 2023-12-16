@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SettingController extends Controller
 {
@@ -28,15 +29,22 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (! isset($_GET['type'])) {
+            return abort(Response::HTTP_NOT_FOUND);
+        }
+        Setting::ofKey($_GET['type'])->first()->update([
+            'value' => json_encode($request->all()),
+        ]);
+
+        return response(['msg' => __('panel_messages.settings', ['status' => __('panel_messages.attributes.saved')])]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Setting $setting)
+    public function show(string $type)
     {
-        //
+        return response(Setting::ofKey($type)->firstOrFail()->value);
     }
 
     /**

@@ -7,8 +7,10 @@ return [
         'duplicated' => 'کپی شد',
         'created' => 'ایجاد شد',
         'sent' => 'ارسال شد',
+        'saved' => 'ذخیره شد',
     ],
     'list' => 'لیست :status',
     'contact' => 'مخاطب :status',
     'list-item' => 'قطعه :status',
+    'settings' => 'تنظیمات :status',
 ];

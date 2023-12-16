@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/vue3'
 import {
   mdiArrowLeft,
   mdiChevronLeft,
+  mdiCogOutline,
   mdiFolderOutline,
   mdiHomeOutline,
   mdiMenu,
@@ -96,6 +97,11 @@ export const NavDrawer = defineComponent({
         title: t('menuDrawerItems.my-invoices'),
         link: route('invoices.index'),
         icon: mdiPageNextOutline,
+      },
+      {
+        title: t('settings.index'),
+        link: route('settings.index'),
+        icon: mdiCogOutline,
       },
     ]
 

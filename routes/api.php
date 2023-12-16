@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ListCaseController;
 use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\Panel\FileManagerController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // invoices
     Route::resource('invoices', InvoiceController::class)->only(['store', 'destroy']);
     Route::post('invoices/calc/{list_case_id}', 'InvoiceController@calculate')->name('invoices.calc');
+    // settings
+    Route::resource('settings', SettingController::class)->only(['store', 'show']);
 });
