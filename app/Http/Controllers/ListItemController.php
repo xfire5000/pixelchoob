@@ -17,10 +17,13 @@ class ListItemController extends Controller
      */
     public function index(string $slug): \Inertia\Response
     {
-        $list_case = ListCase::withoutTrashed()->with(['author', 'invoice'])->archived(false)->where('slug', $slug)->firstOrFail();
+        $my_id = auth()->id();
+        $list_case = ListCase::withoutGlobalScopes()->withoutTrashed()
+            ->with(['author', 'invoice'])->archived(false)->where('slug', $slug)
+            ->where('author_id', $my_id)->orWhere('user_id', $my_id)->firstOrFail();
         $items = $list_case->listItems()->orderBy('sortable')->get();
         $viewed = session()->get('viewed_post', []);
-        if (! in_array($list_case->id, $viewed) and $list_case->author_id !== auth()->id()) {
+        if (! in_array($list_case->id, $viewed) and $list_case->author_id !== $my_id) {
             $list_case->update(['viewed' => true]);
             session()->push('viewed_post', $list_case->id);
         }

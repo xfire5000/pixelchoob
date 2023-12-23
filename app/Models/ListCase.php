@@ -42,6 +42,7 @@ class ListCase extends Model
     {
         return [
             'title' => $this->title,
+            'slug' => $this->slug,
             'description' => $this->description,
         ];
     }

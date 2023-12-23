@@ -59,14 +59,21 @@
   },
   "export-excel": "خروجی اکسل",
   "gazor_hinge": "لولا گازور",
+  "go-dashboard": "برو به داشبورد",
   "groove": "شیار",
   "groove-price": "قیمت شیار",
   "having": { "have-it": "دارد", "not-have-it": "ندارد" },
+  "header-nav": {
+    "services": "خدمات",
+    "features": "امکانات",
+    "about-us": "درباره ما"
+  },
   "home-page": "صفحه اصلی",
   "inbox-lists": "لیست های دریافتی",
   "inprogress": "در حال توسعه",
   "invoice": "فاکتور",
   "invoice-dialog-hint": "برای هر لیست فقط یک ارسال فاکتور وجود دارد! پس قبل از ارسال از صحیح بودن ارقام وارده اطمینان حاصل فرمایید و ارسال را انجام دهید",
+  "invoice-submitted": "فاکتور صادر شده",
   "invoicing": "صدور فاکتور",
   "list": "لیست {name}",
   "material": "جنس",
@@ -82,6 +89,8 @@
   "parts": "قطعه ها",
   "phone-number": "شماره تماس",
   "pixel-choob": "پیکسل چوب",
+  "pixel-hero": "تبادل اندازه بدون دخالت دست و کاغذ",
+  "pixel-hero-desc": "تبادل اندازه ی ام دی اف، برش و حتی پی وی سی و فارسی سازی با صدور فاکتور از سمت ارائه کنندهگان خدمات",
   "price": "قیمت",
   "price_total": "قیمت نهایی",
   "profile": "پروفایل",
@@ -114,6 +123,7 @@
     "height": "ارتفاع",
     "stroke": "ضخامت"
   },
+  "start-to-work": "شروع به کار",
   "status": "وضعیت",
   "stock-infos": "مشخصات ورق",
   "stock-pattern": "ورق راه",
@@ -153,5 +163,6 @@
     "email-invalid": "ایمیل نا معتبر است"
   },
   "viewed": "دیده شده",
+  "with": "با {name}",
   "yes": "بله"
 }

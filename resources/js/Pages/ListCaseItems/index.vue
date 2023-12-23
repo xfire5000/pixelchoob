@@ -152,11 +152,11 @@ PanelLayout
           clearable
         )
       #list-items-provider(
-        :class="[Object.entries(form.errors).length ? 'lg:mt-40' : 'lg:mt-34']"
+        :class="[Object.entries(form.errors).length ? 'lg:mt-40' : { 'lg:mt-34': list_case.author_id === $page.props.auth['user'].id }]"
       )
         div(:key="item.id", v-for="(item, index) in Items").items-top
           ListItemFragment(
-            :btn-disabled="form.id && form.id === item.id && !list_case.user_id",
+            :btn-disabled="(form.id && form.id === item.id) || !!list_case.user_id",
             :btn-text="$t('edit', { name: $t('part') })",
             :chamfer="useJsonParser(item.chamfer)",
             :clearable="!list_case.user_id",
@@ -176,10 +176,11 @@ PanelLayout
             :class="['lg:hidden', { hidden: index > Items.length - 2 }]"
           ).mt-2.block
     v-menu(location="top")
-      template(#activator="{ props: menu }")
+      template(#activator="{ props: menu, isActive: isMenuActive }")
         v-tooltip(location="right")
           template(#activator="{ props: tooltip }")
             v-btn(
+              :class="[{ 'animate-bounce hover:animate-none': !!list_case.user_id }, { 'animate-none': isMenuActive }]",
               :icon="mdiDotsHorizontal",
               color="primary",
               v-bind="mergeProps(menu, tooltip)"
@@ -204,7 +205,7 @@ PanelLayout
         v-list-item(
           :prepend-icon="mdiReceiptTextCheck",
           @click="invoiceDialog = true",
-          v-else
+          v-else-if="list_case.invoice"
         ) {{ $t('show', { name: $t('invoice') }) }}
 ConfirmationModal(
   :show="deleteDialog",

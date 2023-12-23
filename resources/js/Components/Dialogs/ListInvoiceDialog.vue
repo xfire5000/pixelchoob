@@ -125,7 +125,7 @@
 DialogModal(:show, @close="emit('close')")
   template(#title)
     v-icon(class="ltr:mr-2 rtl:ml-2", size="small") {{ mdiReceiptText }}
-    | {{ $t('invoicing') }}
+    | {{ !props.listCase.invoice ? $t('invoicing') : $t('show', { name: $t('invoice') }) }}
   template(#content)
     .container
       v-alert(
@@ -226,7 +226,8 @@ DialogModal(:show, @close="emit('close')")
       :prepend-icon="mdiCheck",
       @click="submit",
       color="primary",
-      rounded="lg"
+      rounded="lg",
+      v-if="!props.listCase.invoice"
     ) {{ $t('submit-store') }}
 </template>
 

@@ -11,7 +11,11 @@ export const Header = defineComponent({
 
     const { t } = useI18n()
 
-    const menuItem = []
+    const menuItem = [
+      { title: t('header-nav.services'), url: '' },
+      { title: t('header-nav.features'), url: '' },
+      { title: t('header-nav.about-us'), url: '' },
+    ]
 
     return () => (
       <nav class="fixed w-full top-0 z-30 transition duration-300">
@@ -90,36 +94,14 @@ export const Header = defineComponent({
                   arrivedState.top ? 'text-white' : 'text-gray-600',
                 ]}
               >
-                <a
-                  href="#"
-                  class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-                >
-                  features
-                </a>
-                <a
-                  href="#"
-                  class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-                >
-                  downloads
-                </a>
-                <a
-                  href="#"
-                  class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-                >
-                  docs
-                </a>
-                <a
-                  href="#"
-                  class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-                >
-                  support
-                </a>
-                <a
-                  href="#"
-                  class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-                >
-                  blog
-                </a>
+                {menuItem.map((item) => (
+                  <p-link
+                    href={item.url}
+                    class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
+                  >
+                    {item.title}
+                  </p-link>
+                ))}
               </div>
             </div>
 

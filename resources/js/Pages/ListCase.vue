@@ -7,6 +7,7 @@
     mdiFormatListText,
     mdiInboxArrowDownOutline,
     mdiMagnify,
+    mdiPageNextOutline,
     mdiPencil,
     mdiPlusCircleOutline,
     mdiRestore,
@@ -308,7 +309,7 @@ PanelLayout
                 .flex.flex-col.text-xs
                   .flex.flex-row.gap-x-1
                     input(
-                      :value="useJsonParser(value).reduce_thickness",
+                      :checked="useJsonParser(value).reduce_thickness",
                       disabled,
                       type="checkbox"
                     )
@@ -365,13 +366,22 @@ PanelLayout
                   small.text-xs.text-sky-600 {{ useLocaleTimeAgo(value) }}
                   small.dir-ltr.text-center.text-xs {{ $d(value, 'long') }}
               template(#item.title="{ item, value }")
-                p-link(
-                  :href="route('list-items.index', item['slug'])",
-                  as="button",
-                  class="hover:underline",
-                  type="button",
-                  v-text="value"
-                ).text-sky-500
+                .flex.flex-row.items-center.gap-x-2
+                  v-tooltip(location="right")
+                    template(#activator="{ props: tooltip }")
+                      v-icon(
+                        size="18",
+                        v-bind="tooltip",
+                        v-if="item['invoice']"
+                      ) {{ mdiPageNextOutline }}
+                    span {{ $t('invoice-submitted') }}
+                  p-link(
+                    :href="route('list-items.index', item['slug'])",
+                    as="button",
+                    class="hover:underline",
+                    type="button",
+                    v-text="value"
+                  ).text-sky-500
               template(#item.user_id="{ item }")
                 | {{ item['author'].name }}
 ListCaseDialog(

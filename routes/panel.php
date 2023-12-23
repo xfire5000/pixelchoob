@@ -16,8 +16,6 @@ Route::middleware([
         Route::get('{slug}', 'index')->name('list-items.index');
         Route::get('export', 'export')->name('list-items.export');
     });
-    // invoices
-    Route::get('invoices', '\App\Http\Controllers\InvoiceController@index')->name('invoices.index');
     // settings
     Route::inertia('settings', 'Settings/index')->name('settings.index');
 });

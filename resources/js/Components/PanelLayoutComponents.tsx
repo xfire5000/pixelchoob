@@ -13,10 +13,6 @@ import { VBtn, VIcon } from 'vuetify/lib/components/index.mjs'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 import route from 'ziggy-js'
 
-export const Header = defineComponent({
-  setup() {},
-})
-
 export const BreadCrumb = defineComponent({
   setup() {
     const { breadCrumb, homeBreadCrumb, drawerOpener } = useGlobalState()
@@ -94,11 +90,11 @@ export const NavDrawer = defineComponent({
         link: route('list-case.index'),
         icon: mdiFolderOutline,
       },
-      {
-        title: t('menuDrawerItems.my-invoices'),
-        link: route('invoices.index'),
-        icon: mdiPageNextOutline,
-      },
+      // {
+      //   title: t('menuDrawerItems.my-invoices'),
+      //   link: route('invoices.index'),
+      //   icon: mdiPageNextOutline,
+      // },
       {
         title: t('settings.index'),
         link: route('settings.index'),
