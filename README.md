@@ -1,4 +1,4 @@
-![PIXELChoob Logo](https://photos.app.goo.gl/BpNF2h5BxLrHw5fe9)
+<img src="https://photos.app.goo.gl/BpNF2h5BxLrHw5fe9" alt="logo" />
 # Welcome to PixelChoob!
 
 Transfer **MDF** size exchange, cutting and even **PVC's** and **Chamfer's** by issuing an invoice from the service providers
