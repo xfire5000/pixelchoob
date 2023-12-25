@@ -33,63 +33,61 @@
 
 <template>
   <FormSection @submitted="updatePassword">
-    <template #title> Update Password </template>
+    <template #title> {{ $t('update-password') }} </template>
 
     <template #description>
-      Ensure your account is using a long, random password to stay secure.
+      {{ $t('update-pass-desc') }}
     </template>
 
     <template #form>
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="current_password" value="Current Password" />
-        <TextInput
-          id="current_password"
+        <v-text-field
           ref="currentPasswordInput"
+          :label="$t('verifications.current-pass')"
           v-model="form.current_password"
+          :error-messages="form.errors?.current_password"
           type="password"
-          class="mt-1 block w-full"
+          hide-details="auto"
           autocomplete="current-password"
         />
-        <InputError :message="form.errors.current_password" class="mt-2" />
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password" value="New Password" />
-        <TextInput
-          id="password"
+        <v-text-field
           ref="passwordInput"
+          :label="$t('verifications.new-pass')"
           v-model="form.password"
+          :error-messages="form.errors?.password"
           type="password"
-          class="mt-1 block w-full"
+          hide-details="auto"
           autocomplete="new-password"
         />
-        <InputError :message="form.errors.password" class="mt-2" />
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-        <TextInput
-          id="password_confirmation"
+        <v-text-field
+          :label="$t('verifications.conf-pass')"
           v-model="form.password_confirmation"
+          :error-messages="form.errors?.password_confirmation"
           type="password"
-          class="mt-1 block w-full"
+          hide-details="auto"
           autocomplete="new-password"
         />
-        <InputError :message="form.errors.password_confirmation" class="mt-2" />
       </div>
     </template>
 
     <template #actions>
       <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        Saved.
+        {{ $t('verifications.saved') }}.
       </ActionMessage>
 
-      <PrimaryButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
+      <v-btn
+        :loading="form.processing"
+        color="primary"
+        type="submit"
+        rounded="lg"
+        >{{ $t('submit-store') }}</v-btn
       >
-        Save
-      </PrimaryButton>
     </template>
   </FormSection>
 </template>

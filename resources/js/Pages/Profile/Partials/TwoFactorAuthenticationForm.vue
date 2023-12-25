@@ -1,15 +1,14 @@
 <script setup lang="ts">
   import { router, useForm, usePage } from '@inertiajs/vue3'
+  import { mdiCheck } from '@mdi/js'
   import route from 'ziggy-js'
 
-  const props = defineProps({
-    requiresConfirmation: Boolean,
-  })
+  const props = defineProps<{ requiresConfirmation: boolean }>()
 
   const page = usePage()
-  const enabling = ref(false)
-  const confirming = ref(false)
-  const disabling = ref(false)
+  const enabling = ref<boolean>(false)
+  const confirming = ref<boolean>(false)
+  const disabling = ref<boolean>(false)
   const qrCode = ref(null)
   const setupKey = ref(null)
   const recoveryCodes = ref([])
@@ -105,36 +104,34 @@
 
 <template>
   <ActionSection>
-    <template #title> Two Factor Authentication </template>
+    <template #title> {{ $t('two-factor-auth.title') }} </template>
 
     <template #description>
-      Add additional security to your account using two factor authentication.
+      {{ $t('two-factor-auth.desc') }}
     </template>
 
     <template #content>
       <h3
         v-if="twoFactorEnabled && !confirming"
-        class="text-lg font-medium text-gray-900"
+        class="text-lg font-medium text-gray-900 dark:text-white"
       >
-        You have enabled two factor authentication.
+        {{ $t('two-factor-auth.activated') }}
       </h3>
 
       <h3
         v-else-if="twoFactorEnabled && confirming"
-        class="text-lg font-medium text-gray-900"
+        class="text-lg font-medium text-gray-900 dark:text-white"
       >
-        Finish enabling two factor authentication.
+        {{ $t('two-factor-auth.finished') }}
       </h3>
 
-      <h3 v-else class="text-lg font-medium text-gray-900">
-        You have not enabled two factor authentication.
+      <h3 v-else class="text-lg font-medium text-gray-900 dark:text-white">
+        {{ $t('two-factor-auth.deactivated') }}
       </h3>
 
       <div class="mt-3 max-w-xl text-sm text-gray-600">
         <p>
-          When two factor authentication is enabled, you will be prompted for a
-          secure, random token during authentication. You may retrieve this
-          token from your phone's Google Authenticator application.
+          {{ $t('two-factor-auth.info') }}
         </p>
       </div>
 
@@ -203,65 +200,70 @@
       <div class="mt-5">
         <div v-if="!twoFactorEnabled">
           <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-            <PrimaryButton
+            <v-btn
+              color="primary"
+              rounded="lg"
               type="button"
-              :class="{ 'opacity-25': enabling }"
-              :disabled="enabling"
+              :loading="enabling"
             >
-              Enable
-            </PrimaryButton>
+              {{ $t('enable') }}
+            </v-btn>
           </ConfirmsPassword>
         </div>
 
         <div v-else>
           <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
-            <PrimaryButton
+            <v-btn
               v-if="confirming"
+              color="primary"
+              :prepend-icon="mdiCheck"
+              rounded="lg"
               type="button"
               class="me-3"
               :class="{ 'opacity-25': enabling }"
               :disabled="enabling"
             >
-              Confirm
-            </PrimaryButton>
+              {{ $t('confirm') }}
+            </v-btn>
           </ConfirmsPassword>
 
           <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
-            <SecondaryButton
+            <v-btn
+              color="secondary"
+              rounded="lg"
               v-if="recoveryCodes.length > 0 && !confirming"
               class="me-3"
             >
-              Regenerate Recovery Codes
-            </SecondaryButton>
+              {{ $t('two-factor-auth.regenerate') }}
+            </v-btn>
           </ConfirmsPassword>
 
           <ConfirmsPassword @confirmed="showRecoveryCodes">
-            <SecondaryButton
+            <v-btn
+              color="secondary"
+              rounded="lg"
               v-if="recoveryCodes.length === 0 && !confirming"
               class="me-3"
             >
-              Show Recovery Codes
-            </SecondaryButton>
+              {{ $t('two-factor-auth.show-recovery-code') }}
+            </v-btn>
           </ConfirmsPassword>
 
           <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-            <SecondaryButton
+            <v-btn
+              color="red"
+              rounded="lg"
               v-if="confirming"
-              :class="{ 'opacity-25': disabling }"
-              :disabled="disabling"
+              :loading="disabling"
             >
-              Cancel
-            </SecondaryButton>
+              {{ $t('cancel') }}
+            </v-btn>
           </ConfirmsPassword>
 
           <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-            <DangerButton
-              v-if="!confirming"
-              :class="{ 'opacity-25': disabling }"
-              :disabled="disabling"
-            >
-              Disable
-            </DangerButton>
+            <v-btn color="red" rounded="lg" v-if="!confirming">
+              {{ $t('disable') }}
+            </v-btn>
           </ConfirmsPassword>
         </div>
       </div>

@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import { router, useForm } from '@inertiajs/vue3'
+  import {
+    mdiCameraOutline,
+    mdiDotsHorizontal,
+    mdiTrashCanOutline,
+  } from '@mdi/js'
   import route from 'ziggy-js'
 
-  const props = defineProps({
-    user: Object,
-  })
+  const props = defineProps<{ user: IUserItem }>()
 
   const form = useForm({
     _method: 'PUT',
@@ -13,7 +16,7 @@
     photo: null,
   })
 
-  const verificationLinkSent = ref(null)
+  const verificationLinkSent = ref<boolean>(false)
   const photoPreview = ref(null)
   const photoInput = ref(null)
 
@@ -70,10 +73,10 @@
 
 <template>
   <FormSection @submitted="updateProfileInformation">
-    <template #title> Profile Information </template>
+    <template #title> {{ $t('profile-info') }} </template>
 
     <template #description>
-      Update your account's profile information and email address.
+      {{ $t('profile-desc') }}
     </template>
 
     <template #form>
@@ -91,71 +94,73 @@
           @change="updatePhotoPreview"
         />
 
-        <InputLabel for="photo" value="Photo" />
+        <InputLabel for="photo" :value="$t('photo')" />
 
-        <!-- Current Profile Photo -->
-        <div v-show="!photoPreview" class="mt-2">
-          <img
-            :src="user.profile_photo_url"
-            :alt="user.name"
-            class="rounded-full h-20 w-20 object-cover"
-          />
+        <div class="relative">
+          <!-- Current Profile Photo -->
+          <div v-if="!photoPreview" class="mt-2">
+            <img
+              :src="user.profile_photo_url"
+              :alt="user.name"
+              class="rounded-full h-20 w-20 object-cover"
+            />
+          </div>
+
+          <!-- New Profile Photo Preview -->
+          <div v-else class="mt-2">
+            <span
+              class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
+              :style="'background-image: url(\'' + photoPreview + '\');'"
+            />
+          </div>
+
+          <v-menu location="bottom">
+            <template #activator="{ props: menu }">
+              <v-btn
+                :icon="mdiDotsHorizontal"
+                size="x-small"
+                color="secondary"
+                class="absolute -bottom-1 -right-1"
+                v-bind="menu"
+              />
+            </template>
+            <v-list>
+              <v-list-item
+                @click="selectNewPhoto"
+                :append-icon="mdiCameraOutline"
+                >{{ $t('add-new-profile-image') }}</v-list-item
+              >
+              <v-list-item
+                :prepend-icon="mdiTrashCanOutline"
+                v-if="user.profile_photo_path"
+                @click="deletePhoto"
+                >{{ $t('remove-profile-image') }}</v-list-item
+              >
+            </v-list>
+          </v-menu>
         </div>
-
-        <!-- New Profile Photo Preview -->
-        <div v-show="photoPreview" class="mt-2">
-          <span
-            class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-            :style="'background-image: url(\'' + photoPreview + '\');'"
-          />
-        </div>
-
-        <SecondaryButton
-          class="mt-2 me-2"
-          type="button"
-          @click.prevent="selectNewPhoto"
-        >
-          Select A New Photo
-        </SecondaryButton>
-
-        <SecondaryButton
-          v-if="user.profile_photo_path"
-          type="button"
-          class="mt-2"
-          @click.prevent="deletePhoto"
-        >
-          Remove Photo
-        </SecondaryButton>
 
         <InputError :message="form.errors.photo" class="mt-2" />
       </div>
 
       <!-- Name -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" value="Name" />
-        <TextInput
-          id="name"
+        <v-text-field
+          :label="$t('name')"
           v-model="form.name"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autocomplete="name"
+          :error-messages="form.errors?.name"
+          hide-details="auto"
         />
-        <InputError :message="form.errors.name" class="mt-2" />
       </div>
 
       <!-- Email -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="email" value="Email" />
-        <TextInput
-          id="email"
+        <v-text-field
+          hide-details="auto"
           v-model="form.email"
-          type="email"
-          class="mt-1 block w-full"
-          required
-          autocomplete="username"
+          :error-messages="form.errors?.email"
+          :label="$t('auth.email')"
         />
-        <InputError :message="form.errors.email" class="mt-2" />
 
         <div
           v-if="
@@ -163,8 +168,10 @@
             user.email_verified_at === null
           "
         >
-          <p class="text-sm mt-2">
-            Your email address is unverified.
+          <v-alert type="error" class="text-sm mt-2" rounded="lg">
+            <template #text>
+              {{ $t('verifications.email-unverified') }}
+            </template>
 
             <p-link
               :href="route('verification.send')"
@@ -173,15 +180,15 @@
               class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               @click.prevent="sendEmailVerification"
             >
-              Click here to re-send the verification email.
+              {{ $t('verifications.resend-verification') }}
             </p-link>
-          </p>
+          </v-alert>
 
           <div
             v-show="verificationLinkSent"
             class="mt-2 font-medium text-sm text-green-600"
           >
-            A new verification p-link has been sent to your email address.
+            {{ $t('verifications.link-sent') }}
           </div>
         </div>
       </div>
@@ -189,15 +196,16 @@
 
     <template #actions>
       <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        Saved.
+        {{ $t('verifications.saved') }}.
       </ActionMessage>
 
-      <PrimaryButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
+      <v-btn
+        type="submit"
+        :loading="form.processing"
+        color="primary"
+        rounded="lg"
+        >{{ $t('submit-store') }}</v-btn
       >
-        Save
-      </PrimaryButton>
     </template>
   </FormSection>
 </template>

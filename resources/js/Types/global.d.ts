@@ -59,6 +59,7 @@ declare global {
     email_verified_at?: Date
     roles?: IRoleItem[]
     profile_photo_url: string
+    profile_photo_path?: string
     contacts?: IUserItem[]
     address_infos?: IAddressInfo[]
   }

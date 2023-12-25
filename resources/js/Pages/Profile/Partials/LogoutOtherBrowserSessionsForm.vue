@@ -2,12 +2,9 @@
   import { useForm } from '@inertiajs/vue3'
   import route from 'ziggy-js'
 
-  defineProps({
-    sessions: Array,
-  })
+  defineProps<{ sessions: any[] }>()
 
-  const confirmingLogout = ref(false)
-  const passwordInput = ref(null)
+  const confirmingLogout = ref<boolean>(false)
 
   const form = useForm({
     password: '',
@@ -15,15 +12,12 @@
 
   const confirmLogout = () => {
     confirmingLogout.value = true
-
-    setTimeout(() => passwordInput.value.focus(), 250)
   }
 
   const logoutOtherBrowserSessions = () => {
     form.delete(route('other-browser-sessions.destroy'), {
       preserveScroll: true,
       onSuccess: () => closeModal(),
-      onError: () => passwordInput.value.focus(),
       onFinish: () => form.reset(),
     })
   }
@@ -37,18 +31,15 @@
 
 <template>
   <ActionSection>
-    <template #title> Browser Sessions </template>
+    <template #title> {{ $t('last-sessions.title') }} </template>
 
     <template #description>
-      Manage and log out your active sessions on other browsers and devices.
+      {{ $t('last-sessions.desc') }}
     </template>
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600">
-        If necessary, you may log out of all of your other browser sessions
-        across all of your devices. Some of your recent sessions are listed
-        below; however, this list may not be exhaustive. If you feel your
-        account has been compromised, you should also update your password.
+        {{ $t('last-sessions.info') }}
       </div>
 
       <!-- Other Browser Sessions -->
@@ -105,9 +96,12 @@
                 <span
                   v-if="session.is_current_device"
                   class="text-green-500 font-semibold"
-                  >This device</span
+                  >{{ $t('last-sessions.this-device') }}</span
                 >
-                <span v-else>Last active {{ session.last_active }}</span>
+                <span v-else
+                  >{{ $t('last-sessions.last-active') }}
+                  {{ session.last_active }}</span
+                >
               </div>
             </div>
           </div>
@@ -115,49 +109,49 @@
       </div>
 
       <div class="flex items-center mt-5">
-        <PrimaryButton @click="confirmLogout">
-          Log Out Other Browser Sessions
-        </PrimaryButton>
+        <v-btn color="primary" rounded="lg" @click="confirmLogout">
+          {{ $t('last-sessions.logout-other') }}
+        </v-btn>
 
         <ActionMessage :on="form.recentlySuccessful" class="ms-3">
-          Done.
+          {{ $t('done') }}.
         </ActionMessage>
       </div>
 
       <!-- Log Out Other Devices Confirmation Modal -->
       <DialogModal :show="confirmingLogout" @close="closeModal">
-        <template #title> Log Out Other Browser Sessions </template>
+        <template #title> {{ $t('last-sessions.logout-other') }} </template>
 
         <template #content>
-          Please enter your password to confirm you would like to log out of
-          your other browser sessions across all of your devices.
+          {{ $t('last-sessions.logout-info') }}
 
           <div class="mt-4">
-            <TextInput
-              ref="passwordInput"
+            <v-text-field
               v-model="form.password"
+              :error-messages="form.errors?.password"
               type="password"
               class="mt-1 block w-3/4"
-              placeholder="Password"
+              :label="$t('auth.password')"
               autocomplete="current-password"
               @keyup.enter="logoutOtherBrowserSessions"
             />
-
-            <InputError :message="form.errors.password" class="mt-2" />
           </div>
         </template>
 
         <template #footer>
-          <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+          <v-btn color="red" rounded="lg" @click="closeModal">
+            {{ $t('cancel') }}
+          </v-btn>
 
-          <PrimaryButton
+          <v-btn
+            color="primary"
+            rounded="lg"
             class="ms-3"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
+            :loading="form.processing"
             @click="logoutOtherBrowserSessions"
           >
-            Log Out Other Browser Sessions
-          </PrimaryButton>
+            {{ $t('last-sessions.logout-other') }}
+          </v-btn>
         </template>
       </DialogModal>
     </template>
