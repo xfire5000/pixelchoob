@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\MyItems;
+use Coderflex\LaravelTicket\Models\Ticket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,11 @@ class ListCase extends Model
     public function invoice(): HasOne
     {
         return $this->hasOne(Invoice::class, 'list_case_id', 'id');
+    }
+
+    public function ticket(): HasOne
+    {
+        return $this->hasOne(Ticket::class, 'list_case_id', 'id')->with(['messages', 'assignedToUser']);
     }
 
     public function scopeArchived(Builder $query, bool $archived = true): void

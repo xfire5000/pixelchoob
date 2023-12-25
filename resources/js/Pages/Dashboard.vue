@@ -36,7 +36,7 @@
       color: '#166534',
       title: t('menuDrawerItems.my-invoices'),
       icon: mdiPageNextOutline,
-      url: route('invoices.index'),
+      url: route('list-case.index'),
     },
   ]
 
@@ -58,8 +58,8 @@ PanelLayout
       v-col(cols="12", md="3", v-for="(item, index) in counter")
         v-card(
           :style="`background-color: ${counterCards[index].color} !important;`",
-          class="hover:shadow-gray-800"
-        ).rounded-xl.shadow-md
+          class="hover:shadow-gray-800 dark:brightness-100"
+        ).rounded-xl.text-white.shadow-md.brightness-200
           v-card-text.relative
             .flex.flex-col
               .flex.flex-row.items-center
@@ -84,10 +84,10 @@ PanelLayout
             v-icon(size="75").mt-12.opacity-40 {{ counterCards[index].icon }}
       v-col(cols="12", md="3")
         .items-top.flex.flex-row
-          div(class="child:dark:text-white").flex.flex-col
+          div(class="child:dark:text-white [&_small]:opacity-75").flex.flex-col
             h6 {{ eventDay.title }} ;
-            small.opacity-75 {{ $d(currentTime, 'long').toString().substring(0, 10) }}
-            small.text-center.opacity-75 {{ $d(currentTime, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}
+            small {{ $t('date') }}: {{ $d(currentTime, 'long').toString().substring(0, 10) }}
+            small {{ $t('timeAgo.hour') }}: {{ $d(currentTime, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}
           v-img(
             :src="`/assets/img/icons/dailyStatus/${eventDay.event}.svg`",
             class="w-[120px] lg:-mt-4 lg:w-auto"

@@ -2,6 +2,7 @@
   import {
     mdiArchive,
     mdiArrowRight,
+    mdiChatOutline,
     mdiContentCopy,
     mdiDotsHorizontal,
     mdiFormatListText,
@@ -111,9 +112,9 @@
   const deleteDialog = ref<boolean>(false)
   const listId = ref<number>(0)
 
-  function deleteList(id: number) {
+  function initOrDestroyDeleteList(id: number = 0) {
     listId.value = id
-    deleteDialog.value = true
+    deleteDialog.value = id !== 0
   }
 
   const doDelete = () =>
@@ -135,13 +136,8 @@
         )
         selectedItems.value = []
       }
-      onCloseDeleteDialog()
+      initOrDestroyDeleteList()
     })
-
-  function onCloseDeleteDialog() {
-    deleteDialog.value = false
-    listId.value = 0
-  }
 
   const duplicate = (id: number) =>
     useChangeRoute('list-cases.duplicate', id).then(
@@ -221,6 +217,13 @@
         tabs.value[tab.value].items.data[index].user_id = id
         listId.value = 0
       })
+  }
+
+  const ticketsDialog = ref<boolean>(false)
+
+  function initOrDestroyTickets(id: number = 0) {
+    listId.value = id
+    ticketsDialog.value = id !== 0
   }
 </script>
 
@@ -315,11 +318,13 @@ PanelLayout
                     )
                     label {{ $t('reduce_thickness') }}
                   v-divider.my-1
-                  .flex.flex-row.items-center
+                  .flex.flex-row.items-center.gap-x-1
                     span {{ $t('sizes.stroke') }}:
                     strong {{ useJsonParser(value).size === '1' ? $t('pvc-size.1mm') : $t('pvc-size.2mm') }}
                   v-divider.my-1
-                  strong {{ $t('color-code') }}: {{ useJsonParser(value).color_code }}
+                  .flex.flex-row.items-center.gap-x-1
+                    span {{ $t('color-code') }}:
+                    strong {{ useJsonParser(value).color_code }}
               template(#item.description="{ value }")
                 p.line-clamp-3.max-w-40 {{ value }}
               template(#item.actions="{ item }")
@@ -340,6 +345,11 @@ PanelLayout
                       v-show="tab === 0"
                     ) {{ $t('send') }}
                     v-list-item(
+                      :prepend-icon="mdiChatOutline",
+                      @click="initOrDestroyTickets(item['id'])",
+                      v-else
+                    ) {{ $t('tickets') }}
+                    v-list-item(
                       :prepend-icon="mdiRestore",
                       @click="restoreList(item['id'])",
                       v-show="tab === tabs.length - 1"
@@ -357,7 +367,7 @@ PanelLayout
                     ) {{ $t('duplicate') }}
                     v-list-item(
                       :prepend-icon="mdiTrashCanOutline",
-                      @click="deleteList(item['id'])",
+                      @click="initOrDestroyDeleteList(item['id'])",
                       v-if="item['user_id'] === null",
                       v-show="tab !== 1"
                     ) {{ $t('delete') }}
@@ -382,8 +392,7 @@ PanelLayout
                     type="button",
                     v-text="value"
                   ).text-sky-500
-              template(#item.user_id="{ item }")
-                | {{ item['author'].name }}
+              template(#item.user_id="{ item }") {{ item['author'].name }}
 ListCaseDialog(
   :initial-form="case_item",
   :show="case_dialog",
@@ -392,16 +401,19 @@ ListCaseDialog(
 )
 ConfirmationModal(
   :show="deleteDialog",
-  @close="onCloseDeleteDialog",
+  @close="initOrDestroyDeleteList()",
   @yes="doDelete"
 )
-  template(#title)
-    | {{ $t('delete', { name: $t('list') }) }}
-  template(#content)
-    | {{ $t('delete-confirmation', { name: $t('list') }) }}
+  template(#title) {{ $t('delete', { name: $t('list') }) }}
+  template(#content) {{ $t('delete-confirmation', { name: $t('list') }) }}
 MyContactsDialog(
   :show="contactsDialog",
   @close="initOrDestroyToSend()",
   @selected-user="onSelectedUser"
+)
+ListCaseTicketsDialog(
+  :list-case-id="listId",
+  :show="ticketsDialog",
+  @close="initOrDestroyTickets()"
 )
 </template>

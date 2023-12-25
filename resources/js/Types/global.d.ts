@@ -121,4 +121,30 @@ declare global {
     chamfer: number
     groove: number
   }
+
+  declare type ITicketItem = {
+    id?: number
+    UUID?: number
+    user_id?: number
+    title: string
+    message?: string
+    priority?: string
+    status?: string
+    is_resolved?: boolean
+    is_locked?: boolean
+    assigned_to?: number
+    created_at?: Date
+    updated_at?: Date
+    messages?: ITicketMessageItem[]
+  }
+
+  declare type ITicketMessageItem = {
+    id?: number
+    user_id?: number
+    ticket_id?: number
+    message: string
+    created_at?: Date
+    updated_at?: Date
+    user?: IUserItem
+  }
 }

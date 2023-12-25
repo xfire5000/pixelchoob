@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Interfaces\User as InterfacesUser;
+use Coderflex\LaravelTicket\Concerns\HasTickets;
+use Coderflex\LaravelTicket\Contracts\CanUseTickets;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -17,12 +19,12 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements InterfacesUser
+class User extends Authenticatable implements CanUseTickets, InterfacesUser
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
-    use HasRoles,SoftDeletes;
+    use HasRoles,HasTickets,SoftDeletes;
     use Notifiable;
     use TwoFactorAuthenticatable;
 

@@ -3,6 +3,7 @@
   import ListItemFragment from './Partials/ListItemFragment.vue'
   import { usePage } from '@inertiajs/vue3'
   import {
+    mdiChatOutline,
     mdiCheckAll,
     mdiDotsHorizontal,
     mdiMicrosoftExcel,
@@ -100,6 +101,8 @@
     usePage().props.list_case['invoice'] = item
     invoiceDialog.value = false
   }
+
+  const ticketsDialog = ref<boolean>(false)
 </script>
 
 <template lang="pug">
@@ -187,11 +190,17 @@ PanelLayout
             ).fixed.bottom-5.left-5
           span {{ $t('actions') }}
       v-list
-        template(
+        v-list-item(
+          :prepend-icon="mdiSend",
+          @click="contactsDialog = true",
           v-if="list_case.author_id === $page.props.auth['user'].id && !list_case.user_id && !list_case.deleted_at"
-        )
-          v-list-item(:prepend-icon="mdiSend", @click="contactsDialog = true") {{ $t('send') }}
-          v-divider.mx-2
+        ) {{ $t('send') }}
+        v-list-item(
+          :prepend-icon="mdiChatOutline",
+          @click="ticketsDialog = true",
+          v-else
+        ) {{ $t('tickets') }}
+        v-divider.mx-2
         v-list-item(
           :href="route('list-items.export')",
           :prepend-icon="mdiMicrosoftExcel",
@@ -226,6 +235,11 @@ ListInvoiceDialog(
   :show="invoiceDialog",
   @close="invoiceDialog = false",
   @submitted="onSubmitted"
+)
+ListCaseTicketsDialog(
+  :list-case-id="list_case.id",
+  :show="ticketsDialog",
+  @close="ticketsDialog = false"
 )
 </template>
 

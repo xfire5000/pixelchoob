@@ -54,8 +54,8 @@
       url: props.initialForm.id
         ? route('list-cases.update', props.initialForm.id)
         : route('list-cases.store'),
-      onSuccess(res: any) {
-        emit('submitted', res.data.item)
+      onSuccess(res) {
+        emit('submitted', res.data.item as IListCaseItem)
         toast(res.data.msg, { type: 'success' })
         form.reset()
         emit('close')

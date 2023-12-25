@@ -164,7 +164,7 @@ export default ({ mode }) => {
       external: ['lodash'],
     },
     optimizeDeps: {
-      include: ['lodash.throttle', 'vue-countup-v3'],
+      include: ['lodash.throttle', 'vue-countup-v3', 'vue3-emoji-picker'],
     },
   })
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ListCaseController;
 use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\Panel\FileManagerController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TicketsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,4 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('invoices', InvoiceController::class)->only(['store']);
     // settings
     Route::resource('settings', SettingController::class)->only(['store', 'show']);
+    // tickets
+    Route::resource('tickets', TicketsController::class)->only(['index', 'store']);
 });

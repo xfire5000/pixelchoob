@@ -52,9 +52,13 @@
 
   const el = ref<HTMLDivElement>(null)
 
-  useInfiniteScroll(el, () => {
-    if (!lockFetch.value) fetchUsers(), { interval: 4000 }
-  })
+  useInfiniteScroll(
+    el,
+    () => {
+      if (!lockFetch.value) fetchUsers()
+    },
+    { interval: 4000 },
+  )
 
   const addressType = (description: string) => _.isNumber(parseInt(description))
 </script>
