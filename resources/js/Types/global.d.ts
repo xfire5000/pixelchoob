@@ -46,7 +46,7 @@ declare global {
 
   declare type IAddressInfo = {
     id?: number
-    user_id: number
+    user_id?: number
     type: string
     description: string
     isShow: 1 | 0

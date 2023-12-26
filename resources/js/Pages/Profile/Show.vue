@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import AddressInfos from './Partials/AddressInfos.vue'
   import DeleteUserForm from './Partials/DeleteUserForm.vue'
   import LogoutOtherBrowserSessionsForm from './Partials/LogoutOtherBrowserSessionsForm.vue'
   import TwoFactorAuthenticationForm from './Partials/TwoFactorAuthenticationForm.vue'
@@ -35,6 +36,12 @@
       <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <div v-if="$page.props.jetstream['canUpdateProfileInformation']">
           <UpdateProfileInformationForm :user="$page.props.auth['user']" />
+
+          <SectionBorder />
+        </div>
+
+        <div>
+          <AddressInfos />
 
           <SectionBorder />
         </div>

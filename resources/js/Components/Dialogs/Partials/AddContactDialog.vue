@@ -110,12 +110,12 @@ DialogModal(:show, @close="emit('close')", max-width="lg")
                   v-checkbox-btn(:model-value="isSelected")
                 template(#subtitle, v-if="item.addressInfos?.length")
                   v-chip-group(color="info")
-                    v-chip(
-                      :key="item.id",
-                      :prepend-icon="addressType(info.description) ? mdiPhone : mdiMapMarker",
-                      v-for="info in item.addressInfos",
-                      v-text="info.description"
-                    )
+                    template(v-for="info in item.addressInfos")
+                      v-chip(
+                        :prepend-icon="addressType(info.description) ? mdiPhone : mdiMapMarker",
+                        v-if="(info.type === 'address' && info.isShow === 1) || ['mobile', 'phone'].includes(info.type)",
+                        v-text="info.description"
+                      )
   template(#footer)
     v-btn(
       :disabled="!selectedItems.length",

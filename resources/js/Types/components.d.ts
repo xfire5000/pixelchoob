@@ -10,6 +10,7 @@ declare module 'vue' {
     ActionMessage: typeof import('./../Components/ActionMessage.vue')['default']
     ActionSection: typeof import('./../Components/ActionSection.vue')['default']
     AddContactDialog: typeof import('./../Components/Dialogs/Partials/AddContactDialog.vue')['default']
+    AddressDialog: typeof import('./../Components/Dialogs/AddressDialog.vue')['default']
     AppLayout: typeof import('./../Layouts/AppLayout.vue')['default']
     ApplicationLogo: typeof import('./../Components/ApplicationLogo.vue')['default']
     ApplicationMark: typeof import('./../Components/ApplicationMark.vue')['default']

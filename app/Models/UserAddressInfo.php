@@ -14,9 +14,6 @@ class UserAddressInfo extends Model
 
     protected $fillable = ['user_id', 'type', 'description', 'isShow'];
 
-    public static array $TYPES = ['address' => ['title' => 'نشانی', 'value' => 'address'],
-        'phone' => ['title' => 'شماره تلفن ثابت', 'value' => 'phone'], 'mobile' => ['title' => 'شماره همراه', 'value' => 'mobile']];
-
     /**
      * A description of the entire PHP function.
      *
@@ -28,5 +25,17 @@ class UserAddressInfo extends Model
     public function scopeOfType(Builder $query, string|array $type): void
     {
         $query->whereIn('type', is_array($type) ? $type : [$type]);
+    }
+
+    /**
+     * A description of the entire PHP function.
+     *
+     * @param  Builder  $query The query builder instance.
+     *
+     * @throws void
+     */
+    public function scopeMyItems(Builder $query): void
+    {
+        $query->where('user_id', auth()->id());
     }
 }
