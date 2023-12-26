@@ -37,7 +37,7 @@ class ListCaseFactory extends Factory
                 'material' => 'MDF',
             ]),
             'archived' => $this->faker->boolean(1),
-            'viewed' => $this->faker->numberBetween(0, 80),
+            'viewed' => $this->faker->boolean(1),
         ];
     }
 }

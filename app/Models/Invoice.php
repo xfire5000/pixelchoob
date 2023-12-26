@@ -13,6 +13,9 @@ class Invoice extends Model
     protected $fillable = ['list_case_id', 'description', 'sumPVC', 'sumCutting', 'countParts',
         'sumGroove', 'sumChamfers', 'cutting', 'chamfer', 'groove', 'pvc'];
 
+    /**
+     * Returns a HasOne relationship for the listCase.
+     */
     public function listCase(): HasOne
     {
         return $this->hasOne(ListCase::class, 'id', 'list_case_id');

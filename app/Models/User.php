@@ -69,27 +69,57 @@ class User extends Authenticatable implements CanUseTickets, InterfacesUser
         'profile_photo_url',
     ];
 
+    /**
+     * A description of the entire PHP function.
+     */
     public function contacts(): MorphToMany
     {
         return $this->morphToMany(User::class, 'user_manager')->with(['addressInfos']);
     }
 
+    /**
+     * Retrieve the address information associated with this user.
+     *
+     * @return HasMany The relationship between the User model and the UserAddressInfo model.
+     */
     public function addressInfos(): HasMany
     {
         return $this->hasMany(UserAddressInfo::class, 'user_id', 'id');
     }
 
+    /**
+     * Retrieves an array of permissions.
+     *
+     * This function retrieves all permissions and maps them to a key-value array.
+     * The key is the name of the permission, and the value is set to true.
+     *
+     * @return mixed The array of permissions.
+     */
     public function getPermissionArray(): mixed
     {
         return $this->getAllPermissions()->mapWithKeys(fn ($pr) => [$pr['name'] => true]
         );
     }
 
+    /**
+     * Get the role of the user.
+     *
+     * @return Collection The role names of the user.
+     */
     public function getRole(): Collection
     {
         return $this->getRoleNames();
     }
 
+    /**
+     * Find or create a user based on the provided email and array.
+     *
+     * @param  string  $email The email to search for.
+     * @param  array  $array An array of data to create a user if not found.
+     * @return InterfacesUser The found or created user.
+     *
+     * @throws Some_Exception_Class If an error occurs during the process.
+     */
     public static function findOrCreate(string $email, array $array): InterfacesUser
     {
         $user = static::where('email', 'like', "%$email%")->first();

@@ -182,12 +182,18 @@ PanelLayout
       template(#activator="{ props: menu, isActive: isMenuActive }")
         v-tooltip(location="right")
           template(#activator="{ props: tooltip }")
-            v-btn(
-              :class="[{ 'animate-bounce hover:animate-none': !!list_case.user_id }, { 'animate-none': isMenuActive }]",
-              :icon="mdiDotsHorizontal",
-              color="primary",
-              v-bind="mergeProps(menu, tooltip)"
-            ).fixed.bottom-5.left-5
+            .fixed.bottom-5.left-5
+              .relative
+                div(
+                  v-if="list_case.ticket?.new_messages_count > 0"
+                ).fixed-badge
+                  span {{ list_case.ticket.new_messages_count }}
+                v-btn(
+                  :class="[{ 'animate-bounce hover:animate-none': !!list_case.user_id }, { 'animate-none': isMenuActive }]",
+                  :icon="mdiDotsHorizontal",
+                  color="primary",
+                  v-bind="mergeProps(menu, tooltip)"
+                )
           span {{ $t('actions') }}
       v-list
         v-list-item(
@@ -199,7 +205,13 @@ PanelLayout
           :prepend-icon="mdiChatOutline",
           @click="ticketsDialog = true",
           v-else
-        ) {{ $t('tickets') }}
+        )
+          | {{ $t('tickets') }}
+          template(#append)
+            v-chip(
+              color="sky-600",
+              v-if="list_case.ticket && list_case.ticket.new_messages_count > 0"
+            ) {{ $n(list_case.ticket.new_messages_count) }}
         v-divider.mx-2
         v-list-item(
           :href="route('list-items.export')",
@@ -252,5 +264,8 @@ ListCaseTicketsDialog(
     @apply flex w-full flex-col gap-y-2 rounded-lg bg-gray-200 px-2 py-4 text-gray-800 shadow-md dark:bg-slate-800 dark:text-white lg:w-[98%] lg:py-6;
     @apply child-hover:bg-gray-400 child-hover:dark:bg-white child-hover:dark:bg-opacity-20 child:lg:gap-x-2;
     @apply child:flex child:w-full child:flex-col child:gap-y-2 child:rounded-lg child:p-2 child:lg:flex-row;
+  }
+  .fixed-badge {
+    @apply absolute bottom-8 left-8 z-20 h-6 min-w-6 max-w-10 rounded-full bg-red-500 text-center;
   }
 </style>

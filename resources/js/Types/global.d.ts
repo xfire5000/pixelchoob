@@ -35,6 +35,7 @@ declare global {
     author?: IUserItem
     list_items?: listItems[]
     invoice?: IInvoiceItem
+    ticket?: ITicketItem
   }
 
   declare type IRoleItem = {
@@ -137,6 +138,8 @@ declare global {
     created_at?: Date
     updated_at?: Date
     messages?: ITicketMessageItem[]
+    new_messages?: ITicketMessageItem[]
+    new_messages_count?: number
   }
 
   declare type ITicketMessageItem = {

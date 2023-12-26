@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import DialogModal from '../../DialogModal.vue'
   import {
+    mdiAccountSearch,
     mdiArrowLeft,
     mdiInformationVariantCircleOutline,
     mdiMagnify,
@@ -66,7 +67,9 @@
 <template lang="pug">
 DialogModal(:show, @close="emit('close')", max-width="lg")
   template(#title)
-    | {{ $t('search-and-add-contacts') }}
+    .flex.flex-row.items-center.gap-x-2
+      v-icon(size="small") {{ mdiAccountSearch }}
+      | {{ $t('search-and-add-contacts') }}
   template(#content)
     v-row
       v-col(cols="12")
@@ -89,7 +92,7 @@ DialogModal(:show, @close="emit('close')", max-width="lg")
         ).mt-2
         template(v-if="users?.data.length")
           v-divider.m-2
-          div(class="lg:max-h-85", ref="el").max-h-64.overflow-y-scroll
+          div(ref="el").max-h-64.overflow-y-scroll
             v-list(rounded="lg", v-model:selected="selectedItems").my-4
               v-list-item(
                 :title="$t('no-data')",
@@ -99,12 +102,13 @@ DialogModal(:show, @close="emit('close')", max-width="lg")
                 :prepend-avatar="item.profile_photo_url",
                 :title="item.name",
                 :value="item",
+                class="[&_div]:my-auto",
                 lines="three",
                 v-for="item in users?.data"
               )
                 template(#append="{ isSelected }")
                   v-checkbox-btn(:model-value="isSelected")
-                template(#subtitle)
+                template(#subtitle, v-if="item.addressInfos?.length")
                   v-chip-group(color="info")
                     v-chip(
                       :key="item.id",

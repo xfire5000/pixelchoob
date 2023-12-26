@@ -20,11 +20,12 @@ class ListCaseController extends Controller
         $type = $_GET['type'];
 
         return response(match ($type) {
-            'my-lists' => ListCase::withCount('listItems')->with('invoice')->latest()->archived(false)->paginate(20),
-            'inbox' => ListCase::withCount('listItems')->with(['author', 'invoice'])->inbox()->latest()->paginate(20),
-            'archived' => ListCase::withCount('listItems')->with('invoice')->archived()->latest()->paginate(20),
-            'deleted' => ListCase::withCount('listItems')->with('invoice')->onlyTrashed()->latest()->paginate(20),
-            'searched' => ListCase::search($_GET['s'])->query(fn ($query) => $query->withCount('listItems')->with('author')->latest())->paginate(20)
+            'my-lists' => ListCase::withCount('listItems')->with(['invoice', 'ticket'])->latest()->archived(false)->paginate(20),
+            'inbox' => ListCase::withCount('listItems')->with(['author', 'invoice', 'ticket'])->inbox()->latest()->paginate(20),
+            'archived' => ListCase::withCount('listItems')->with(['invoice', 'ticket'])->archived()->latest()->paginate(20),
+            'deleted' => ListCase::withCount('listItems')->with(['invoice', 'ticket'])->onlyTrashed()->latest()->paginate(20),
+            'searched' => ListCase::search($_GET['s'])->query(fn ($query) => $query->withCount('listItems')
+                ->with(['author', 'invoice', 'ticket'])->latest())->paginate(20)
         });
     }
 

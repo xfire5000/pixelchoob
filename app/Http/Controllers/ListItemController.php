@@ -19,7 +19,7 @@ class ListItemController extends Controller
     {
         $my_id = auth()->id();
         $list_case = ListCase::withoutGlobalScopes()->withoutTrashed()
-            ->with(['author', 'invoice'])->archived(false)->where('slug', $slug)
+            ->with(['author', 'invoice', 'ticket'])->archived(false)->whereSlug($slug)
             ->where('author_id', $my_id)->orWhere('user_id', $my_id)->firstOrFail();
         $items = $list_case->listItems()->orderBy('sortable')->get();
         $viewed = session()->get('viewed_post', []);

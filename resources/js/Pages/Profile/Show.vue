@@ -10,11 +10,12 @@
     confirmsTwoFactorAuthentication: boolean
   }>()
 
-  const { setBreadCrumbItem } = useGlobalState()
+  const { setBreadCrumbItem, breadCrumb } = useGlobalState()
 
   const { t } = useI18n()
 
   onMounted(() => {
+    breadCrumb.value = []
     setBreadCrumbItem({
       title: t('profile'),
     })

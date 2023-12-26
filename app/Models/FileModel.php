@@ -20,11 +20,21 @@ class FileModel extends Model
         'audio' => 4,
     ];
 
+    /**
+     * Retrieve the associated user for this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    /**
+     * Retrieves the array representation of the object for search indexing.
+     *
+     * @return array The searchable array representation of the object.
+     */
     public function toSearchableArray(): array
     {
         return [

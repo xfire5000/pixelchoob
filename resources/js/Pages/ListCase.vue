@@ -224,6 +224,12 @@
   function initOrDestroyTickets(id: number = 0) {
     listId.value = id
     ticketsDialog.value = id !== 0
+    if (id !== 0) {
+      let index = tabs.value[tab.value].items.findIndex(
+        (item: IListCaseItem) => item.id === id,
+      )
+      tabs.value[tab.value].items[index].ticket.new_messages_count = 0
+    }
   }
 </script>
 
@@ -385,6 +391,12 @@ PanelLayout
                         v-if="item['invoice']"
                       ) {{ mdiPageNextOutline }}
                     span {{ $t('invoice-submitted') }}
+                  v-chip(
+                    :prepend-icon="mdiChatOutline",
+                    @click="initOrDestroyTickets(item['id'])",
+                    color="sky-600",
+                    v-if="item['ticket'] && item['ticket'].new_messages_count > 0"
+                  ) {{ $t('new-message', { prefix: $n(item['ticket'].new_messages_count) }) }}
                   p-link(
                     :href="route('list-items.index', item['slug'])",
                     as="button",
