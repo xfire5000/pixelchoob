@@ -7,6 +7,8 @@
   const { direction } = useGlobalState()
 
   useTextDirection().value = direction.value
+
+  useFavicon('/assets/img/icons/pwa/homescreen192.png')
 </script>
 
 <template lang="pug">
