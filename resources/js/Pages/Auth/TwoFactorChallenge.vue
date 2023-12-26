@@ -1,5 +1,7 @@
-<script setup>
+<script setup lang="ts">
   import { useForm } from '@inertiajs/vue3'
+  import { mdiBackupRestore, mdiDotsHorizontal } from '@mdi/js'
+  import route from 'ziggy-js'
 
   const recovery = ref(false)
 
@@ -12,7 +14,7 @@
   const codeInput = ref(null)
 
   const toggleRecovery = async () => {
-    recovery.value ^= true
+    recovery.value !== true
 
     await nextTick()
 
@@ -30,74 +32,40 @@
   }
 </script>
 
-<template>
-  <p-head title="Two-factor Confirmation" />
-
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
-
-    <div class="mb-4 text-sm text-gray-600">
-      <template v-if="!recovery">
-        Please confirm access to your account by entering the authentication
-        code provided by your authenticator application.
-      </template>
-
-      <template v-else>
-        Please confirm access to your account by entering one of your emergency
-        recovery codes.
-      </template>
-    </div>
-
-    <form @submit.prevent="submit">
-      <div v-if="!recovery">
-        <InputLabel for="code" value="Code" />
-        <TextInput
-          id="code"
-          ref="codeInput"
-          v-model="form.code"
-          type="text"
-          inputmode="numeric"
-          class="mt-1 block w-full"
-          autofocus
-          autocomplete="one-time-code"
-        />
-        <InputError class="mt-2" :message="form.errors.code" />
-      </div>
-
-      <div v-else>
-        <InputLabel for="recovery_code" value="Recovery Code" />
-        <TextInput
-          id="recovery_code"
-          ref="recoveryCodeInput"
-          v-model="form.recovery_code"
-          type="text"
-          class="mt-1 block w-full"
-          autocomplete="one-time-code"
-        />
-        <InputError class="mt-2" :message="form.errors.recovery_code" />
-      </div>
-
-      <div class="flex items-center justify-end mt-4">
-        <button
-          type="button"
-          class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
-          @click.prevent="toggleRecovery"
-        >
-          <template v-if="!recovery"> Use a recovery code </template>
-
-          <template v-else> Use an authentication code </template>
-        </button>
-
-        <PrimaryButton
-          class="ms-4"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Log in
-        </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+<template lang="pug">
+p-head(:title="$t('auth.two-factor-confirm')")
+AuthLayout
+  .mx-10.flex.flex-col.gap-y-2
+    div(class="dark:text-gray-200").text-sm.text-gray-600
+      template(v-if="!recovery") {{ $t('auth.two-factor-do-access') }}
+      template(v-else) {{ $t('auth.two-factor-do-emergency') }}
+    v-form(@submit.prevent="submit")
+      v-text-field(
+        ::="form.code",
+        :error-messages="form.errors?.code",
+        :label="$t('auth.code')",
+        :prepend-inner-icon="mdiDotsHorizontal",
+        color="secondary",
+        hide-details="auto",
+        v-if="!recovery",
+        variant="solo"
+      ).text-right
+      v-text-field(
+        ::="form.recovery_code",
+        :error-messages="form.errors?.recovery_code",
+        :label="$t('auth.recover-code')",
+        :prepend-inner-icon="mdiBackupRestore",
+        color="secondary",
+        hide-details="auto",
+        v-else,
+        variant="solo"
+      ).text-right
+      .flex.flex-row.items-center.gap-x-2
+        v-btn(@click="toggleRecovery", rounded="lg", variant="outlined") {{ !recovery ? $t('auth.use-recovery') : $t('auth.use-auth-code') }}
+        v-btn(
+          :loading="form.processing",
+          color="primary",
+          rounded="lg",
+          type="submit"
+        ) {{ $t('auth.login') }}
 </template>

@@ -1,12 +1,22 @@
-<script setup>
+<script setup lang="ts">
   import { useForm } from '@inertiajs/vue3'
+  import {
+    mdiAccount,
+    mdiAt,
+    mdiBackupRestore,
+    mdiCheck,
+    mdiEyeOffOutline,
+    mdiEyeOutline,
+    mdiLockOutline,
+  } from '@mdi/js'
+  import route from 'ziggy-js'
 
   const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
-    terms: false,
+    terms: true,
   })
 
   const submit = () => {
@@ -14,115 +24,74 @@
       onFinish: () => form.reset('password', 'password_confirmation'),
     })
   }
+
+  const typeChange = reactive({
+    isPassword: true,
+    isConfPassword: true,
+  })
 </script>
 
-<template>
-  <p-head title="Register" />
-
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
-
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="name" value="Name" />
-        <TextInput
-          id="name"
-          v-model="form.name"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="name"
-        />
-        <InputError class="mt-2" :message="form.errors.name" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="email" value="Email" />
-        <TextInput
-          id="email"
-          v-model="form.email"
-          type="email"
-          class="mt-1 block w-full"
-          required
-          autocomplete="username"
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-        <TextInput
-          id="password"
-          v-model="form.password"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="new-password"
-        />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-        <TextInput
-          id="password_confirmation"
-          v-model="form.password_confirmation"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="new-password"
-        />
-        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-      </div>
-
-      <div
-        v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
-        class="mt-4"
-      >
-        <InputLabel for="terms">
-          <div class="flex items-center">
-            <Checkbox id="terms" :checked="form.terms" name="terms" required />
-
-            <div class="ms-2">
-              I agree to the
-              <a
-                target="_blank"
-                :href="route('terms.show')"
-                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >Terms of Service</a
-              >
-              and
-              <a
-                target="_blank"
-                :href="route('policy.show')"
-                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >Privacy Policy</a
-              >
-            </div>
-          </div>
-          <InputError class="mt-2" :message="form.errors.terms" />
-        </InputLabel>
-      </div>
-
-      <div class="flex items-center justify-end mt-4">
-        <p-link
-          :href="route('login')"
-          class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Already registered?
-        </p-link>
-
-        <PrimaryButton
-          class="ms-4"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Register
-        </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+<template lang="pug">
+p-head(:title="$t('auth.register')")
+AuthLayout
+  .flex.flex-col
+    v-text-field(
+      ::="form.name",
+      :error-messages="form.errors?.name",
+      :label="$t('auth.name')",
+      :prepend-inner-icon="mdiAccount",
+      :rules="[rules.required]",
+      class="lg:w-2/3",
+      color="secondary",
+      hide-details="auto",
+      variant="solo"
+    ).mx-10.mt-4.text-right
+    v-text-field(
+      ::="form.email",
+      :error-messages="form.errors?.email",
+      :label="$t('auth.email')",
+      :prepend-inner-icon="mdiAt",
+      :rules="[rules.email, rules.required]",
+      color="secondary",
+      hide-details="auto",
+      type="email",
+      variant="solo"
+    ).mx-10.mt-4.text-right
+    v-text-field(
+      ::="form.password",
+      :append-inner-icon="typeChange.isPassword ? mdiEyeOutline : mdiEyeOffOutline",
+      :error-messages="form.errors?.password",
+      :label="$t('auth.password')",
+      :prepend-inner-icon="mdiLockOutline",
+      :rules="[rules.required]",
+      :type="typeChange.isPassword ? 'password' : 'text'",
+      @click:append-inner="typeChange.isPassword = !typeChange.isPassword",
+      color="secondary",
+      hide-details="auto",
+      variant="solo"
+    ).mx-10.mt-4.text-right
+    v-text-field(
+      ::="form.password_confirmation",
+      :append-inner-icon="typeChange.isConfPassword ? mdiEyeOutline : mdiEyeOffOutline",
+      :error-messages="form.errors?.password_confirmation",
+      :label="$t('auth.password_conf')",
+      :prepend-inner-icon="mdiBackupRestore",
+      :rules="[rules.required]",
+      :type="typeChange.isConfPassword ? 'password' : 'text'",
+      @click:append-inner="typeChange.isConfPassword = !typeChange.isConfPassword",
+      color="secondary",
+      hide-details="auto",
+      variant="solo"
+    ).mx-10.my-4.text-right
+    v-divider.mx-10
+    p-link(
+      :href="route('login')",
+      as="button",
+      type="button"
+    ).mx-12.mb-10.mt-3.text-right.text-xs.text-sky-600 {{ $t('auth.have-an-account') }}
+    v-btn(
+      :icon="mdiCheck",
+      @click="submit",
+      color="primary"
+    ).absolute.bottom-6.right-6
 </template>

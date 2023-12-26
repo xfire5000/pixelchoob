@@ -1,9 +1,10 @@
-<script setup>
+<script setup lang="ts">
   import { useForm } from '@inertiajs/vue3'
+  import route from 'ziggy-js'
 
-  const props = defineProps({
-    status: String,
-  })
+  const props = defineProps<{
+    status: string
+  }>()
 
   const form = useForm({})
 
@@ -16,55 +17,33 @@
   )
 </script>
 
-<template>
-  <p-head title="Email Verification" />
-
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
-
-    <div class="mb-4 text-sm text-gray-600">
-      Before continuing, could you verify your email address by clicking on the
-      link we just emailed to you? If you didn't receive the email, we will
-      gladly send you another.
-    </div>
-
-    <div
+<template lang="pug">
+p-head(:title="$t('auth.verify-email')")
+AuthLayout
+  .mx-10.flex.flex-col.gap-y-2
+    div(class="dark:text-gray-200").text-sm.text-gray-600 {{ $t('auth.verify-desc') }}
+    v-alert(
+      :text="$t('auth.verify-sent')",
+      type="info",
       v-if="verificationLinkSent"
-      class="mb-4 font-medium text-sm text-green-600"
-    >
-      A new verification link has been sent to the email address you provided in
-      your profile settings.
-    </div>
-
-    <form @submit.prevent="submit">
-      <div class="mt-4 flex items-center justify-between">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Resend Verification Email
-        </PrimaryButton>
-
-        <div>
-          <p-link
-            :href="route('profile.show')"
-            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Edit Profile</p-link
-          >
-
-          <p-link
-            :href="route('logout')"
+    )
+    v-form(@submit.prevent="submit")
+      .flex.items-center.justify-between
+        v-btn(
+          :loading="form.processing",
+          color="secondary",
+          rounded="lg",
+          type="submit"
+        ) {{ $t('auth.resend-verification') }}
+        div
+          p-link(
+            :href="route('profile.show')",
+            class="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          ).rounded-md.text-sm.text-gray-600.underline {{ $t('auth.edit-profile') }}
+          p-link(
+            :href="route('logout')",
+            as="button",
+            class="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2",
             method="post"
-            as="button"
-            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ms-2"
-          >
-            Log Out
-          </p-link>
-        </div>
-      </div>
-    </form>
-  </AuthenticationCard>
+          ).ms-2.rounded-md.text-sm.text-gray-600.underline {{ $t('auth.logout') }}
 </template>

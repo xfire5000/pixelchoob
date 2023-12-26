@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useForm, usePage } from '@inertiajs/vue3'
   import {
+    mdiAccountPlus,
     mdiArrowRight,
     mdiAt,
     mdiCheck,
@@ -58,22 +59,13 @@
 
   const step = ref<number>(1)
   const isPassword = ref<boolean>(true)
-
-  const rules = {
-    email: (value) => {
-      const pattern =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return pattern.test(value) || t('validation-rules.email-invalid')
-    },
-    required: (value) => !!value || t('validation-rules.required'),
-  }
 </script>
 
 <template lang="pug">
 p-head(:title="$t('auth.login')")
 AuthLayout
   small(class="dark:text-white").mr-6 {{ $t('auth.welcome-login') }}
-  p(class="Dark:text-gray-200").mx-6.my-4.text-right.text-xs.text-gray-600
+  p(class="dark:text-gray-200").mx-6.my-4.text-right.text-xs.text-gray-600
     v-icon(size="small").ml-2 {{ mdiInformationVariantCircleOutline }}
     | {{ $t('auth.login-hint') }}
   TransitionSlide
@@ -110,19 +102,16 @@ AuthLayout
       v-else,
       variant="solo"
     ).mx-10.mt-4.text-right
-    p-link(
-      :href="route('password.request')",
-      class="hover:underline",
-      v-if="canResetPassword && step === 2"
-    ).mx-10.mb-4.text-right.text-sm.text-secondary
-      v-icon(size="small").ml-2 {{ mdiLockReset }}
-      | {{ $t('auth.forgot-password') }}
   v-divider.mx-10
-  p-link(
-    :href="route('register')",
-    as="button",
-    type="button"
-  ).mx-12.mb-10.mt-3.text-right.text-xs.text-sky-600 {{ $t('auth.no-account-go-register') }}
+  div(
+    class="[&_a]:flex [&_a]:flex-row [&_a]:items-center [&_a]:gap-x-2"
+  ).mx-12.mb-10.mt-3.flex.flex-col.gap-y-2.text-right.text-xs.text-sky-600
+    p-link(:href="route('password.request')")
+      v-icon {{ mdiLockReset }}
+      | {{ $t('auth.forgot_password') }}
+    p-link(:href="route('register')")
+      v-icon {{ mdiAccountPlus }}
+      | {{ $t('auth.no-account-go-register') }}
   v-btn(
     :icon="2 > step ? mdiArrowRight : mdiCheck",
     :loading="form.processing",
@@ -130,7 +119,6 @@ AuthLayout
     color="secondary"
   ).absolute.bottom-6.right-6
   v-btn(
-    ,
     :icon="mdiArrowRight",
     @click="step--",
     size="small",

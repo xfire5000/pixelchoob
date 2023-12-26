@@ -1,5 +1,14 @@
-<script setup>
+<script setup lang="ts">
   import { useForm } from '@inertiajs/vue3'
+  import {
+    mdiAt,
+    mdiBackupRestore,
+    mdiCheck,
+    mdiEyeOffOutline,
+    mdiEyeOutline,
+    mdiLockOutline,
+  } from '@mdi/js'
+  import route from 'ziggy-js'
 
   const props = defineProps({
     email: String,
@@ -13,70 +22,62 @@
     password_confirmation: '',
   })
 
-  const submit = () => {
+  const submit = () =>
     form.post(route('password.update'), {
       onFinish: () => form.reset('password', 'password_confirmation'),
     })
-  }
+
+  const typeChange = reactive({
+    isPassword: true,
+    isConfPassword: true,
+  })
 </script>
 
-<template>
-  <p-head title="Reset Password" />
-
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
-
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="email" value="Email" />
-        <TextInput
-          id="email"
-          v-model="form.email"
-          type="email"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="username"
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-        <TextInput
-          id="password"
-          v-model="form.password"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="new-password"
-        />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-        <TextInput
-          id="password_confirmation"
-          v-model="form.password_confirmation"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="new-password"
-        />
-        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-      </div>
-
-      <div class="flex items-center justify-end mt-4">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Reset Password
-        </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+<template lang="pug">
+p-head(:title="$t('auth.reset-password')")
+AppLayout
+  .mx-10.flex.flex-col.gap-y-2
+    v-text-field(
+      ::="form.email",
+      :error-messages="form.errors?.email",
+      :label="$t('auth.email')",
+      :prepend-inner-icon="mdiAt",
+      :rules="[rules.email, rules.required]",
+      color="secondary",
+      type="email",
+      variant="solo"
+    ).text-right
+    v-text-field(
+      ::="form.password",
+      :append-inner-icon="typeChange.isPassword ? mdiEyeOutline : mdiEyeOffOutline",
+      :error-messages="form.errors?.password",
+      :label="$t('auth.password')",
+      :prepend-inner-icon="mdiLockOutline",
+      :rules="[rules.required]",
+      :type="typeChange.isPassword ? 'password' : 'text'",
+      @click:append-inner="typeChange.isPassword = !typeChange.isPassword",
+      color="secondary",
+      hide-details="auto",
+      variant="solo"
+    ).text-right
+    v-text-field(
+      ::="form.password_confirmation",
+      :append-inner-icon="typeChange.isConfPassword ? mdiEyeOutline : mdiEyeOffOutline",
+      :error-messages="form.errors?.password_confirmation",
+      :label="$t('auth.password_conf')",
+      :prepend-inner-icon="mdiBackupRestore",
+      :rules="[rules.required]",
+      :type="typeChange.isConfPassword ? 'password' : 'text'",
+      @click:append-inner="typeChange.isConfPassword = !typeChange.isConfPassword",
+      color="secondary",
+      hide-details="auto",
+      variant="solo"
+    ).text-right
+    v-btn(
+      :loading="form.processing",
+      :prepend-icon="mdiCheck",
+      @click="submit",
+      color="secondary",
+      rounded="lg"
+    ).mt-4 {{ $t('auth.reset-password') }}
 </template>

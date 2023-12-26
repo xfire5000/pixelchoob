@@ -96,11 +96,11 @@ AppLayout
         data-aos-duration="3000"
       ).col-span-full
         div(:class="['lg:px-16 lg:py-30', { 'py-10': mobile }]")
-          h1(:class="[{ 'text-3xl': mobile }]")
+          h1(:class="[{ 'text-3xl': mobile }, 'dark:text-white']")
             | {{ $t('pixel-hero') }}&nbsp;
             span(class="bg-300%")
               | {{ $t('with', { name: $t('pixel-choob') }) }}
-          h6.mt-6.opacity-50 {{ $t('pixel-hero-desc') }}
+          h6(class="dark:text-gray-200").mt-6.opacity-50 {{ $t('pixel-hero-desc') }}
           p-link(
             :href="$page.props.auth['user'] ? route('dashboard') : route('login')",
             as="button",
@@ -122,7 +122,7 @@ AppLayout
     #features.rounded-xl.bg-blue-600.bg-opacity-40.py-8
       div(class="child:rounded-xl").mx-4.grid.grid-cols-4.gap-4
         div(
-          class="hover:scale-102 dark:bg-dark-100 lg:col-span-1",
+          class="hover:scale-102 dark:bg-dark-100 dark:text-white lg:col-span-1",
           v-for="item in features"
         ).col-span-full.bg-white.p-2.shadow-sm.transition
           .my-4.flex.flex-row.items-center.justify-center.gap-x-2
@@ -140,7 +140,7 @@ AppLayout
           data-aos-delay="300",
           data-aos-duration="3000"
         ).flex.w-full.flex-col.gap-y-2
-          h5 {{ $t('services-free') }}
+          h5(class="dark:text-white") {{ $t('services-free') }}
           p(v-text="$t('services-desc')").text-gray-500
           p-link(
             :href="$page.props.auth['user'] ? route('dashboard') : route('login')",
