@@ -93,7 +93,7 @@ AppLayout
         class="lg:col-span-1",
         data-aos="fade-left",
         data-aos-delay="300",
-        data-aos-duration="3000"
+        data-aos-duration="2000"
       ).col-span-full
         div(:class="['lg:px-16 lg:py-30', { 'py-10': mobile }]")
           h1(:class="[{ 'text-3xl': mobile }, 'dark:text-white']")
@@ -138,7 +138,7 @@ AppLayout
           class="lg:w-1/3",
           data-aos="fade-left",
           data-aos-delay="300",
-          data-aos-duration="3000"
+          data-aos-duration="2000"
         ).flex.w-full.flex-col.gap-y-2
           h5(class="dark:text-white") {{ $t('services-free') }}
           p(v-text="$t('services-desc')").text-gray-500
@@ -165,13 +165,13 @@ AppLayout
             alt="logo",
             class="group-hover:rotate-6 group-hover:shadow-md [&_img]:p-1 [&_img]:brightness-200"
           ).absolute.bottom-5.z-20.ml-28.w-40.rounded-full.border.bg-opacity-40.shadow-gray-200.backdrop-blur-lg
-    #about-us.my-6.p-6
-      .items-top.m-4.flex.flex-row.gap-x-2
-        div(class="dark:bg-dark-200 lg:w-1/3").rounded-xl.bg-cyan-500.p-6
+    #about-us(class="lg:p-6").my-6
+      div(class="lg:flex-row lg:gap-x-2").items-top.m-4.flex.flex-col.gap-y-2
+        div(class="dark:bg-dark-200 lg:w-1/3 lg:p-6").rounded-xl.bg-cyan-500.p-2
           div(class="child:text-white").my-auto.flex.flex-col
             strong(v-text="$t('about-info')").mr-2.mt-2
             .group.mt-4.flex.flex-row.items-center.justify-end
-              div(class="child-hover:underline").dir-ltr.ml-4.flex.flex-col.gap-y-2
+              div(class="child-hover:underline lg:ml-4").dir-ltr.ml-2.flex.flex-col.gap-y-2
                 a(href="tell:+989140010783")
                   small +989140010783
                 a(href="tell:+989140010796")
@@ -180,9 +180,9 @@ AppLayout
                 v-icon(class="group-hover:text-blue-600") {{ mdiPhone }}
             .group.mt-6.flex.flex-row.items-center.justify-end
               a(
-                class="hover:underline",
+                class="hover:underline lg:ml-6 lg:text-base",
                 href="mailto:Support@pixelchoob.ir"
-              ).ml-4.text-base Support@pixelchoob.ir
+              ).ml-2.text-sm Support@pixelchoob.ir
               .contact-icon-circle
                 v-icon(class="group-hover:text-blue-600") {{ mdiAt }}
         .grow

@@ -1,6 +1,7 @@
 import ThemeProvideVue from './ThemeProvide.vue'
 import { mdiAccountOutline } from '@mdi/js'
 import { VDivider, VIcon } from 'vuetify/lib/components/index.mjs'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 import route from 'ziggy-js'
 
 export const Header = defineComponent({
@@ -17,12 +18,14 @@ export const Header = defineComponent({
       { title: t('header-nav.about-us'), url: '#about-us' },
     ]
 
+    const { mobile } = useDisplay()
+
     return () => (
       <nav class="fixed w-full top-0 z-30 transition duration-300">
         <div class="container px-18 mx-auto">
           <div
             class={[
-              'lg:flex lg:items-center relative transition duration-300 rounded-full mt-4 mx-24 bg-[#fff] dark:bg-gray-800 bg-opacity-0 dark:bg-opacity-0',
+              'lg:flex lg:items-center relative transition duration-300 rounded-full mt-4 lg:mx-24 bg-[#fff] dark:bg-gray-800 bg-opacity-0 dark:bg-opacity-0',
               {
                 'bg-opacity-100 dark:bg-opacity-100 shadow-md':
                   !arrivedState.top,
@@ -41,7 +44,6 @@ export const Header = defineComponent({
               {/* Mobile menu button */}
               <div class="flex lg:hidden">
                 <button
-                  x-cloak
                   onClick={() => (drawer.value = !drawer.value)}
                   type="button"
                   class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
@@ -97,10 +99,26 @@ export const Header = defineComponent({
                     {item.title}
                   </a>
                 ))}
+                {mobile.value ? (
+                  <>
+                    <VDivider class="my-3" />
+                    <div class="flex flex-row items-center justify-between gap-x-2">
+                      <p-link class="sm:mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">
+                        {t('auth.login-register')}
+                      </p-link>
+                      <ThemeProvideVue />
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
 
-            <div class="flex justify-center sm:mt-6 lg:flex z-40 lg:mt-0 lg:ml-4 absolute left-0">
+            <div
+              class={[
+                'flex justify-center sm:mt-6 lg:flex z-40 lg:mt-0 lg:ml-4 absolute left-0',
+                { hidden: mobile.value },
+              ]}
+            >
               <p-link
                 href={route('login')}
                 as="button"
@@ -109,7 +127,7 @@ export const Header = defineComponent({
               >
                 <VIcon class="ml-2 text-sky-600">{mdiAccountOutline}</VIcon>
                 <VDivider vertical class="ml-2 my-auto" length="24px" />
-                <span>{t('auth.login-register')}</span>
+                <span class="text-xxs">{t('auth.login-register')}</span>
               </p-link>
               <ThemeProvideVue />
             </div>
