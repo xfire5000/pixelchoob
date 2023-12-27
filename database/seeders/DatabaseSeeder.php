@@ -15,17 +15,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
         ]);
-        if (\App\Models\User::count() < 10) {
-            \App\Models\User::factory(10)->create();
-        }
-        $this->call([
-            SettingSeed::class,
-        ]);
-        if (\App\Models\ListCase::count() < 10) {
-            \App\Models\ListCase::factory(10)->create();
-        }
-        if (\App\Models\ListItem::count() < 60) {
-            \App\Models\ListItem::factory(60)->create();
-        }
+        // if (\App\Models\User::count() < 10) {
+        //     \App\Models\User::factory(10)->create();
+        // }
+        // $this->call([
+        //     SettingSeed::class,
+        // ]);
+        // if (\App\Models\ListCase::count() < 10) {
+        //     \App\Models\ListCase::factory(10)->create();
+        // }
+        // if (\App\Models\ListItem::count() < 60) {
+        //     \App\Models\ListItem::factory(60)->create();
+        // }
     }
 }

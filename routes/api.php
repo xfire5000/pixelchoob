@@ -4,7 +4,6 @@ use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ListCaseController;
 use App\Http\Controllers\ListItemController;
-use App\Http\Controllers\Panel\FileManagerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserAddressInfoController;
@@ -27,9 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['auth:sanctum', HandlePrecognitiveRequests::class])->group(function () {
-    // file-manager
-    Route::resource('file_manager', FileManagerController::class)
-        ->only(['index', 'store', 'show', 'update', 'destroy']);
     // list-cases
     Route::resource('list-cases', ListCaseController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::controller(ListCaseController::class)->prefix('list-cases')->group(function () {
