@@ -14,6 +14,7 @@ return [
     'phone' => 'شماره ثابت :status',
     'mobile' => 'شماره همراه :status',
     'contact' => 'مخاطب :status',
+    'user' => 'کاربر :status',
     'list-item' => 'قطعه :status',
     'settings' => 'تنظیمات :status',
     'invoice' => 'پیش فاکتور :status',

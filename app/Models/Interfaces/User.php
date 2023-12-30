@@ -21,7 +21,7 @@ interface User
 
     public function hasAnyRole(...$roles): bool;
 
-    public function hasRole($roles, string $guard = null): bool;
+    public function hasRole($roles, ?string $guard = null): bool;
 
     public function roles(): BelongsToMany;
 }

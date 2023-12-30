@@ -18,4 +18,7 @@ Route::middleware([
     });
     // settings
     Route::inertia('settings', 'Settings/index')->name('settings.index');
+    // users
+    Route::get('users', '\App\Http\Controllers\UsersController@index')->name('users.index')
+    ->middleware('permission:view-users');
 });

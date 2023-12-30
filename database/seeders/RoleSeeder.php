@@ -22,31 +22,33 @@ class RoleSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $permissions = [];
-        $permissions_title = [];
+        $permissions = [
+            'view-users', 'edit-users', 'add-users', 'delete-users',
+            'view-roles', 'edit-roles', 'add-roles', 'delete-roles', 'view-permissions',
+            'edit-permissions', 'add-permissions', 'delete-permissions',
+        ];
 
-        $role = Role::findOrCreate('admin');
-        $role->updateQuietly(['title' => 'مدیر']);
+        $role = Role::findOrCreate('admin', 'web');
+        $role->updateQuietly(['title' => __('roles.admin')]);
         if (! $admin->hasAnyRole($role)) {
             $admin->assignRole($role);
         }
 
-        foreach ($permissions as $key => $item) {
-            if (! Permission::findByName($item) instanceof Permission) {
-                Permission::create(['name' => $item, 'title' => $permissions_title[$key]]);
+        foreach ($permissions as $item) {
+            if (! Permission::where('name', $item)->exists()) {
+                Permission::create(['name' => $item, 'title' => __("permissions.$item")]);
                 $role->givePermissionTo($item);
             }
         }
 
         $user_permissions = [];
-        $user_permissions_title = [];
 
-        $user_role = Role::findOrCreate('user');
-        $user_role->updateQuietly(['title' => 'کاربر']);
+        $user_role = Role::findOrCreate('user', 'web');
+        $user_role->updateQuietly(['title' => __('roles.user')]);
 
-        foreach ($user_permissions as $key => $item) {
-            if (! Permission::findByName($item) instanceof Permission) {
-                Permission::create(['name' => $item, 'title' => $user_permissions_title[$key]]);
+        foreach ($user_permissions as $item) {
+            if (! Permission::where('name', $item)->exists()) {
+                Permission::create(['name' => $item, 'title' => __("permissions.$item")]);
                 $user_role->givePermissionTo($item);
             }
         }

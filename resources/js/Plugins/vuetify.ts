@@ -53,10 +53,12 @@ export default createVuetify({
     VSelect: {
       density: 'compact',
       class: 'dark:text-white',
+      variant: 'outlined',
     },
     VAutocomplete: {
       density: 'compact',
       class: 'dark:text-white',
+      variant: 'outlined',
     },
     VAlert: { density: 'compact', variant: 'tonal' },
     VList: {

@@ -108,7 +108,7 @@ AuthLayout
   ).mx-12.mb-10.mt-3.flex.flex-col.gap-y-2.text-right.text-xs.text-sky-600
     p-link(:href="route('password.request')")
       v-icon {{ mdiLockReset }}
-      | {{ $t('auth.forgot_password') }}
+      | {{ $t('auth.forgot-password') }}
     p-link(:href="route('register')")
       v-icon {{ mdiAccountPlus }}
       | {{ $t('auth.no-account-go-register') }}

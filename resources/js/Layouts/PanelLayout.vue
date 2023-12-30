@@ -5,7 +5,7 @@
 <template lang="pug">
 .flex.h-full.w-full.flex-col
   .flex.flex-1
-    NavDrawer
+    NavDrawer(v-once)
     main.my-6.flex-1.overflow-hidden
       .container.-mt-4
         BreadCrumb

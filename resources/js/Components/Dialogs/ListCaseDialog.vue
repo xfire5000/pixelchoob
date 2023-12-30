@@ -58,9 +58,13 @@
         emit('submitted', res.data.item as IListCaseItem)
         toast(res.data.msg, { type: 'success' })
         form.reset()
-        emit('close')
+        if (!form.id) emit('close')
       },
     })
+
+  onUpdated(() => {
+    if (!props.show && form.id) form.id = undefined
+  })
 </script>
 
 <template lang="pug">

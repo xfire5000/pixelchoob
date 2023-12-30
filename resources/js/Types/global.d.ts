@@ -58,11 +58,13 @@ declare global {
     email: string
     password?: string
     email_verified_at?: Date
-    roles?: IRoleItem[]
-    profile_photo_url: string
+    roles?: IRoleItem[] | string[]
+    profile_photo_url?: string
     profile_photo_path?: string
     contacts?: IUserItem[]
     address_infos?: IAddressInfo[]
+    created_at?: Date
+    updated_at?: Date
   }
 
   declare type IFourSections = {

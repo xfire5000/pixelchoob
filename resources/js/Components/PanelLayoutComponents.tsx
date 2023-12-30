@@ -1,6 +1,7 @@
 import ThemeProvideVue from './ThemeProvide.vue'
 import { usePage } from '@inertiajs/vue3'
 import {
+  mdiAccountGroup,
   mdiArrowLeft,
   mdiChevronLeft,
   mdiCogOutline,
@@ -73,32 +74,49 @@ export const NavDrawer = defineComponent({
   setup() {
     const page = usePage()
 
+    const permissions: any[] = page.props.auth['can']
+
     const { t } = useI18n()
 
     const { mobile } = useDisplay()
 
     const { selectDrawerItem, drawerOpener } = useGlobalState()
 
-    const menuItems = [
+    const menuItems: {
+      title: string
+      link: string
+      icon: string
+      can: boolean
+    }[] = [
       {
         title: t('dashboard'),
         link: route('dashboard'),
         icon: mdiHomeOutline,
+        can: true,
       },
       {
         title: t('menuDrawerItems.my-lists'),
         link: route('list-case.index'),
         icon: mdiFolderOutline,
+        can: true,
       },
       // {
       //   title: t('menuDrawerItems.my-invoices'),
       //   link: route('invoices.index'),
       //   icon: mdiPageNextOutline,
+      //   can:true
       // },
       {
         title: t('settings.index'),
         link: route('settings.index'),
         icon: mdiCogOutline,
+        can: true,
+      },
+      {
+        title: t('users'),
+        link: route('users.index'),
+        icon: mdiAccountGroup,
+        can: permissions['view-users'],
       },
     ]
 
@@ -171,7 +189,9 @@ export const NavDrawer = defineComponent({
 
             {menuItems
               .filter((f) =>
-                search.value.length ? f.title.includes(search.value) : f,
+                search.value.length
+                  ? f.title.includes(search.value) && f.can
+                  : f.can,
               )
               .map((item) => (
                 <p-link

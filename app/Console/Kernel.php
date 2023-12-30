@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('list-case:archiver')->weekly()->at('01:00');
+        $schedule->command('log:clear')->weekly()->at('02:00');
+        $schedule->command('telescope:clear')->weekly()->at('02:05');
     }
 
     /**

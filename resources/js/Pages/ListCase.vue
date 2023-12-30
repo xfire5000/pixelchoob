@@ -90,12 +90,7 @@
 
   const listCaseDialogActivator = (item = undefined) => {
     case_item.value = item
-    case_dialog.value = true
-  }
-
-  function onCaseClosed() {
-    case_dialog.value = false
-    case_item.value = undefined
+    case_dialog.value = !_.isUndefined(item)
   }
 
   function onSubmitted(item: IListCaseItem) {
@@ -408,7 +403,7 @@ PanelLayout
 ListCaseDialog(
   :initial-form="case_item",
   :show="case_dialog",
-  @close="onCaseClosed",
+  @close="listCaseDialogActivator()",
   @submitted="onSubmitted"
 )
 ConfirmationModal(

@@ -7,6 +7,7 @@ use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserAddressInfoController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
+| Here is where you permission register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
 |
@@ -46,4 +47,7 @@ Route::middleware(['auth:sanctum', HandlePrecognitiveRequests::class])->group(fu
     Route::resource('tickets', TicketsController::class)->only(['index', 'store']);
     // address
     Route::resource('address', UserAddressInfoController::class)->only(['index', 'store', 'update', 'destroy']);
+    // users
+    Route::resource('users',UsersController::class)->only(['store','update','destroy'])
+    ->middleware(['permission:add-users','permission:edit-users','permission:delete-users']);
 });
