@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { fourSections, twoSections } from '@Components/ListItemSections'
   import { mdiArrowLeftRight, mdiText, mdiTrashCanOutline } from '@mdi/js'
+  import { useDisplay } from 'vuetify/lib/framework.mjs'
 
   interface IProps {
     btnColor: string
@@ -29,6 +30,8 @@
     }>()
 
   const emit = defineEmits<{ 'btn:click': any; 'clear:click': any }>()
+
+  const { mobile } = useDisplay()
 </script>
 
 <template lang="pug">
@@ -51,18 +54,21 @@ fourSections(
   :disable="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: pvc.l1 || ((groove.l || gazor_hinge.l) && (chamfer.l2 || pvc.l2)), l2: pvc.l2 || ((groove.l || gazor_hinge.l) && (chamfer.l1 || pvc.l1)), w1: pvc.w1 || ((groove.l || gazor_hinge.l) && (chamfer.w2 || pvc.w2)), w2: pvc.w2 || ((groove.l || gazor_hinge.l) && (chamfer.w1 || pvc.w1)) }",
   :title="$t('chamfer')"
 )
-twoSections(
-  ::l="gazor_hinge.l",
-  ::w="gazor_hinge.w",
-  :disable="readonly ? { l: true, w: true } : { l: groove.l || (chamfer.l1 && chamfer.l2), w: groove.w || (chamfer.w1 && chamfer.w2) }",
-  :title="$t('gazor_hinge')"
-)
-twoSections(
-  ::l="groove.l",
-  ::w="groove.w",
-  :disable="readonly ? { l: true, w: true } : { l: gazor_hinge.l || (chamfer.l1 && chamfer.l2) || (pvc.l1 && pvc.l2), w: gazor_hinge.w || (chamfer.w1 && chamfer.w2) || (pvc.w1 && pvc.w2) }",
-  :title="$t('groove')"
-)
+div(
+  class="child:w-1/2 lg:child:h-full lg:child:w-auto"
+).flex.flex-row.items-center.justify-center.gap-x-1
+  twoSections(
+    ::l="gazor_hinge.l",
+    ::w="gazor_hinge.w",
+    :disable="readonly ? { l: true, w: true } : { l: groove.l || (chamfer.l1 && chamfer.l2), w: groove.w || (chamfer.w1 && chamfer.w2) }",
+    :title="$t('gazor_hinge')"
+  )
+  twoSections(
+    ::l="groove.l",
+    ::w="groove.w",
+    :disable="readonly ? { l: true, w: true } : { l: gazor_hinge.l || (chamfer.l1 && chamfer.l2) || (pvc.l1 && pvc.l2), w: gazor_hinge.w || (chamfer.w1 && chamfer.w2) || (pvc.w1 && pvc.w2) }",
+    :title="$t('groove')"
+  )
 fourSections(
   ::l1="pvc.l1",
   ::l2="pvc.l2",
@@ -71,8 +77,10 @@ fourSections(
   :disable="readonly ? { l1: true, l2: true, w1: true, w2: true } : { l1: chamfer.l1 || (groove.l && (pvc.l2 || chamfer.l2)), l2: chamfer.l2 || (groove.l && (pvc.l1 || chamfer.l1)), w1: chamfer.w1 || (groove.l && (pvc.w2 || chamfer.w2)), w2: chamfer.w2 || (groove.l && (pvc.w1 || chamfer.w1)) }",
   :title="$t('pvc-settings')"
 )
-.flex.h-full.grow.flex-col.gap-y-2
-  div(class="lg:max-h-16 lg:flex-row lg:gap-x-2").items-top.flex.h-auto.flex-col.gap-y-3
+div(:class="[{ 'order-first': mobile }]").flex.h-full.grow.flex-col.gap-y-2
+  div(
+    class="lg:max-h-16 lg:flex-row lg:gap-x-2"
+  ).items-top.flex.h-auto.flex-col-reverse.gap-y-3
     v-text-field(
       ::="qty",
       :error-messages="errors?.qty",
@@ -100,7 +108,7 @@ fourSections(
       hide-details="auto",
       type="number"
     )
-  .flex.max-h-10.flex-row.gap-x-2
+  div(:class="[{ hidden: mobile }]").flex.max-h-10.flex-row.gap-x-2
     v-btn(
       :color="btnColor",
       :disabled="btnDisabled",
@@ -117,4 +125,21 @@ fourSections(
           variant="tonal"
         )
       span {{ clearableText && clearableText.length ? clearableText : $t('clear-form') }}
+div(:class="[{ hidden: !mobile }]").flex.flex-row.items-center.gap-x-2
+  v-btn(
+    :color="btnColor",
+    :disabled="btnDisabled",
+    @click="emit('btn:click')"
+  ).grow {{ btnText }}
+  v-tooltip(location="bottom", v-if="clearable")
+    template(#activator="{ props }")
+      v-btn(
+        :icon="mdiTrashCanOutline",
+        @click="emit('clear:click')",
+        color="red",
+        size="small",
+        v-bind="props",
+        variant="tonal"
+      )
+    span {{ clearableText && clearableText.length ? clearableText : $t('clear-form') }}
 </template>

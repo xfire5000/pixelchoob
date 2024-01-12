@@ -204,7 +204,7 @@
   "show": "نمایش {name}",
   "sizes": {
     "width": "عرض",
-    "height": "ارتفاع",
+    "height": "طول",
     "stroke": "ضخامت"
   },
   "start-journey": "شروع به کار پس از ثبت نام",
