@@ -45,7 +45,6 @@ declare module 'vue' {
     TextInput: typeof import('./../Components/TextInput.vue')['default']
     ThemeProvide: typeof import('./../Components/ThemeProvide.vue')['default']
     UserDialog: typeof import('./../Components/Dialogs/UserDialog.vue')['default']
-    VCheck: typeof import('vuetify/components')['VCheck']
     Welcome: typeof import('./../Components/Welcome.vue')['default']
   }
 }

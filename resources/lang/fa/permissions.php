@@ -9,4 +9,6 @@ return [
 'edit-roles'=>'ویرایش نقش ها',
 'add-roles'=>'افزودن نقش',
 'delete-roles'=>'حذف نقش',
+'view-settings'=>'نمایش تنظیمات',
+ 'edit-settings'=>'ویرایش تنظیمات',
 ];

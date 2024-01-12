@@ -110,7 +110,7 @@ export const NavDrawer = defineComponent({
         title: t('settings.index'),
         link: route('settings.index'),
         icon: mdiCogOutline,
-        can: true,
+        can: permissions['view-settings'],
       },
       {
         title: t('users'),

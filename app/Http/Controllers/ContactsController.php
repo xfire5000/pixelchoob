@@ -85,6 +85,7 @@ class ContactsController extends Controller
         return response(User::with(['addressInfos' => fn ($query) => $query->where('isShow', true)])
             ->whereNotIn('id', $haveContacts)
             ->where('name', 'like', "%{$_GET['search']}%")
+            ->whereHas('roles', fn ($query) => $query->where('name', explode(',', $_GET['type'])))
             ->orWhereHas('addressInfos', fn ($query) => $query->where('isShow', true)
                 ->where('description', 'like', "%{$_GET['search']}%"))->paginate(20));
     }

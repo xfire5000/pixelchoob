@@ -16,6 +16,7 @@
     email: '',
     password: '',
     password_confirmation: '',
+    role: 'user',
     terms: true,
   })
 
@@ -83,6 +84,15 @@ AuthLayout
       hide-details="auto",
       variant="solo"
     ).mx-10.my-4.text-right
+    v-radio-group(
+      ::="form.role",
+      class="[&_.v-selection-control-group]:gap-x-4",
+      color="primary",
+      hide-details="auto",
+      inline
+    ).mx-10.mb-2
+      v-radio(:label="$t('user')", value="user")
+      v-radio(:label="$t('provider')", value="provider")
     v-divider.mx-10
     p-link(
       :href="route('login')",

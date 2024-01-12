@@ -24,6 +24,7 @@ class RoleSeeder extends Seeder
 
         $permissions = [
             'view-users', 'edit-users', 'add-users', 'delete-users',
+            'view-settings', 'edit-settings',
             // 'view-roles', 'edit-roles', 'add-roles', 'delete-roles',
         ];
 
@@ -49,6 +50,18 @@ class RoleSeeder extends Seeder
             if (! Permission::where('name', $item)->exists()) {
                 Permission::create(['name' => $item, 'title' => __("permissions.$item")]);
                 $user_role->givePermissionTo($item);
+            }
+        }
+
+        $provider_permissions = ['view-settings', 'edit-settings'];
+
+        $provider_role = Role::findOrCreate('provider', 'web');
+        $provider_role->updateQuietly(['title' => __('roles.provider')]);
+
+        foreach ($provider_permissions as $item) {
+            if (! Permission::where('name', $item)->exists()) {
+                Permission::create(['name' => $item, 'title' => __("permissions.$item")]);
+                $provider_role->givePermissionTo($item);
             }
         }
     }

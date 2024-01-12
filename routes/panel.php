@@ -17,8 +17,8 @@ Route::middleware([
         Route::get('export', 'export')->name('list-items.export');
     });
     // settings
-    Route::inertia('settings', 'Settings/index')->name('settings.index');
+    Route::inertia('settings', 'Settings/index')->name('settings.index')->middleware('permission:view-settings');
     // users
     Route::get('users', '\App\Http\Controllers\UsersController@index')->name('users.index')
-    ->middleware('permission:view-users');
+        ->middleware('permission:view-users');
 });

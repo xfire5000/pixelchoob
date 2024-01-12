@@ -25,6 +25,7 @@
 
   const page = ref<number>(1)
   const lockFetch = ref<boolean>(false)
+  const userType = ref<string[]>(['user', 'provider'])
 
   function fetchUsers(isNewSearch: boolean = false) {
     if (search.value.length) {
@@ -36,7 +37,11 @@
       useFetchClient
         .get<TPageProps>(
           route('search.contacts.index', {
-            _query: { page: page.value, search: search.value },
+            _query: {
+              page: page.value,
+              search: search.value,
+              type: userType.value.toString(),
+            },
           }),
         )
         .then(({ data, statusCode }) => {
@@ -62,6 +67,13 @@
   )
 
   const addressType = (description: string) => _.isNumber(parseInt(description))
+
+  const { t } = useI18n()
+
+  const selectType = [
+    { title: t('users'), value: 'user' },
+    { title: t('providers'), value: 'provider' },
+  ]
 </script>
 
 <template lang="pug">
@@ -80,16 +92,27 @@ DialogModal(:show, @close="emit('close')", max-width="lg")
           color="info",
           variant="tonal"
         )
-        v-text-field(
-          ::="search",
-          :append-inner-icon="mdiArrowLeft",
-          :hint="$t('search-contacts-hint')",
-          :placeholder="$t('search-placeholder')",
-          :prepend-inner-icon="mdiMagnify",
-          @click:append-inner="fetchUsers(true)",
-          @keypress.enter="fetchUsers(true)",
-          density="comfortable"
-        ).mt-2
+        .mt-2.flex.flex-row.items-center.gap-x-1
+          v-text-field(
+            ::="search",
+            :append-inner-icon="mdiArrowLeft",
+            :hint="$t('search-contacts-hint')",
+            :placeholder="$t('search-placeholder')",
+            :prepend-inner-icon="mdiMagnify",
+            @click:append-inner="fetchUsers(true)",
+            @keypress.enter="fetchUsers(true)",
+            class="w-2/4",
+            density="comfortable"
+          )
+          v-select(
+            ::="userType",
+            :items="selectType",
+            :label="$t('type-of', { name: $t('user') })",
+            chips,
+            closable-chips,
+            density="comfortable",
+            multiple
+          )
         template(v-if="users?.data.length")
           v-divider.m-2
           div(ref="el").max-h-64.overflow-y-scroll

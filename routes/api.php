@@ -42,12 +42,13 @@ Route::middleware(['auth:sanctum', HandlePrecognitiveRequests::class])->group(fu
     // invoices
     Route::resource('invoices', InvoiceController::class)->only(['store']);
     // settings
-    Route::resource('settings', SettingController::class)->only(['store', 'show']);
+    Route::resource('settings', SettingController::class)->only(['store', 'show'])
+        ->middleware(['edit-settings', 'view-settings']);
     // tickets
     Route::resource('tickets', TicketsController::class)->only(['index', 'store']);
     // address
     Route::resource('address', UserAddressInfoController::class)->only(['index', 'store', 'update', 'destroy']);
     // users
-    Route::resource('users',UsersController::class)->only(['store','update','destroy'])
-    ->middleware(['permission:add-users','permission:edit-users','permission:delete-users']);
+    Route::resource('users', UsersController::class)->only(['store', 'update', 'destroy'])
+        ->middleware(['permission:add-users', 'permission:edit-users', 'permission:delete-users']);
 });

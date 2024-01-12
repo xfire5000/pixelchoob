@@ -25,6 +25,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'role' => ['required'],
         ])->validate();
 
         $user = User::create([
@@ -32,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
-        $user->assignRole('user');
+        $user->assignRole($input['role']);
         Setting::create([
             'title' => 'invoices_price', 'value' => json_encode([
                 'cutting' => 1,
