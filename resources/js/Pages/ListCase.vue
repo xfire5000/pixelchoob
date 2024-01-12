@@ -29,7 +29,7 @@
     { key: 'pvc', title: t('pvc-infos') },
     { key: 'stock', title: t('stock-infos') },
     { key: 'created_at', title: t('created_at') },
-    { key: 'actions', title: t('actions') },
+    { key: 'actions', title: t('actions'), sortable: false },
   ]
 
   const searched = useUrlSearchParams('history').s
@@ -202,7 +202,9 @@
 
   async function onSelectedUser(id: number) {
     await useFetchClient
-      .post<{ msg: string }>(route('list-cases.send'), { user_id: id })
+      .post<{ msg: string }>(route('list-cases.send', listId.value), {
+        user_id: id,
+      })
       .then(({ data }) => {
         contactsDialog.value = false
         toast(data.value.msg, { type: 'success' })
@@ -226,6 +228,18 @@
       tabs.value[tab.value].items[index].ticket.new_messages_count = 0
     }
   }
+
+  watch(
+    () => selectedItems.value,
+    (newValue) => {
+      let index = newValue.findIndex((n) =>
+        tabs.value[tab.value].items.data.find(
+          (element) => element.id === n && !!element.user_id,
+        ),
+      )
+      if (index !== -1) selectedItems.value.splice(index, 1)
+    },
+  )
 </script>
 
 <template lang="pug">
@@ -255,7 +269,7 @@ PanelLayout
           rounded="lg",
           v-show="tab !== 1",
           variant="tonal"
-        ).my-auto.ml-3 {{ $t('delete') }}
+        ).my-auto.ml-3 {{ $t('delete') }}&nbsp;&nbsp;{{ selectedItems.length }}
         v-btn(
           :prepend-icon="mdiPlusCircleOutline",
           @click="listCaseDialogActivator",

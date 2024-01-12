@@ -125,7 +125,7 @@ PanelLayout
       div(class="lg:col-span-1").col-span-full
         small {{ $t('status') }}:
         v-chip(
-          :class="[list_case.user_id ? 'bg-primary text-primary' : 'bg-indigo-600 text-indigo-500']"
+          :class="[list_case.user_id ? 'bg-green-200 text-primary' : 'bg-indigo-600 text-indigo-500']"
         ).bg-opacity-20 {{ list_case.user_id ? $t('sent') : $t('no-sent') }}
       div(
         class="ltr:text-right rtl:text-left dark:text-blue-400 lg:col-span-2",
@@ -155,7 +155,7 @@ PanelLayout
           clearable
         )
       #list-items-provider(
-        :class="[Object.entries(form.errors).length ? 'lg:mt-40' : { 'lg:mt-34': list_case.author_id === $page.props.auth['user'].id }]"
+        :class="[Object.entries(form.errors).length ? 'lg:mt-40' : { 'lg:mt-34': list_case.author_id === $page.props.auth['user'].id && !list_case.user_id }]"
       )
         div(:key="item.id", v-for="(item, index) in Items").items-top
           ListItemFragment(
