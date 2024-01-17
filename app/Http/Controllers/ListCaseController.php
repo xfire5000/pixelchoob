@@ -113,7 +113,8 @@ class ListCaseController extends Controller
     {
         $data = $request->all();
         if (! isset($data['id'])) {
-            $data['author'] = auth()->id();
+            $data['author_id'] = auth()->id();
+            $data['viewed'] = false;
             $data['pvc'] = json_encode($data['pvc']);
             $data['stock'] = json_encode($data['stock']);
         }
