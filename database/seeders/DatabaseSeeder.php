@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            SettingSeed::class,
         ]);
         // if (\App\Models\User::count() < 10) {
         //     \App\Models\User::factory(10)->create();
