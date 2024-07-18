@@ -13,7 +13,6 @@ import eslintPlugin from 'vite-plugin-eslint'
 import Inspect from 'vite-plugin-inspect'
 import { VitePWA } from 'vite-plugin-pwa'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import webfontDownload from 'vite-plugin-webfont-dl'
 
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -138,15 +137,6 @@ export default ({ mode }) => {
           ],
         },
       }),
-      webfontDownload(
-        [
-          'https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap',
-          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Medium',
-          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Normal',
-          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Normal+Bold',
-        ],
-        { injectAsStyleTag: false, minifyCss: true, cache: true },
-      ),
       eslintPlugin(),
     ],
     resolve: {

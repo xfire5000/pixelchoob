@@ -11,9 +11,11 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap">
+    <link href="https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29" rel="stylesheet">
     <!-- Scripts -->
     @routes
-    @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue", 'webfonts.css'])
+    @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])
     @inertiaHead
 </head>
 
