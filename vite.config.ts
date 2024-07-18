@@ -141,11 +141,11 @@ export default ({ mode }) => {
       webfontDownload(
         [
           'https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap',
-          'https://db.onlinewebfonts.com/c/bd84acf61e0af29bab6db956e6182bf0?family=IRANSansWeb%28FaNum%29+Medium',
-          'https://db.onlinewebfonts.com/c/bd84acf61e0af29bab6db956e6182bf0?family=IRANSansWeb%28FaNum%29+Normal',
-          'https://db.onlinewebfonts.com/c/bd84acf61e0af29bab6db956e6182bf0?family=IRANSansWeb%28FaNum%29+Normal+Bold',
+          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Medium',
+          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Normal',
+          'https://db.onlinewebfonts.com/c/5c53f1a72f61b5b51e2ea79a22ebc38b?family=IRANSansWeb%28FaNum%29+Normal+Bold',
         ],
-        { injectAsStyleTag: false },
+        { injectAsStyleTag: false, minifyCss: true, cache: true },
       ),
       eslintPlugin(),
     ],
